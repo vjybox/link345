@@ -17,6 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 DATA = ROOT / "data" / "companies.txt"
 OUT_HTML = ROOT / "index.html"
+OUT_EMBED = ROOT / "blogger-embed.html"
 OUT_JSON = ROOT / "data" / "directory.json"
 
 # ---------------------------------------------------------------------------
@@ -299,17 +300,188 @@ def main():
 
     html = render(payload)
     OUT_HTML.write_text(html, encoding="utf-8")
-    size_kb = OUT_HTML.stat().st_size / 1024
-    print(f"[ok] wrote {OUT_HTML} ({size_kb:.0f} KB)")
+    print(f"[ok] wrote {OUT_HTML} ({OUT_HTML.stat().st_size/1024:.0f} KB)")
+
+    embed = render_embed(payload)
+    OUT_EMBED.write_text(embed, encoding="utf-8")
+    print(f"[ok] wrote {OUT_EMBED} ({OUT_EMBED.stat().st_size/1024:.0f} KB)")
 
 
-def render(payload):
+def _fill(text, payload):
     data_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     stats = payload["stats"]
-    return TEMPLATE.replace("/*__DATA__*/", data_json) \
+    return text.replace("/*__DATA__*/", data_json) \
         .replace("__N_ENTRIES__", f'{stats["entries"]:,}') \
         .replace("__N_CATS__", str(stats["categories"])) \
         .replace("__N_SECTORS__", str(stats["sectors"]))
+
+
+def render(payload):
+    return _fill(TEMPLATE, payload)
+
+
+def render_embed(payload):
+    """Blogger-safe build: one scoped <div>, no <head>/<body>, @import fonts,
+    container-query layout. Reuses the full template's markup + script so the
+    two outputs never drift."""
+    body_start = TEMPLATE.index("<body>") + len("<body>")
+    script_start = TEMPLATE.index("<script>")
+    markup = TEMPLATE[body_start:script_start].strip()
+    script = TEMPLATE[script_start:TEMPLATE.index("</script>") + len("</script>")]
+    embed = (
+        "<!-- The Lithium Index — paste this whole block into a Blogger Page "
+        "(HTML view) or an HTML/JavaScript gadget. Self-contained. -->\n"
+        + STYLE_EMBED + "\n<div id=\"li-root\">\n" + markup
+        + "\n</div>\n" + script + "\n"
+    )
+    return _fill(embed, payload)
+
+
+STYLE_EMBED = r"""<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap');
+#li-root{
+  --bg:#fafafa; --panel:#ffffff; --ink:#0a0a0a; --muted:#6b6b6b;
+  --line:#e4e4e4; --line-strong:#0a0a0a; --blue:#1452ff; --orange:#ff5a1f;
+  --grid:rgba(10,10,10,.035); --cell:48px;
+  container-type:inline-size;
+  font-family:"JetBrains Mono",ui-monospace,monospace;
+  color:var(--ink); font-size:13px; line-height:1.5; text-align:left;
+  background:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:var(--cell) var(--cell);
+  border:1px solid var(--line-strong);
+  max-width:1320px; margin:18px auto; overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#li-root *{box-sizing:border-box; margin:0; padding:0}
+#li-root a{color:inherit;text-decoration:none}
+#li-root button,#li-root input,#li-root select{font-family:inherit}
+#li-root .menu-toggle{display:none !important}
+#li-root h1{font-size:26px;font-weight:400}
+
+#li-root header{display:block;background:#fff;border-bottom:1px solid var(--line-strong)}
+#li-root .bar{padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#li-root .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+#li-root .brand .mark{width:11px;height:11px;background:var(--blue);
+  box-shadow:3px 0 0 var(--orange);transform:translateY(1px)}
+#li-root .brand h1{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
+  font-weight:400;font-size:25px;letter-spacing:.2px;line-height:1}
+#li-root .brand small{color:var(--muted);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+#li-root .search{flex:1;min-width:200px;position:relative}
+#li-root .search input{width:100%;font-size:13px;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line-strong);padding:11px 38px 11px 14px;outline:none}
+#li-root .search input:focus{box-shadow:3px 3px 0 var(--blue)}
+#li-root .search .kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-size:10px;color:var(--muted);border:1px solid var(--line);padding:1px 5px}
+#li-root .stats{display:flex;gap:16px;white-space:nowrap}
+#li-root .stats div{display:flex;flex-direction:column;line-height:1.1}
+#li-root .stats b{font-size:16px}
+#li-root .stats span{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+#li-root .wrap{display:block;padding:16px}
+#li-root aside{border:1px solid var(--line-strong);background:var(--panel);
+  margin-bottom:16px;max-height:none;overflow:visible}
+#li-root .aside-h{padding:12px 14px;border-bottom:1px solid var(--line);
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  display:flex;justify-content:space-between;align-items:center}
+#li-root .aside-h button{font-size:10px;background:none;border:none;color:var(--blue);
+  cursor:pointer;letter-spacing:.1em}
+#li-root .sector{border-bottom:1px solid var(--line)}
+#li-root .sector>.row{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 14px;cursor:pointer;user-select:none}
+#li-root .sector>.row:hover{background:#f3f3f3}
+#li-root .sector>.row.on{background:var(--ink);color:#fff}
+#li-root .sector .nm{font-weight:500;font-size:12px;display:flex;align-items:center;gap:8px}
+#li-root .sector .tw{font-size:9px;color:var(--muted);transition:transform .15s}
+#li-root .sector>.row.on .tw{color:#bbb}
+#li-root .sector .ct{font-size:10px;color:var(--muted)}
+#li-root .sector>.row.on .ct{color:#bbb}
+#li-root .cats{display:none;background:#fcfcfc;border-top:1px solid var(--line)}
+#li-root .sector.open .cats{display:block}
+#li-root .sector.open .tw{transform:rotate(90deg)}
+#li-root .cat{display:flex;justify-content:space-between;padding:7px 14px 7px 32px;
+  cursor:pointer;font-size:11px;color:#333}
+#li-root .cat:hover{background:#f0f0f0}
+#li-root .cat.on{color:var(--blue);font-weight:700}
+#li-root .cat .ct{color:var(--muted);font-weight:400}
+
+#li-root main{min-width:0}
+#li-root .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+#li-root .pills{display:flex;gap:6px;flex-wrap:wrap}
+#li-root .pill{font-size:11px;background:var(--panel);border:1px solid var(--line-strong);
+  padding:6px 11px;cursor:pointer;white-space:nowrap}
+#li-root .pill:hover{background:#f0f0f0}
+#li-root .pill.on{background:var(--blue);color:#fff}
+#li-root .spacer{flex:1}
+#li-root .sort{font-size:11px;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line-strong);padding:6px 10px;cursor:pointer}
+#li-root select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),
+                   linear-gradient(135deg,var(--ink) 50%,transparent 50%);
+  background-position:calc(100% - 12px) 11px,calc(100% - 8px) 11px;
+  background-size:4px 4px,4px 4px;background-repeat:no-repeat}
+#li-root .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+#li-root .chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;
+  background:#fff;border:1px solid var(--line-strong);padding:5px 8px}
+#li-root .chip b{font-weight:500}
+#li-root .chip .x{cursor:pointer;color:var(--orange);font-weight:700}
+#li-root .resultline{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.04em}
+#li-root .resultline b{color:var(--ink)}
+
+#li-root .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+#li-root .card{background:var(--panel);border:1px solid var(--line-strong);padding:14px;
+  display:flex;flex-direction:column;gap:10px;min-height:128px;
+  transition:transform .08s, box-shadow .08s;position:relative}
+#li-root .card:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+#li-root .card .nm{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
+  font-size:20px;line-height:1.15;flex:1}
+#li-root .card .meta{display:flex;flex-direction:column;gap:4px}
+#li-root .card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer}
+#li-root .card .sec{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+#li-root .card .go{font-size:10px;color:var(--muted);display:flex;align-items:center;
+  gap:6px;border-top:1px solid var(--line);padding-top:9px;margin-top:2px}
+#li-root .card:hover .go{color:var(--orange)}
+#li-root .card.verified{box-shadow:inset 3px 0 0 var(--blue)}
+#li-root .card.verified:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
+#li-root .card .idx{font-size:9px;color:var(--muted);letter-spacing:.1em;
+  display:flex;align-items:center;justify-content:space-between}
+#li-root .badge{font-size:8px;letter-spacing:.12em;color:var(--blue);
+  border:1px solid var(--blue);padding:1px 4px}
+#li-root .tags{display:flex;flex-wrap:wrap;gap:4px}
+#li-root .tag{font-size:9px;letter-spacing:.04em;color:#444;background:#f1f3ff;
+  border:1px solid #d6ddff;padding:2px 6px}
+#li-root mark{background:linear-gradient(transparent 55%, #ffe08a 55%);color:inherit;padding:0}
+
+#li-root .empty{padding:60px 20px;text-align:center;color:var(--muted);
+  border:1px dashed var(--line-strong);background:var(--panel)}
+#li-root .empty b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px}
+
+#li-root .pager{display:flex;align-items:center;justify-content:center;gap:6px;
+  margin:26px 0 8px;flex-wrap:wrap}
+#li-root .pager button{font-size:11px;background:var(--panel);border:1px solid var(--line-strong);
+  padding:7px 12px;cursor:pointer;min-width:38px}
+#li-root .pager button:hover:not(:disabled){background:#f0f0f0}
+#li-root .pager button.on{background:var(--ink);color:#fff}
+#li-root .pager button:disabled{opacity:.35;cursor:default}
+#li-root .pager .gap{color:var(--muted);padding:0 2px}
+
+#li-root footer{padding:22px 16px;border-top:1px solid var(--line-strong);
+  color:var(--muted);font-size:10px;display:flex;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;background:#fff}
+#li-root footer a{color:var(--blue)}
+
+/* Layout adapts to the WIDGET width (container query), not the browser
+   window — so it looks right inside a narrow Blogger content column. */
+@container (min-width:680px){
+  #li-root .wrap{display:grid;grid-template-columns:248px 1fr;gap:18px;align-items:start;padding:18px}
+  #li-root aside{position:sticky;top:8px;max-height:80vh;overflow:auto;margin-bottom:0}
+}
+@container (max-width:420px){
+  #li-root .brand h1{font-size:21px}
+  #li-root .stats{display:none}
+}
+</style>"""
 
 
 TEMPLATE = r"""<!DOCTYPE html>
@@ -533,7 +705,7 @@ footer a{color:var(--blue)}
 
 <footer>
   <span>The Lithium Index · __N_ENTRIES__ entries · __N_CATS__ categories · __N_SECTORS__ mega-sectors</span>
-  <span>Single-file build · cards link to a web search for each entry until verified URLs are added</span>
+  <span>Single-file build · ✓ marks a verified official link; others open a web search</span>
 </footer>
 
 <script>

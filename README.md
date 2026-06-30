@@ -34,8 +34,9 @@ category → 20 · "tesla" search → 5.
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | The deployable single-file homepage (build output). |
-| `build.py` | Parses the dataset, assigns mega-sectors, renders `index.html`. |
+| `index.html` | Standalone full-page homepage (use for static hosting / GitHub Pages). |
+| `blogger-embed.html` | **Paste-into-Blogger build** — scoped, no `<head>`/`<body>`, container-query layout. |
+| `build.py` | Parses the dataset, assigns mega-sectors, renders both HTML files + JSON. |
 | `data/companies.txt` | Source dataset — `## id \| Category` headers + numbered entries. |
 | `data/directory.json` | Generated structured data (also embedded in the HTML). |
 
@@ -48,20 +49,34 @@ python3 build.py
 No third-party packages required (standard library only). The script prints a
 warning if any category is left without a mega-sector.
 
-## Deploy to Google Blogger
+## Deploy to Google Blogger  ←  use `blogger-embed.html`
 
-`index.html` is fully self-contained, so any of these work:
+A **full** HTML document (`index.html`) does *not* paste well into a Blogger
+Page: Blogger discards the `<head>` (so fonts + most CSS never load) and drops
+the body into its theme's narrow column, which is why a raw paste looks
+unstyled and cramped. **`blogger-embed.html` fixes this**:
 
-1. **Page / Post (easiest).** New Page → switch to **HTML view** → paste the
-   entire contents of `index.html`. Some Blogger sanitizers strip `<style>`/
-   `<script>`; if so, use option 2.
-2. **Custom theme (pixel-perfect).** Theme → Edit HTML → replace the whole
-   template with `index.html`. The directory then *is* your blog homepage.
-3. **HTML/JavaScript gadget.** Layout → Add a Gadget → HTML/JavaScript → paste
-   `index.html`. Good for embedding inside an existing theme.
+- no `<!DOCTYPE>` / `<head>` / `<body>` — just one `<style>` + one `<div id="li-root">` + one `<script>`;
+- every CSS rule is scoped to `#li-root`, so it can't fight (or be broken by) the theme;
+- fonts load via `@import` (survives Blogger's sanitizer);
+- the layout uses **container queries**, so it adapts to your post column's
+  width — two columns when there's room, stacked when narrow — instead of the
+  browser window.
 
-Any static host (GitHub Pages, Netlify, Cloudflare Pages, S3) also works —
-just serve `index.html`.
+Steps:
+
+1. Open `blogger-embed.html`, copy the **entire** file.
+2. In Blogger: **New Page** (or Post) → switch the editor to **HTML view** →
+   paste → Publish. *(Or Layout → Add a Gadget → HTML/JavaScript → paste.)*
+3. Optional: set that page as your homepage in Settings.
+
+If your theme already strips `<script>` from pages, use the **HTML/JavaScript
+gadget** route (step 2 parenthetical) — gadgets allow scripts.
+
+### Static hosting
+
+For GitHub Pages / Netlify / Cloudflare Pages / S3, serve **`index.html`**
+(the standalone full-page version) instead.
 
 ## Adding / overriding URLs
 
