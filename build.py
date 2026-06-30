@@ -51,6 +51,155 @@ MEGA_SECTORS = {
     "Industry Bodies & Standards": [8, 53, 66, 69],
 }
 
+# ---------------------------------------------------------------------------
+# Each mega-sector implies a coarse "entry type" used by the Type filter.
+# ---------------------------------------------------------------------------
+SECTOR_TYPE = {
+    "Cell Manufacturing & OEMs": "Manufacturer / OEM",
+    "Materials & Chemicals": "Materials",
+    "Mining & Raw Materials": "Mining",
+    "BMS & Power Electronics": "Components",
+    "Recycling & Circular Economy": "Recycling",
+    "Energy Storage & Charging": "ESS / Charging",
+    "Manufacturing Equipment": "Equipment",
+    "Process & Facility Systems": "Equipment",
+    "Software, Data & Simulation": "Software",
+    "Testing, Certification & Quality": "Testing / Certification",
+    "Logistics & Supply Chain": "Logistics",
+    "Thermal & Safety": "Equipment",
+    "Research & Academia": "Research",
+    "Education, Training & Workforce": "Education / Talent",
+    "Media, Community & Events": "Media / Events",
+    "Finance & Investment": "Finance",
+    "Insurance & Risk": "Insurance",
+    "Consulting & Professional Services": "Consulting",
+    "Legal, IP & Policy": "Legal / Policy",
+    "Industry Bodies & Standards": "Association / Standards",
+}
+
+# ---------------------------------------------------------------------------
+# Technology / chemistry tags, detected from the entry name + category text.
+# (tag, [keywords]) — first keyword match adds the tag; an entry may carry
+# several tags. Purely deterministic, no fabricated data.
+# ---------------------------------------------------------------------------
+TECH_RULES = [
+    ("Solid-State", ["solid-state", "solid state", "solid electrolyte"]),
+    ("LFP", ["lfp", "lithium iron", "iron phosphate"]),
+    ("NMC / NCA", ["nmc", "ncm", "nca", "811", "622", "532"]),
+    ("Sodium-ion", ["sodium-ion", "sodium ion", "sodium-metal", "na-ion"]),
+    ("Silicon Anode", ["silicon"]),
+    ("Lithium-Metal", ["lithium metal", "li-metal", "lithium-metal", "lithium-air", "lithium-water"]),
+    ("Graphene", ["graphene"]),
+    ("Supercapacitor", ["supercapacitor", "ultracapacitor"]),
+    ("Cathode", ["cathode"]),
+    ("Anode / Graphite", ["anode", "graphite"]),
+    ("Electrolyte", ["electrolyte"]),
+    ("Separator", ["separator"]),
+    ("Alt. Chemistry", ["iron-air", "iron flow", "iron salt", "zinc-air", "zinc8",
+                        "metal-hydrogen", "liquid metal", "magnesium", "flow battery",
+                        "niobium"]),
+]
+
+# ---------------------------------------------------------------------------
+# Curated verified official domains for high-confidence, unambiguous brands.
+# Keys are cleaned, lowercased base names; an entry matches when its cleaned
+# name equals a key or begins with "<key> ". Everything else falls back to a
+# web search. Extend freely — or add "Name | https://url" lines in the data.
+# ---------------------------------------------------------------------------
+KNOWN_URLS = {
+    "catl": "https://www.catl.com", "byd": "https://www.byd.com",
+    "lg energy solution": "https://www.lgensol.com", "panasonic": "https://www.panasonic.com",
+    "samsung sdi": "https://www.samsungsdi.com", "sk on": "https://www.sk-on.com",
+    "tesla": "https://www.tesla.com", "northvolt": "https://northvolt.com",
+    "eve energy": "https://www.evebattery.com", "gotion": "https://www.gotion.com.cn",
+    "microvast": "https://microvast.com", "quantumscape": "https://www.quantumscape.com",
+    "solid power": "https://www.solidpowerbattery.com", "sila": "https://www.silanano.com",
+    "freyr": "https://www.freyrbattery.com", "enovix": "https://www.enovix.com",
+    "rivian": "https://rivian.com", "lucid motors": "https://www.lucidmotors.com",
+    "nio": "https://www.nio.com", "xpeng": "https://www.xpeng.com",
+    "ford": "https://www.ford.com", "general motors": "https://www.gm.com",
+    "volkswagen group": "https://www.volkswagen-group.com", "stellantis": "https://www.stellantis.com",
+    "mercedes-benz": "https://www.mercedes-benz.com", "bmw": "https://www.bmwgroup.com",
+    "hyundai": "https://www.hyundai.com", "toyota": "https://global.toyota",
+    "honda": "https://global.honda", "polestar": "https://www.polestar.com",
+    "vinfast": "https://vinfast.com",
+    "umicore": "https://www.umicore.com", "basf": "https://www.basf.com",
+    "johnson matthey": "https://matthey.com", "asahi kasei": "https://www.asahi-kasei.com",
+    "toray industries": "https://www.toray.com", "solvay": "https://www.solvay.com",
+    "arkema": "https://www.arkema.com", "3m": "https://www.3m.com", "henkel": "https://www.henkel.com",
+    "texas instruments": "https://www.ti.com", "analog devices": "https://www.analog.com",
+    "nxp": "https://www.nxp.com", "infineon": "https://www.infineon.com",
+    "renesas": "https://www.renesas.com", "stmicroelectronics": "https://www.st.com",
+    "bosch": "https://www.bosch.com",
+    "li-cycle": "https://li-cycle.com", "redwood materials": "https://www.redwoodmaterials.com",
+    "ascend elements": "https://ascendelements.com", "glencore": "https://www.glencore.com",
+    "fluence": "https://www.fluenceenergy.com", "wärtsilä": "https://www.wartsila.com",
+    "sungrow": "https://en.sungrowpower.com", "enersys": "https://www.enersys.com",
+    "saft": "https://www.saftbatteries.com",
+    "albemarle": "https://www.albemarle.com", "ganfeng lithium": "https://www.ganfenglithium.com",
+    "rio tinto": "https://www.riotinto.com", "bhp": "https://www.bhp.com",
+    "vale": "https://www.vale.com", "anglo american": "https://www.angloamerican.com",
+    "siemens": "https://www.siemens.com", "abb": "https://global.abb",
+    "rockwell automation": "https://www.rockwellautomation.com", "fanuc": "https://www.fanuc.co.jp",
+    "kuka": "https://www.kuka.com", "yaskawa": "https://www.yaskawa.com",
+    "dassault systèmes": "https://www.3ds.com", "ansys": "https://www.ansys.com",
+    "comsol": "https://www.comsol.com", "ptc": "https://www.ptc.com",
+    "mathworks": "https://www.mathworks.com", "altair": "https://altair.com",
+    "sap": "https://www.sap.com", "oracle": "https://www.oracle.com",
+    "trumpf": "https://www.trumpf.com", "coherent": "https://www.coherent.com",
+    "ipg photonics": "https://www.ipgphotonics.com", "bühler": "https://www.buhlergroup.com",
+    "manz": "https://www.manz.com",
+    "chargepoint": "https://www.chargepoint.com", "evgo": "https://www.evgo.com",
+    "electrify america": "https://www.electrifyamerica.com", "witricity": "https://witricity.com",
+    "tüv süd": "https://www.tuvsud.com", "tüv rheinland": "https://www.tuv.com",
+    "dnv": "https://www.dnv.com", "intertek": "https://www.intertek.com",
+    "bureau veritas": "https://www.bureauveritas.com", "sgs": "https://www.sgs.com",
+    "exponent": "https://www.exponent.com",
+    "dhl": "https://www.dhl.com", "db schenker": "https://www.dbschenker.com",
+    "kuehne + nagel": "https://www.kuehne-nagel.com",
+    "mckinsey": "https://www.mckinsey.com", "boston consulting group": "https://www.bcg.com",
+    "bain": "https://www.bain.com", "deloitte": "https://www.deloitte.com",
+    "pwc": "https://www.pwc.com", "ey": "https://www.ey.com", "kpmg": "https://kpmg.com",
+    "accenture": "https://www.accenture.com",
+    "bloombergnef": "https://about.bnef.com", "idtechex": "https://www.idtechex.com",
+    "benchmark mineral intelligence": "https://www.benchmarkminerals.com",
+    "wood mackenzie": "https://www.woodmac.com",
+    "argonne national laboratory": "https://www.anl.gov",
+    "national renewable energy laboratory": "https://www.nrel.gov",
+    "oak ridge national laboratory": "https://www.ornl.gov",
+    "sandia national laboratories": "https://www.sandia.gov",
+    "google patents": "https://patents.google.com",
+    "the faraday institution": "https://www.faraday.ac.uk",
+}
+
+
+def clean_name(name):
+    """Lowercased base name: drop parentheticals and trailing notes."""
+    base = re.sub(r"\([^)]*\)", " ", name)
+    base = re.split(r"\s[-/]\s", base)[0]  # cut " - note" / " / note"
+    return re.sub(r"\s+", " ", base).strip().lower()
+
+
+def match_url(name):
+    """Longest-prefix match against KNOWN_URLS; '' if none."""
+    cn = clean_name(name)
+    best = ""
+    for key, url in KNOWN_URLS.items():
+        if cn == key or cn.startswith(key + " "):
+            if len(key) > len(best):
+                best, best_url = key, url
+    return best and best_url or ""
+
+
+def derive_tech(name, category):
+    hay = (name + " " + category).lower()
+    tags = []
+    for tag, kws in TECH_RULES:
+        if any(k in hay for k in kws):
+            tags.append(tag)
+    return tags
+
+
 def build_category_lookup():
     """Return {category_id: mega_sector_name}."""
     lookup = {}
@@ -83,12 +232,25 @@ def parse():
             continue
         m = entry_re.match(line)
         if m and current is not None:
+            text = m.group(2)
+            # optional explicit URL:  "Name | https://example.com"
+            url = ""
+            if "|" in text:
+                text, _, maybe = text.partition("|")
+                text, maybe = text.strip(), maybe.strip()
+                if maybe.startswith("http"):
+                    url = maybe
+            if not url:
+                url = match_url(text)
             entries.append({
                 "id": int(m.group(1)),
-                "name": m.group(2),
+                "name": text,
                 "cid": current["id"],
                 "cat": current["name"],
                 "sector": current["sector"],
+                "url": url,
+                "type": SECTOR_TYPE.get(current["sector"], "Other"),
+                "tech": derive_tech(text, current["name"]),
             })
     return categories, entries
 
@@ -117,14 +279,18 @@ def main():
 
     payload = {
         "entries": [
-            {"i": e["id"], "n": e["name"], "c": e["cid"], "cn": e["cat"], "s": e["sector"]}
+            {"i": e["id"], "n": e["name"], "c": e["cid"], "cn": e["cat"],
+             "s": e["sector"], "u": e["url"], "t": e["type"], "tech": e["tech"]}
             for e in entries
         ],
         "tree": tree,
+        "types": sorted({e["type"] for e in entries}),
+        "techs": sorted({t for e in entries for t in e["tech"]}),
         "stats": {
             "entries": len(entries),
             "categories": len(categories),
             "sectors": len(tree),
+            "withUrl": sum(1 for e in entries if e["url"]),
         },
     }
 
@@ -241,8 +407,13 @@ main{min-width:0}
 .pill:hover{background:#f0f0f0}
 .pill.on{background:var(--blue);color:#fff}
 .spacer{flex:1}
-.sort{font-family:inherit;font-size:11px;background:var(--panel);
+.sort{font-family:inherit;font-size:11px;background:var(--panel);color:var(--ink);
   border:1px solid var(--line-strong);padding:6px 10px;cursor:pointer}
+select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),
+                   linear-gradient(135deg,var(--ink) 50%,transparent 50%);
+  background-position:calc(100% - 12px) 11px,calc(100% - 8px) 11px;
+  background-size:4px 4px,4px 4px;background-repeat:no-repeat}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;min-height:0}
 .chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;
   background:#fff;border:1px solid var(--line-strong);padding:5px 8px}
@@ -266,6 +437,14 @@ main{min-width:0}
 .card .go{font-size:10px;color:var(--muted);display:flex;align-items:center;
   gap:6px;border-top:1px solid var(--line);padding-top:9px;margin-top:2px}
 .card:hover .go{color:var(--orange)}
+.card.verified{box-shadow:inset 3px 0 0 var(--blue)}
+.card.verified:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
+.card .idx{display:flex;align-items:center;justify-content:space-between}
+.badge{font-size:8px;letter-spacing:.12em;color:var(--blue);
+  border:1px solid var(--blue);padding:1px 4px}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:9px;letter-spacing:.04em;color:#444;background:#f1f3ff;
+  border:1px solid #d6ddff;padding:2px 6px}
 mark{background:linear-gradient(transparent 55%, #ffe08a 55%);color:inherit;padding:0}
 
 .empty{padding:60px 20px;text-align:center;color:var(--muted);
@@ -341,6 +520,8 @@ footer a{color:var(--blue)}
     <div class="toolbar">
       <div class="pills" id="pills"></div>
       <span class="spacer"></span>
+      <select class="sort" id="typeSel" title="Filter by type"></select>
+      <select class="sort" id="techSel" title="Filter by technology / chemistry"></select>
       <button class="sort" id="sortBtn">Sort: Relevance</button>
     </div>
     <div class="chips" id="chips"></div>
@@ -361,7 +542,7 @@ const PER_PAGE = 60;
 const QUICK = ["Cell Manufacturing & OEMs","Materials & Chemicals","Mining & Raw Materials",
   "Recycling & Circular Economy","Manufacturing Equipment","Software, Data & Simulation"];
 
-const state = {q:"", sector:null, cat:null, sort:"rel", page:1};
+const state = {q:"", sector:null, cat:null, type:"", tech:"", sort:"rel", page:1};
 
 const $ = s => document.querySelector(s);
 const grid = $("#grid"), pager = $("#pager"), chips = $("#chips"),
@@ -390,6 +571,13 @@ function buildPills(){
   pillsEl.innerHTML = `<button class="pill" data-pill="__all">All sectors</button>` +
     QUICK.filter(s=>DB.tree[s]).map(s=>`<button class="pill" data-pill="${esc(s)}">${esc(s)}</button>`).join("");
 }
+function buildSelects(){
+  const typeSel=$("#typeSel"), techSel=$("#techSel");
+  typeSel.innerHTML = `<option value="">All types</option>` +
+    DB.types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
+  techSel.innerHTML = `<option value="">All technologies</option>` +
+    DB.techs.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
+}
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
 
@@ -399,6 +587,8 @@ function filtered(){
   let rows = DB.entries;
   if(state.cat){ rows = rows.filter(e=>e.c===state.cat); }
   else if(state.sector){ rows = rows.filter(e=>e.s===state.sector); }
+  if(state.type){ rows = rows.filter(e=>e.t===state.type); }
+  if(state.tech){ rows = rows.filter(e=>e.tech.indexOf(state.tech)>=0); }
   if(q){
     rows = rows.filter(e=>
       e.n.toLowerCase().includes(q) ||
@@ -444,16 +634,22 @@ function render(){
     pager.innerHTML=""; renderChips(); return;
   }
 
-  grid.innerHTML = slice.map(e=>`
-    <a class="card" href="${searchUrl(e.n)}" target="_blank" rel="noopener">
-      <div class="idx">#${e.i}</div>
+  grid.innerHTML = slice.map(e=>{
+    const verified = !!e.u;
+    const href = verified ? e.u : searchUrl(e.n);
+    const tags = (e.tech||[]).slice(0,3)
+      .map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+    return `
+    <a class="card${verified?" verified":""}" href="${href}" target="_blank" rel="noopener">
+      <div class="idx">#${e.i}${verified?'<span class="badge">✓ LINK</span>':''}</div>
       <div class="nm">${hl(e.n,q)}</div>
+      ${tags?`<div class="tags">${tags}</div>`:""}
       <div class="meta">
         <div class="cat" data-cat="${e.c}">${hl(e.cn,q)}</div>
         <div class="sec">${esc(e.s)}</div>
       </div>
-      <div class="go">↗ open web search</div>
-    </a>`).join("");
+      <div class="go">↗ ${verified?"visit site":"web search"}</div>
+    </a>`;}).join("");
 
   renderPager(pages);
   renderChips();
@@ -467,6 +663,8 @@ function renderChips(){
     const name = (DB.entries.find(e=>e.c===state.cat)||{}).cn || ("#"+state.cat);
     c.push(`<span class="chip"><b>Category:</b> ${esc(name)} <span class="x" data-clear="cat">✕</span></span>`);
   }
+  if(state.type) c.push(`<span class="chip"><b>Type:</b> ${esc(state.type)} <span class="x" data-clear="type">✕</span></span>`);
+  if(state.tech) c.push(`<span class="chip"><b>Tech:</b> ${esc(state.tech)} <span class="x" data-clear="tech">✕</span></span>`);
   if(state.q.trim()) c.push(`<span class="chip"><b>Search:</b> "${esc(state.q.trim())}" <span class="x" data-clear="q">✕</span></span>`);
   chips.innerHTML = c.join("");
 }
@@ -530,6 +728,8 @@ chips.addEventListener("click", ev=>{
   const k=x.dataset.clear;
   if(k==="sector") state.sector=null;
   if(k==="cat") state.cat=null;
+  if(k==="type"){ state.type=""; $("#typeSel").value=""; }
+  if(k==="tech"){ state.tech=""; $("#techSel").value=""; }
   if(k==="q"){ state.q=""; $("#q").value=""; }
   state.page=1; render();
 });
@@ -552,6 +752,9 @@ document.addEventListener("keydown", e=>{
   if(e.key==="Escape"){ $("#q").blur(); }
 });
 
+$("#typeSel").addEventListener("change", e=>{ state.type=e.target.value; state.page=1; render(); });
+$("#techSel").addEventListener("change", e=>{ state.tech=e.target.value; state.page=1; render(); });
+
 const SORTS=[["rel","Relevance"],["az","A → Z"],["za","Z → A"]];
 $("#sortBtn").addEventListener("click", ()=>{
   const i=SORTS.findIndex(s=>s[0]===state.sort);
@@ -561,8 +764,9 @@ $("#sortBtn").addEventListener("click", ()=>{
 
 $("#clearNav").addEventListener("click", resetAll);
 $("#brandReset").addEventListener("click", e=>{e.preventDefault();resetAll();});
-function resetAll(){ state.q="";state.sector=null;state.cat=null;state.page=1;
-  $("#q").value=""; document.querySelectorAll(".sector.open").forEach(s=>s.classList.remove("open")); render(); }
+function resetAll(){ state.q="";state.sector=null;state.cat=null;state.type="";state.tech="";state.page=1;
+  $("#q").value=""; $("#typeSel").value=""; $("#techSel").value="";
+  document.querySelectorAll(".sector.open").forEach(s=>s.classList.remove("open")); render(); }
 
 // mobile nav
 const body=document.body;
@@ -573,7 +777,7 @@ document.addEventListener("click",e=>{
     closeNav();
 });
 
-buildTree(); buildPills(); render();
+buildTree(); buildPills(); buildSelects(); render();
 </script>
 </body>
 </html>

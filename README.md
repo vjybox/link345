@@ -11,8 +11,16 @@ runtime dependencies (all data is embedded, zero external API calls).
   `/` keyboard shortcut and match highlighting.
 - **Sidebar navigation tree**: 20 mega-sectors → drill down to any of the
   146 categories, each with a live entry count.
+- **Type filter** (18 values: Manufacturer/OEM, Materials, Mining, Equipment,
+  Software, Testing, Logistics, Finance, Consulting, …).
+- **Technology / chemistry filter** (Solid-State, LFP, NMC/NCA, Sodium-ion,
+  Silicon Anode, Lithium-Metal, Graphene, Supercapacitor, Cathode, Anode,
+  Electrolyte, Separator) — all detected deterministically from entry text.
+- **Verified links**: 269 marquee entries link to their official website
+  (marked with a ✓ badge); the rest fall back to a web search.
 - **Quick-filter pills** for the most-used sectors.
-- **Active-filter chips** (sector / category / search) with one-click clear.
+- **Active-filter chips** (sector / category / type / tech / search) with
+  one-click clear. All filters combine (AND).
 - **Sort**: Relevance · A→Z · Z→A.
 - **Pagination** at 60 entries per page.
 - **Responsive** — collapsible filter drawer on mobile.
@@ -55,12 +63,20 @@ warning if any category is left without a mega-sector.
 Any static host (GitHub Pages, Netlify, Cloudflare Pages, S3) also works —
 just serve `index.html`.
 
-## Adding real URLs
+## Adding / overriding URLs
 
-The source list contained company **names only**, so each card currently links
-to a web search for the entry. To attach verified URLs, extend the entry format
-in `data/companies.txt` (e.g. `1. CATL | https://www.catl.com`) and teach
-`build.py` to parse the trailing URL, then re-run the build.
+269 well-known, unambiguous brands already resolve to verified official
+domains via the curated `KNOWN_URLS` map in `build.py`; everything else links
+to a web search. Two ways to add more:
+
+1. **Per-entry override (highest priority).** Append a URL to any line in
+   `data/companies.txt`:
+   `1. CATL (Contemporary Amperex Technology Co., Limited) | https://www.catl.com`
+2. **Curated map.** Add `"<cleaned name>": "https://…"` to `KNOWN_URLS`.
+   An entry matches when its cleaned name (parentheticals/notes stripped,
+   lowercased) equals the key or begins with `"<key> "`.
+
+Re-run `python3 build.py` after either change.
 
 ## Suggested next steps
 
