@@ -394,7 +394,15 @@ function flashResults(){
   const target = resultLine.textContent ? resultLine : (grid.firstElementChild ? grid : document.querySelector("main"));
   if(target) target.scrollIntoView({behavior:"smooth", block:"start"});
 }
-function setSector(s){ state.sector=s; state.cat=null; state.page=1; render(); flashResults(); }
+function scrollToSelectedSector(){
+  // Bring the chosen mega-sector to the top so its sub-sectors are visible;
+  // the user then taps a sub-sector to drop down to the entries.
+  if(!isStacked()) return;
+  const row = document.querySelector(".sector > .row.on");
+  const el = row && row.closest(".sector");
+  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+function setSector(s){ state.sector=s; state.cat=null; state.page=1; render(); if(s) scrollToSelectedSector(); }
 function setCat(id){
   const e = DB.entries.find(e=>e.c===id);
   state.cat=id; state.sector=e?e.s:state.sector; state.page=1; render(); flashResults();
