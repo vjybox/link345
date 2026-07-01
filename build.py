@@ -435,7 +435,9 @@ STYLE_PAGE = r"""<style>
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),
                    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:48px 48px;
-  border:1px solid var(--ls); max-width:1200px; margin:18px auto; overflow:hidden;
+  border:1px solid var(--ls); overflow:hidden; box-sizing:border-box;
+  position:relative; left:50%; transform:translateX(-50%);
+  width:94vw; max-width:1500px; margin:20px 0;
   -webkit-font-smoothing:antialiased;
 }
 #lx *{box-sizing:border-box; margin:0; padding:0}
@@ -480,8 +482,9 @@ STYLE_PAGE = r"""<style>
 #lx .card.v:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
 #lx .idx{font-size:9px; color:var(--muted); letter-spacing:.1em;
   display:flex; justify-content:space-between; align-items:center}
-#lx .badge{font-size:8px; letter-spacing:.12em; color:var(--blue); border:1px solid var(--blue); padding:1px 4px}
-#lx .nm{font-family:"Instrument Serif",Georgia,serif; font-style:italic; font-size:18px; line-height:1.15; flex:1}
+#lx .badge{font-size:8px; letter-spacing:.12em; color:#fff; background:var(--blue); border:1px solid var(--blue); padding:1px 5px}
+#lx .nm{font-family:"JetBrains Mono",ui-monospace,monospace; font-weight:700; font-size:14px;
+  line-height:1.4; letter-spacing:-.2px; flex:1; overflow-wrap:anywhere; word-break:break-word}
 #lx .tags{display:flex; flex-wrap:wrap; gap:4px}
 #lx .tag{font-size:9px; color:#444; background:#f1f3ff; border:1px solid #d6ddff; padding:2px 6px}
 #lx .go{font-size:10px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px}
@@ -506,7 +509,12 @@ STYLE_EMBED = r"""<style>
                    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:var(--cell) var(--cell);
   border:1px solid var(--line-strong);
-  max-width:1320px; margin:18px auto; overflow:hidden;
+  box-sizing:border-box; overflow:hidden;
+  /* Break out of the theme's (often narrow) content column and use the
+     viewport width, capped, so the directory actually widens on big screens.
+     Assumes a centered content column (the Blogger norm). */
+  position:relative; left:50%; transform:translateX(-50%);
+  width:94vw; max-width:1500px; margin:20px 0;
   -webkit-font-smoothing:antialiased;
 }
 #li-root *{box-sizing:border-box; margin:0; padding:0}
@@ -584,15 +592,18 @@ STYLE_EMBED = r"""<style>
 #li-root .resultline{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.04em}
 #li-root .resultline b{color:var(--ink)}
 
-#li-root .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-#li-root .card{background:var(--panel);border:1px solid var(--line-strong);padding:14px;
-  display:flex;flex-direction:column;gap:10px;min-height:128px;
-  transition:transform .08s, box-shadow .08s;position:relative}
+#li-root .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+#li-root .card{background:var(--panel);border:1px solid var(--line-strong);padding:15px 15px 13px;
+  display:flex;flex-direction:column;gap:9px;min-height:124px;
+  transition:transform .08s, box-shadow .08s;position:relative;overflow:hidden}
 #li-root .card:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
-#li-root .card .nm{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
-  font-size:20px;line-height:1.15;flex:1}
-#li-root .card .meta{display:flex;flex-direction:column;gap:4px}
-#li-root .card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer}
+#li-root .card .nm{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;
+  font-size:14px;line-height:1.4;letter-spacing:-.2px;flex:1;
+  overflow-wrap:anywhere;word-break:break-word}
+#li-root .card .meta{display:flex;flex-direction:column;gap:5px}
+#li-root .card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer;
+  overflow-wrap:anywhere;line-height:1.35}
+#li-root .card .cat:hover{text-decoration:underline}
 #li-root .card .sec{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 #li-root .card .go{font-size:10px;color:var(--muted);display:flex;align-items:center;
   gap:6px;border-top:1px solid var(--line);padding-top:9px;margin-top:2px}
@@ -601,8 +612,8 @@ STYLE_EMBED = r"""<style>
 #li-root .card.verified:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
 #li-root .card .idx{font-size:9px;color:var(--muted);letter-spacing:.1em;
   display:flex;align-items:center;justify-content:space-between}
-#li-root .badge{font-size:8px;letter-spacing:.12em;color:var(--blue);
-  border:1px solid var(--blue);padding:1px 4px}
+#li-root .badge{font-size:8px;letter-spacing:.12em;color:#fff;background:var(--blue);
+  border:1px solid var(--blue);padding:1px 5px}
 #li-root .tags{display:flex;flex-wrap:wrap;gap:4px}
 #li-root .tag{font-size:9px;letter-spacing:.04em;color:#444;background:#f1f3ff;
   border:1px solid #d6ddff;padding:2px 6px}
@@ -654,8 +665,8 @@ TEMPLATE = r"""<!DOCTYPE html>
   --bg:#fafafa; --panel:#ffffff; --ink:#0a0a0a; --muted:#6b6b6b;
   --line:#e4e4e4; --line-strong:#0a0a0a;
   --blue:#1452ff; --orange:#ff5a1f;
-  --grid:rgba(10,10,10,.035); --cell:48px;
-  --maxw:1320px;
+  --grid:rgba(10,10,10,.03); --cell:48px;
+  --maxw:1560px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -750,16 +761,19 @@ select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
   letter-spacing:.04em}
 .resultline b{color:var(--ink)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:14px}
-.card{background:var(--panel);border:1px solid var(--line-strong);padding:14px;
-  display:flex;flex-direction:column;gap:10px;min-height:128px;
-  transition:transform .08s, box-shadow .08s;position:relative}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line-strong);padding:15px 15px 13px;
+  display:flex;flex-direction:column;gap:9px;min-height:124px;
+  transition:transform .08s, box-shadow .08s;position:relative;overflow:hidden}
 .card:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
 .card .idx{font-size:9px;color:var(--muted);letter-spacing:.1em}
-.card .nm{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
-  font-size:20px;line-height:1.15;flex:1}
-.card .meta{display:flex;flex-direction:column;gap:4px}
-.card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em}
+.card .nm{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;
+  font-size:14px;line-height:1.4;letter-spacing:-.2px;flex:1;
+  overflow-wrap:anywhere;word-break:break-word}
+.card .meta{display:flex;flex-direction:column;gap:5px}
+.card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer;
+  overflow-wrap:anywhere;line-height:1.35}
+.card .cat:hover{text-decoration:underline}
 .card .sec{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .card .go{font-size:10px;color:var(--muted);display:flex;align-items:center;
   gap:6px;border-top:1px solid var(--line);padding-top:9px;margin-top:2px}
@@ -767,8 +781,8 @@ select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
 .card.verified{box-shadow:inset 3px 0 0 var(--blue)}
 .card.verified:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
 .card .idx{display:flex;align-items:center;justify-content:space-between}
-.badge{font-size:8px;letter-spacing:.12em;color:var(--blue);
-  border:1px solid var(--blue);padding:1px 4px}
+.badge{font-size:8px;letter-spacing:.12em;color:#fff;background:var(--blue);
+  border:1px solid var(--blue);padding:1px 5px}
 .tags{display:flex;flex-wrap:wrap;gap:4px}
 .tag{font-size:9px;letter-spacing:.04em;color:#444;background:#f1f3ff;
   border:1px solid #d6ddff;padding:2px 6px}
@@ -828,8 +842,8 @@ footer a{color:var(--blue)}
     </div>
     <div class="stats">
       <div><b id="statShown">0</b><span>Showing</span></div>
-      <div><b>__N_CATS__</b><span>Categories</span></div>
-      <div><b>__N_SECTORS__</b><span>Sectors</span></div>
+      <div><b id="statCats">__N_CATS__</b><span>Categories</span></div>
+      <div><b id="statSecs">__N_SECTORS__</b><span>Sectors</span></div>
     </div>
   </div>
 </header>
@@ -951,6 +965,8 @@ function render(){
   const slice = rows.slice(start, start+PER_PAGE);
 
   $("#statShown").textContent = rows.length.toLocaleString();
+  $("#statCats").textContent = new Set(rows.map(e=>e.c)).size;
+  $("#statSecs").textContent = new Set(rows.map(e=>e.s)).size;
   resultLine.innerHTML = rows.length
     ? `Showing <b>${start+1}–${start+slice.length}</b> of <b>${rows.length.toLocaleString()}</b> entries`
     : "";
@@ -1029,10 +1045,21 @@ function syncSidebar(){
 }
 
 // ---- events ----
-function setSector(s){ state.sector=s; state.cat=null; state.page=1; render(); }
+function isStacked(){
+  const w = document.querySelector(".wrap");
+  return w && getComputedStyle(w).display !== "grid";
+}
+function flashResults(){
+  // On narrow/stacked layouts the sidebar sits above the grid, so a filter
+  // change happens off-screen. Scroll the results into view so it's obvious.
+  if(!isStacked()) return;
+  const m = document.querySelector("main");
+  if(m) m.scrollIntoView({behavior:"smooth", block:"start"});
+}
+function setSector(s){ state.sector=s; state.cat=null; state.page=1; render(); flashResults(); }
 function setCat(id){
   const e = DB.entries.find(e=>e.c===id);
-  state.cat=id; state.sector=e?e.s:state.sector; state.page=1; render();
+  state.cat=id; state.sector=e?e.s:state.sector; state.page=1; render(); flashResults();
 }
 
 treeEl.addEventListener("click", ev=>{
@@ -1062,7 +1089,7 @@ chips.addEventListener("click", ev=>{
 });
 grid.addEventListener("click", ev=>{
   const cat = ev.target.closest(".cat[data-cat]");
-  if(cat){ ev.preventDefault(); setCat(Number(cat.dataset.cat)); window.scrollTo({top:0,behavior:"smooth"}); }
+  if(cat){ ev.preventDefault(); setCat(Number(cat.dataset.cat)); }
 });
 pager.addEventListener("click", ev=>{
   const b=ev.target.closest("button[data-page]"); if(!b||b.disabled) return;

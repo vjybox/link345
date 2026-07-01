@@ -11,7 +11,9 @@
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),
                    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:48px 48px;
-  border:1px solid var(--ls); max-width:1200px; margin:18px auto; overflow:hidden;
+  border:1px solid var(--ls); overflow:hidden; box-sizing:border-box;
+  position:relative; left:50%; transform:translateX(-50%);
+  width:94vw; max-width:1500px; margin:20px 0;
   -webkit-font-smoothing:antialiased;
 }
 #lx *{box-sizing:border-box; margin:0; padding:0}
@@ -56,8 +58,9 @@
 #lx .card.v:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
 #lx .idx{font-size:9px; color:var(--muted); letter-spacing:.1em;
   display:flex; justify-content:space-between; align-items:center}
-#lx .badge{font-size:8px; letter-spacing:.12em; color:var(--blue); border:1px solid var(--blue); padding:1px 4px}
-#lx .nm{font-family:"Instrument Serif",Georgia,serif; font-style:italic; font-size:18px; line-height:1.15; flex:1}
+#lx .badge{font-size:8px; letter-spacing:.12em; color:#fff; background:var(--blue); border:1px solid var(--blue); padding:1px 5px}
+#lx .nm{font-family:"JetBrains Mono",ui-monospace,monospace; font-weight:700; font-size:14px;
+  line-height:1.4; letter-spacing:-.2px; flex:1; overflow-wrap:anywhere; word-break:break-word}
 #lx .tags{display:flex; flex-wrap:wrap; gap:4px}
 #lx .tag{font-size:9px; color:#444; background:#f1f3ff; border:1px solid #d6ddff; padding:2px 6px}
 #lx .go{font-size:10px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px}
