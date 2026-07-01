@@ -34,9 +34,10 @@ category → 20 · "tesla" search → 5.
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | Standalone full-page homepage (use for static hosting / GitHub Pages). |
-| `blogger-embed.html` | **Paste-into-Blogger build** — scoped, no `<head>`/`<body>`, container-query layout. |
-| `build.py` | Parses the dataset, assigns mega-sectors, renders both HTML files + JSON. |
+| `index.html` | Standalone full-page app (search/filters/pagination) — for static hosting / GitHub Pages. |
+| `blogger-page.html` | **No-JS directory that works pasted into a Blogger Page** (native `<details>`; no scripts/forms). |
+| `blogger-embed.html` | Scoped app for an HTML/JavaScript **gadget** — no `<head>`/`<body>`, container-query layout. |
+| `build.py` | Parses the dataset, assigns mega-sectors, renders all three HTML files + JSON. |
 | `data/companies.txt` | Source dataset — `## id \| Category` headers + numbered entries. |
 | `data/directory.json` | Generated structured data (also embedded in the HTML). |
 
@@ -52,19 +53,21 @@ warning if any category is left without a mega-sector.
 ## Deploy to Google Blogger
 
 **Important:** Blogger *Pages* strip `<script>`/`<input>`/`<select>`/`<button>`,
-so pasting the app into a Page yields an empty styled box — a Blogger Page
-cannot run JavaScript. Use one of the working routes in
+so pasting the *interactive* app into a Page yields an empty styled box.
+Three working routes are documented in
 **[`BLOGGER-SETUP.md`](BLOGGER-SETUP.md)**:
 
-1. **Recommended — iframe:** host `index.html` on GitHub Pages and embed it
-   with a one-line `<iframe>` in your Blogger Page. Scripts run on the host;
-   the Page just frames it. Full steps in `BLOGGER-SETUP.md`.
-2. **HTML/JavaScript gadget:** paste `blogger-embed.html` into a
+1. **Paste `blogger-page.html` into a Page (no hosting, works instantly).**
+   A no-JavaScript build using native `<details>` — full browsable catalog,
+   counts, verified links, tech tags, jump nav. No live search box/filters
+   (those need JS; use Ctrl/⌘-F, or route 2).
+2. **iframe the full app:** host `index.html` on GitHub Pages, embed it with a
+   one-line `<iframe>` in your Page — restores live search, filters, pagination.
+3. **HTML/JavaScript gadget:** paste `blogger-embed.html` into a
    Layout → HTML/JavaScript gadget (gadgets allow scripts, unlike Pages).
 
-`blogger-embed.html` is the scoped, `@import`-font, container-query build made
-for embedding inside a theme; `index.html` is the standalone full page used
-for hosting (GitHub Pages / Netlify / Cloudflare Pages / S3).
+For static hosting (GitHub Pages / Netlify / Cloudflare Pages / S3), serve
+`index.html`.
 
 ## Adding / overriding URLs
 

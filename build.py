@@ -18,6 +18,7 @@ ROOT = Path(__file__).parent
 DATA = ROOT / "data" / "companies.txt"
 OUT_HTML = ROOT / "index.html"
 OUT_EMBED = ROOT / "blogger-embed.html"
+OUT_PAGE = ROOT / "blogger-page.html"
 OUT_JSON = ROOT / "data" / "directory.json"
 
 # ---------------------------------------------------------------------------
@@ -306,6 +307,10 @@ def main():
     OUT_EMBED.write_text(embed, encoding="utf-8")
     print(f"[ok] wrote {OUT_EMBED} ({OUT_EMBED.stat().st_size/1024:.0f} KB)")
 
+    page = render_blogger_page(payload)
+    OUT_PAGE.write_text(page, encoding="utf-8")
+    print(f"[ok] wrote {OUT_PAGE} ({OUT_PAGE.stat().st_size/1024:.0f} KB)")
+
 
 def _fill(text, payload):
     data_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
@@ -335,6 +340,156 @@ def render_embed(payload):
         + "\n</div>\n" + script + "\n"
     )
     return _fill(embed, payload)
+
+
+def _search_url(name):
+    clean = clean_name(name) or name
+    from urllib.parse import quote
+    return "https://www.google.com/search?q=" + quote(clean + " battery")
+
+
+def render_blogger_page(payload):
+    """No-JavaScript, no-form-element directory that survives Blogger's Page
+    sanitizer. Pure <style> + <div>/<a> + native <details>/<summary>."""
+    entries = payload["entries"]
+    tree = payload["tree"]
+    stats = payload["stats"]
+
+    by_cat = {}
+    for e in entries:
+        by_cat.setdefault(e["c"], []).append(e)
+    for lst in by_cat.values():
+        lst.sort(key=lambda e: e["i"])
+
+    def card(e):
+        verified = bool(e["u"])
+        href = e["u"] if verified else _search_url(e["n"])
+        badge = '<span class="badge">✓ LINK</span>' if verified else ""
+        tags = "".join(f'<span class="tag">{escape(t)}</span>' for t in e["tech"][:3])
+        tags = f'<span class="tags">{tags}</span>' if tags else ""
+        return (
+            f'<a class="card{" v" if verified else ""}" href="{escape(href)}" '
+            f'target="_blank" rel="noopener">'
+            f'<span class="idx">#{e["i"]}{badge}</span>'
+            f'<span class="nm">{escape(e["n"])}</span>{tags}'
+            f'<span class="go">↗ {"visit site" if verified else "web search"}</span></a>'
+        )
+
+    toc = "".join(
+        f'<a href="#s{i}">{escape(sec)}</a>'
+        for i, sec in enumerate(tree.keys(), 1)
+    )
+
+    sections = []
+    for i, (sec, cats) in enumerate(tree.items(), 1):
+        total = sum(c["count"] for c in cats)
+        cat_blocks = []
+        for c in cats:
+            cards = "".join(card(e) for e in by_cat.get(c["id"], []))
+            cat_blocks.append(
+                f'<details class="cat"><summary><span>'
+                f'<span class="tw">▸</span>{escape(c["name"])}</span>'
+                f'<span class="scount">{c["count"]}</span></summary>'
+                f'<div class="grid">{cards}</div></details>'
+            )
+        sections.append(
+            f'<details class="sec" id="s{i}"><summary><span class="snm">'
+            f'<span class="tw">▸</span>{escape(sec)}</span>'
+            f'<span class="scount">{total} entries · {len(cats)} categories</span>'
+            f'</summary><div class="catwrap">{"".join(cat_blocks)}'
+            f'<a class="top" href="#lx-top">↑ back to top</a></div></details>'
+        )
+
+    n_entries = f'{stats["entries"]:,}'
+    return (
+        "<!-- The Lithium Index — Blogger-PAGE-safe build (no JavaScript, no "
+        "form elements). Paste this whole block into a Blogger Page/Post in "
+        "HTML view. Browse by expanding sectors; use Ctrl/Cmd+F to find text. -->\n"
+        + STYLE_PAGE + '\n<div id="lx"><a id="lx-top"></a>\n'
+        f'<div class="head"><div class="brand"><span class="mark"></span>'
+        f'<h1>The Lithium Index</h1></div>'
+        f'<div class="sub">Li-ion Battery Industry Directory</div>'
+        f'<div class="stat"><b>{n_entries}</b> entries · '
+        f'<b>{stats["categories"]}</b> categories · '
+        f'<b>{stats["sectors"]}</b> mega-sectors · '
+        f'<b>{stats["withUrl"]}</b> verified links</div>'
+        f'<div class="tip">Click a sector to expand · '
+        f'press Ctrl/⌘+F to search the page</div></div>'
+        f'<div class="toc">{toc}</div>'
+        f'<div class="body">{"".join(sections)}</div>'
+        f'<div class="foot">The Lithium Index · a ✓ marks a verified official '
+        f'link, others open a web search · built as a static Blogger page</div>'
+        "</div>\n"
+    )
+
+
+STYLE_PAGE = r"""<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap');
+#lx{
+  --bg:#fafafa; --panel:#fff; --ink:#0a0a0a; --muted:#6b6b6b; --line:#e4e4e4;
+  --ls:#0a0a0a; --blue:#1452ff; --orange:#ff5a1f; --grid:rgba(10,10,10,.035);
+  container-type:inline-size;
+  font-family:"JetBrains Mono",ui-monospace,monospace;
+  color:var(--ink); font-size:13px; line-height:1.5; text-align:left;
+  background:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:48px 48px;
+  border:1px solid var(--ls); max-width:1200px; margin:18px auto; overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#lx *{box-sizing:border-box; margin:0; padding:0}
+#lx a{color:inherit; text-decoration:none}
+#lx summary::-webkit-details-marker{display:none}
+#lx summary::marker{content:""}
+#lx .head{padding:22px 20px; border-bottom:1px solid var(--ls); background:#fff}
+#lx .brand{display:flex; align-items:baseline; gap:10px}
+#lx .mark{width:11px; height:11px; background:var(--blue); box-shadow:3px 0 0 var(--orange)}
+#lx h1{font-family:"Instrument Serif",Georgia,serif; font-style:italic; font-weight:400;
+  font-size:30px; line-height:1}
+#lx .sub{color:var(--muted); font-size:10px; letter-spacing:.18em; text-transform:uppercase; margin-top:8px}
+#lx .stat{margin-top:12px; font-size:11px; color:var(--muted)}
+#lx .stat b{color:var(--ink)}
+#lx .tip{margin-top:8px; font-size:10px; color:var(--muted)}
+#lx .toc{padding:14px 20px; border-bottom:1px solid var(--line); background:#fcfcfc;
+  display:flex; flex-wrap:wrap; gap:6px}
+#lx .toc a{font-size:10px; border:1px solid var(--ls); padding:4px 8px; background:#fff}
+#lx .toc a:hover{background:var(--blue); color:#fff}
+#lx .body{padding:16px 20px}
+#lx details.sec{border:1px solid var(--ls); background:#fff; margin-bottom:12px}
+#lx details.sec>summary{list-style:none; cursor:pointer; padding:12px 14px;
+  display:flex; justify-content:space-between; align-items:center; font-weight:500; font-size:14px}
+#lx details.sec[open]>summary{background:var(--ink); color:#fff}
+#lx .snm{display:flex; align-items:center}
+#lx .tw{display:inline-block; font-size:10px; color:var(--muted); margin-right:9px; transition:transform .15s}
+#lx details[open]>summary .tw{transform:rotate(90deg)}
+#lx details.sec[open]>summary .tw{color:#fff}
+#lx .scount{font-size:11px; color:var(--muted); white-space:nowrap; padding-left:12px}
+#lx details.sec[open]>summary .scount{color:#bbb}
+#lx .catwrap{padding:10px 12px}
+#lx details.cat{border:1px solid var(--line); margin:8px 0; background:#fcfcfc}
+#lx details.cat>summary{list-style:none; cursor:pointer; padding:9px 12px;
+  display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#222}
+#lx details.cat[open]>summary{color:var(--blue); font-weight:700; border-bottom:1px solid var(--line)}
+#lx details.cat>summary>span:first-child{display:flex; align-items:center}
+#lx .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; padding:12px}
+#lx .card{display:flex; flex-direction:column; gap:8px; border:1px solid var(--ls);
+  background:#fff; padding:12px; min-height:112px; transition:box-shadow .08s}
+#lx .card.v{box-shadow:inset 3px 0 0 var(--blue)}
+#lx .card:hover{box-shadow:4px 4px 0 var(--ink)}
+#lx .card.v:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
+#lx .idx{font-size:9px; color:var(--muted); letter-spacing:.1em;
+  display:flex; justify-content:space-between; align-items:center}
+#lx .badge{font-size:8px; letter-spacing:.12em; color:var(--blue); border:1px solid var(--blue); padding:1px 4px}
+#lx .nm{font-family:"Instrument Serif",Georgia,serif; font-style:italic; font-size:18px; line-height:1.15; flex:1}
+#lx .tags{display:flex; flex-wrap:wrap; gap:4px}
+#lx .tag{font-size:9px; color:#444; background:#f1f3ff; border:1px solid #d6ddff; padding:2px 6px}
+#lx .go{font-size:10px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px}
+#lx .card:hover .go{color:var(--orange)}
+#lx .top{display:block; text-align:right; font-size:10px; color:var(--blue); padding:8px 4px 2px}
+#lx .foot{padding:20px; border-top:1px solid var(--ls); color:var(--muted); font-size:10px; background:#fff}
+@container (max-width:440px){ #lx h1{font-size:24px} }
+</style>"""
 
 
 STYLE_EMBED = r"""<style>
