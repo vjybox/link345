@@ -21297,6 +21297,28 @@
       }
     ]
   },
+  "colors": {
+    "Cell Manufacturing & OEMs": "#2563eb",
+    "Materials & Chemicals": "#7c3aed",
+    "Mining & Raw Materials": "#b45309",
+    "BMS & Power Electronics": "#0891b2",
+    "Recycling & Circular Economy": "#16a34a",
+    "Energy Storage & Charging": "#ea580c",
+    "Manufacturing Equipment": "#4f46e5",
+    "Process & Facility Systems": "#0d9488",
+    "Software, Data & Simulation": "#db2777",
+    "Testing, Certification & Quality": "#ca8a04",
+    "Logistics & Supply Chain": "#0284c7",
+    "Thermal & Safety": "#dc2626",
+    "Research & Academia": "#9333ea",
+    "Education, Training & Workforce": "#059669",
+    "Media, Community & Events": "#e11d48",
+    "Finance & Investment": "#15803d",
+    "Insurance & Risk": "#a16207",
+    "Consulting & Professional Services": "#1d4ed8",
+    "Legal, IP & Policy": "#6d28d9",
+    "Industry Bodies & Standards": "#475569"
+  },
   "types": [
     "Association / Standards",
     "Components",

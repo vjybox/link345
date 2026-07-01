@@ -80,6 +80,18 @@ SECTOR_TYPE = {
 }
 
 # ---------------------------------------------------------------------------
+# One accent color per mega-sector (assigned in MEGA_SECTORS order). Modern,
+# saturated-but-professional palette; used on the sidebar, cards and pills to
+# color-code the taxonomy.
+# ---------------------------------------------------------------------------
+SECTOR_COLORS = [
+    "#2563eb", "#7c3aed", "#b45309", "#0891b2", "#16a34a",
+    "#ea580c", "#4f46e5", "#0d9488", "#db2777", "#ca8a04",
+    "#0284c7", "#dc2626", "#9333ea", "#059669", "#e11d48",
+    "#15803d", "#a16207", "#1d4ed8", "#6d28d9", "#475569",
+]
+
+# ---------------------------------------------------------------------------
 # Technology / chemistry tags, detected from the entry name + category text.
 # (tag, [keywords]) — first keyword match adds the tag; an entry may carry
 # several tags. Purely deterministic, no fabricated data.
@@ -286,6 +298,8 @@ def main():
             for e in entries
         ],
         "tree": tree,
+        "colors": {sec: SECTOR_COLORS[i % len(SECTOR_COLORS)]
+                   for i, sec in enumerate(tree.keys())},
         "types": sorted({e["type"] for e in entries}),
         "techs": sorted({t for e in entries for t in e["tech"]}),
         "stats": {
@@ -354,6 +368,7 @@ def render_blogger_page(payload):
     entries = payload["entries"]
     tree = payload["tree"]
     stats = payload["stats"]
+    colors = payload["colors"]
 
     by_cat = {}
     for e in entries:
@@ -368,7 +383,8 @@ def render_blogger_page(payload):
         tags = "".join(f'<span class="tag">{escape(t)}</span>' for t in e["tech"][:3])
         tags = f'<span class="tags">{tags}</span>' if tags else ""
         return (
-            f'<a class="card{" v" if verified else ""}" href="{escape(href)}" '
+            f'<a class="card{" v" if verified else ""}" '
+            f'style="--sc:{colors.get(e["s"], "#0a0a0a")}" href="{escape(href)}" '
             f'target="_blank" rel="noopener">'
             f'<span class="idx">#{e["i"]}{badge}</span>'
             f'<span class="nm">{escape(e["n"])}</span>{tags}'
@@ -393,7 +409,8 @@ def render_blogger_page(payload):
                 f'<div class="grid">{cards}</div></details>'
             )
         sections.append(
-            f'<details class="sec" id="s{i}"><summary><span class="snm">'
+            f'<details class="sec" id="s{i}" style="--sc:{colors.get(sec, "#0a0a0a")}">'
+            f'<summary><span class="snm">'
             f'<span class="tw">▸</span>{escape(sec)}</span>'
             f'<span class="scount">{total} entries · {len(cats)} categories</span>'
             f'</summary><div class="catwrap">{"".join(cat_blocks)}'
@@ -444,7 +461,9 @@ STYLE_PAGE = r"""<style>
 #lx a{color:inherit; text-decoration:none}
 #lx summary::-webkit-details-marker{display:none}
 #lx summary::marker{content:""}
-#lx .head{padding:22px 20px; border-bottom:1px solid var(--ls); background:#fff}
+#lx .head{padding:22px 20px; border-bottom:1px solid var(--ls); background:#fff; position:relative}
+#lx .head::after{content:""; position:absolute; left:0; right:0; bottom:-1px; height:3px;
+  background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 #lx .brand{display:flex; align-items:baseline; gap:10px}
 #lx .mark{width:11px; height:11px; background:var(--blue); box-shadow:3px 0 0 var(--orange)}
 #lx h1{font-family:"Instrument Serif",Georgia,serif; font-style:italic; font-weight:400;
@@ -458,7 +477,7 @@ STYLE_PAGE = r"""<style>
 #lx .toc a{font-size:10px; border:1px solid var(--ls); padding:4px 8px; background:#fff}
 #lx .toc a:hover{background:var(--blue); color:#fff}
 #lx .body{padding:16px 20px}
-#lx details.sec{border:1px solid var(--ls); background:#fff; margin-bottom:12px}
+#lx details.sec{border:1px solid var(--ls); border-left:4px solid var(--sc,var(--ls)); background:#fff; margin-bottom:12px}
 #lx details.sec>summary{list-style:none; cursor:pointer; padding:12px 14px;
   display:flex; justify-content:space-between; align-items:center; font-weight:500; font-size:14px}
 #lx details.sec[open]>summary{background:var(--ink); color:#fff}
@@ -466,7 +485,7 @@ STYLE_PAGE = r"""<style>
 #lx .tw{display:inline-block; font-size:10px; color:var(--muted); margin-right:9px; transition:transform .15s}
 #lx details[open]>summary .tw{transform:rotate(90deg)}
 #lx details.sec[open]>summary .tw{color:#fff}
-#lx .scount{font-size:11px; color:var(--muted); white-space:nowrap; padding-left:12px}
+#lx .scount{font-size:11px; color:var(--sc,var(--muted)); font-weight:700; white-space:nowrap; padding-left:12px}
 #lx details.sec[open]>summary .scount{color:#bbb}
 #lx .catwrap{padding:10px 12px}
 #lx details.cat{border:1px solid var(--line); margin:8px 0; background:#fcfcfc}
@@ -476,6 +495,7 @@ STYLE_PAGE = r"""<style>
 #lx details.cat>summary>span:first-child{display:flex; align-items:center}
 #lx .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; padding:12px}
 #lx .card{display:flex; flex-direction:column; gap:8px; border:1px solid var(--ls);
+  border-top:3px solid var(--sc,var(--ls));
   background:#fff; padding:12px; min-height:112px; transition:box-shadow .08s}
 #lx .card.v{box-shadow:inset 3px 0 0 var(--blue)}
 #lx .card:hover{box-shadow:4px 4px 0 var(--ink)}
@@ -523,7 +543,9 @@ STYLE_EMBED = r"""<style>
 #li-root .menu-toggle{display:none !important}
 #li-root h1{font-size:26px;font-weight:400}
 
-#li-root header{display:block;background:#fff;border-bottom:1px solid var(--line-strong)}
+#li-root header{display:block;position:relative;background:#fff;border-bottom:1px solid var(--line-strong)}
+#li-root header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;
+  background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 #li-root .bar{padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 #li-root .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
 #li-root .brand .mark{width:11px;height:11px;background:var(--blue);
@@ -550,15 +572,15 @@ STYLE_EMBED = r"""<style>
   display:flex;justify-content:space-between;align-items:center}
 #li-root .aside-h button{font-size:10px;background:none;border:none;color:var(--blue);
   cursor:pointer;letter-spacing:.1em}
-#li-root .sector{border-bottom:1px solid var(--line)}
+#li-root .sector{border-bottom:1px solid var(--line);border-left:4px solid var(--sc,transparent)}
 #li-root .sector>.row{display:flex;align-items:center;justify-content:space-between;
-  padding:9px 14px;cursor:pointer;user-select:none}
+  padding:9px 12px;cursor:pointer;user-select:none}
 #li-root .sector>.row:hover{background:#f3f3f3}
 #li-root .sector>.row.on{background:var(--ink);color:#fff}
 #li-root .sector .nm{font-weight:500;font-size:12px;display:flex;align-items:flex-start;gap:8px;min-width:0}
 #li-root .sector .tw{font-size:9px;color:var(--muted);transition:transform .15s;flex:0 0 auto;margin-top:3px}
 #li-root .sector>.row.on .tw{color:#bbb}
-#li-root .sector .ct{font-size:10px;color:var(--muted);white-space:nowrap;flex:0 0 auto;padding-left:10px}
+#li-root .sector .ct{font-size:10px;color:var(--sc,var(--muted));font-weight:700;white-space:nowrap;flex:0 0 auto;padding-left:10px}
 #li-root .sector>.row.on .ct{color:#bbb}
 #li-root .cats{display:none;background:#fcfcfc;border-top:1px solid var(--line)}
 #li-root .sector.open .cats{display:block}
@@ -573,9 +595,10 @@ STYLE_EMBED = r"""<style>
 #li-root .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 #li-root .pills{display:flex;gap:6px;flex-wrap:wrap}
 #li-root .pill{font-size:11px;background:var(--panel);border:1px solid var(--line-strong);
-  padding:6px 11px;cursor:pointer;white-space:nowrap}
+  border-left:3px solid var(--sc,var(--line-strong));padding:6px 11px;cursor:pointer;white-space:nowrap}
+#li-root .pill[data-pill="__all"]{border-left-width:1px}
 #li-root .pill:hover{background:#f0f0f0}
-#li-root .pill.on{background:var(--blue);color:#fff}
+#li-root .pill.on{background:var(--sc,var(--blue));border-color:var(--sc,var(--blue));color:#fff}
 #li-root .spacer{flex:1}
 #li-root .sort{font-size:11px;background:var(--panel);color:var(--ink);
   border:1px solid var(--line-strong);padding:6px 10px;cursor:pointer}
@@ -604,7 +627,10 @@ STYLE_EMBED = r"""<style>
 #li-root .card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer;
   overflow-wrap:anywhere;line-height:1.35}
 #li-root .card .cat:hover{text-decoration:underline}
-#li-root .card .sec{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+#li-root .card{border-top:3px solid var(--sc,var(--ink))}
+#li-root .card .sec{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--sc,var(--muted));
+  display:flex;align-items:center;gap:5px}
+#li-root .card .dot{width:7px;height:7px;border-radius:50%;background:var(--sc,var(--muted));flex:0 0 auto}
 #li-root .card .go{font-size:10px;color:var(--muted);display:flex;align-items:center;
   gap:6px;border-top:1px solid var(--line);padding-top:9px;margin-top:2px}
 #li-root .card:hover .go{color:var(--orange)}
@@ -642,6 +668,10 @@ STYLE_EMBED = r"""<style>
 @container (min-width:680px){
   #li-root .wrap{display:grid;grid-template-columns:248px 1fr;gap:18px;align-items:start;padding:18px}
   #li-root aside{position:sticky;top:8px;max-height:80vh;overflow:auto;margin-bottom:0}
+}
+@container (max-width:679px){
+  #li-root .pills{display:none}
+  #li-root .toolbar{justify-content:flex-start}
 }
 @container (max-width:420px){
   #li-root .brand h1{font-size:21px}
@@ -686,6 +716,8 @@ header{
   position:sticky;top:0;z-index:50;background:rgba(250,250,250,.86);
   backdrop-filter:blur(10px);border-bottom:1px solid var(--line-strong);
 }
+header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;
+  background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 .bar{max-width:var(--maxw);margin:0 auto;padding:14px 20px;
   display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
@@ -717,15 +749,15 @@ aside{position:sticky;top:84px;border:1px solid var(--line-strong);
   display:flex;justify-content:space-between;align-items:center}
 .aside-h button{font-family:inherit;font-size:10px;background:none;border:none;
   color:var(--blue);cursor:pointer;letter-spacing:.1em}
-.sector{border-bottom:1px solid var(--line)}
+.sector{border-bottom:1px solid var(--line);border-left:4px solid var(--sc,transparent)}
 .sector>.row{display:flex;align-items:center;justify-content:space-between;
-  padding:9px 14px;cursor:pointer;user-select:none}
+  padding:9px 12px;cursor:pointer;user-select:none}
 .sector>.row:hover{background:#f3f3f3}
 .sector>.row.on{background:var(--ink);color:#fff}
 .sector .nm{font-weight:500;font-size:12px;display:flex;align-items:flex-start;gap:8px;min-width:0}
 .sector .tw{font-size:9px;color:var(--muted);transition:transform .15s;flex:0 0 auto;margin-top:3px}
 .sector>.row.on .tw{color:#bbb}
-.sector .ct{font-size:10px;color:var(--muted);white-space:nowrap;flex:0 0 auto;padding-left:10px}
+.sector .ct{font-size:10px;color:var(--sc,var(--muted));font-weight:700;white-space:nowrap;flex:0 0 auto;padding-left:10px}
 .sector>.row.on .ct{color:#bbb}
 .cats{display:none;background:#fcfcfc;border-top:1px solid var(--line)}
 .sector.open .cats{display:block}
@@ -741,9 +773,11 @@ main{min-width:0}
 .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .pills{display:flex;gap:6px;flex-wrap:wrap}
 .pill{font-family:inherit;font-size:11px;background:var(--panel);
-  border:1px solid var(--line-strong);padding:6px 11px;cursor:pointer;white-space:nowrap}
+  border:1px solid var(--line-strong);border-left:3px solid var(--sc,var(--line-strong));
+  padding:6px 11px;cursor:pointer;white-space:nowrap}
+.pill[data-pill="__all"]{border-left-width:1px}
 .pill:hover{background:#f0f0f0}
-.pill.on{background:var(--blue);color:#fff}
+.pill.on{background:var(--sc,var(--blue));border-color:var(--sc,var(--blue));color:#fff}
 .spacer{flex:1}
 .sort{font-family:inherit;font-size:11px;background:var(--panel);color:var(--ink);
   border:1px solid var(--line-strong);padding:6px 10px;cursor:pointer}
@@ -774,7 +808,10 @@ select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
 .card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer;
   overflow-wrap:anywhere;line-height:1.35}
 .card .cat:hover{text-decoration:underline}
-.card .sec{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.card{border-top:3px solid var(--sc,var(--ink))}
+.card .sec{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--sc,var(--muted));
+  display:flex;align-items:center;gap:5px}
+.card .dot{width:7px;height:7px;border-radius:50%;background:var(--sc,var(--muted));flex:0 0 auto}
 .card .go{font-size:10px;color:var(--muted);display:flex;align-items:center;
   gap:6px;border-top:1px solid var(--line);padding-top:9px;margin-top:2px}
 .card:hover .go{color:var(--orange)}
@@ -821,6 +858,7 @@ footer a{color:var(--blue)}
 @media(max-width:560px){
   .brand h1{font-size:21px}
   .grid{grid-template-columns:1fr 1fr}
+  .pills{display:none}
 }
 @media(max-width:420px){.grid{grid-template-columns:1fr}}
 </style>
@@ -894,7 +932,7 @@ function buildTree(){
   let html = "";
   for(const [sector,cats] of Object.entries(DB.tree)){
     const total = cats.reduce((a,c)=>a+c.count,0);
-    html += `<div class="sector" data-sector="${esc(sector)}">
+    html += `<div class="sector" data-sector="${esc(sector)}" style="--sc:${DB.colors[sector]||'#0a0a0a'}">
       <div class="row" data-act="sector">
         <span class="nm"><span class="tw">▶</span>${esc(sector)}</span>
         <span class="ct">${total}</span>
@@ -910,7 +948,7 @@ function buildTree(){
 }
 function buildPills(){
   pillsEl.innerHTML = `<button class="pill" data-pill="__all">All sectors</button>` +
-    QUICK.filter(s=>DB.tree[s]).map(s=>`<button class="pill" data-pill="${esc(s)}">${esc(s)}</button>`).join("");
+    QUICK.filter(s=>DB.tree[s]).map(s=>`<button class="pill" data-pill="${esc(s)}" style="--sc:${DB.colors[s]||'#0a0a0a'}">${esc(s)}</button>`).join("");
 }
 function buildSelects(){
   const typeSel=$("#typeSel"), techSel=$("#techSel");
@@ -983,13 +1021,13 @@ function render(){
     const tags = (e.tech||[]).slice(0,3)
       .map(t=>`<span class="tag">${esc(t)}</span>`).join("");
     return `
-    <a class="card${verified?" verified":""}" href="${href}" target="_blank" rel="noopener">
+    <a class="card${verified?" verified":""}" style="--sc:${DB.colors[e.s]||'#0a0a0a'}" href="${href}" target="_blank" rel="noopener">
       <div class="idx">#${e.i}${verified?'<span class="badge">✓ LINK</span>':''}</div>
       <div class="nm">${hl(e.n,q)}</div>
       ${tags?`<div class="tags">${tags}</div>`:""}
       <div class="meta">
         <div class="cat" data-cat="${e.c}">${hl(e.cn,q)}</div>
-        <div class="sec">${esc(e.s)}</div>
+        <div class="sec"><span class="dot"></span>${esc(e.s)}</div>
       </div>
       <div class="go">↗ ${verified?"visit site":"web search"}</div>
     </a>`;}).join("");
@@ -1053,8 +1091,9 @@ function flashResults(){
   // On narrow/stacked layouts the sidebar sits above the grid, so a filter
   // change happens off-screen. Scroll the results into view so it's obvious.
   if(!isStacked()) return;
-  const m = document.querySelector("main");
-  if(m) m.scrollIntoView({behavior:"smooth", block:"start"});
+  // Land on the result line (right above the cards), not the tall toolbar.
+  const target = resultLine.textContent ? resultLine : (grid.firstElementChild ? grid : document.querySelector("main"));
+  if(target) target.scrollIntoView({behavior:"smooth", block:"start"});
 }
 function setSector(s){ state.sector=s; state.cat=null; state.page=1; render(); flashResults(); }
 function setCat(id){
