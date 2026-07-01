@@ -49,34 +49,22 @@ python3 build.py
 No third-party packages required (standard library only). The script prints a
 warning if any category is left without a mega-sector.
 
-## Deploy to Google Blogger  ←  use `blogger-embed.html`
+## Deploy to Google Blogger
 
-A **full** HTML document (`index.html`) does *not* paste well into a Blogger
-Page: Blogger discards the `<head>` (so fonts + most CSS never load) and drops
-the body into its theme's narrow column, which is why a raw paste looks
-unstyled and cramped. **`blogger-embed.html` fixes this**:
+**Important:** Blogger *Pages* strip `<script>`/`<input>`/`<select>`/`<button>`,
+so pasting the app into a Page yields an empty styled box — a Blogger Page
+cannot run JavaScript. Use one of the working routes in
+**[`BLOGGER-SETUP.md`](BLOGGER-SETUP.md)**:
 
-- no `<!DOCTYPE>` / `<head>` / `<body>` — just one `<style>` + one `<div id="li-root">` + one `<script>`;
-- every CSS rule is scoped to `#li-root`, so it can't fight (or be broken by) the theme;
-- fonts load via `@import` (survives Blogger's sanitizer);
-- the layout uses **container queries**, so it adapts to your post column's
-  width — two columns when there's room, stacked when narrow — instead of the
-  browser window.
+1. **Recommended — iframe:** host `index.html` on GitHub Pages and embed it
+   with a one-line `<iframe>` in your Blogger Page. Scripts run on the host;
+   the Page just frames it. Full steps in `BLOGGER-SETUP.md`.
+2. **HTML/JavaScript gadget:** paste `blogger-embed.html` into a
+   Layout → HTML/JavaScript gadget (gadgets allow scripts, unlike Pages).
 
-Steps:
-
-1. Open `blogger-embed.html`, copy the **entire** file.
-2. In Blogger: **New Page** (or Post) → switch the editor to **HTML view** →
-   paste → Publish. *(Or Layout → Add a Gadget → HTML/JavaScript → paste.)*
-3. Optional: set that page as your homepage in Settings.
-
-If your theme already strips `<script>` from pages, use the **HTML/JavaScript
-gadget** route (step 2 parenthetical) — gadgets allow scripts.
-
-### Static hosting
-
-For GitHub Pages / Netlify / Cloudflare Pages / S3, serve **`index.html`**
-(the standalone full-page version) instead.
+`blogger-embed.html` is the scoped, `@import`-font, container-query build made
+for embedding inside a theme; `index.html` is the standalone full page used
+for hosting (GitHub Pages / Netlify / Cloudflare Pages / S3).
 
 ## Adding / overriding URLs
 
