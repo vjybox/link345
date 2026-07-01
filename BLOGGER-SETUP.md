@@ -73,7 +73,14 @@ inside a layout region rather than as a standalone page.
 
 ---
 
-### Which should I pick?
+## Enabling "Submit a company"
+
+The header **＋ Submit** button and each drawer's "Suggest an edit" link open
+whatever URL is set as `SUBMIT_URL` at the top of the `<script>` in
+`build.py` (default is a placeholder). Create a Google Form or Tally form,
+paste its URL into `SUBMIT_URL`, and re-run `python3 build.py`.
+
+## Which should I pick?
 
 | Want… | Use |
 | --- | --- |

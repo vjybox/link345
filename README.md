@@ -1,34 +1,40 @@
 # The Lithium Index
 
 A futuristic-minimalist **homepage / directory** of the lithium-ion battery
-industry — **1,996 entries** across **146 categories** grouped into
-**20 mega-sectors**, built as a single self-contained `index.html` with no
-runtime dependencies (all data is embedded, zero external API calls).
+industry — **2,129 entries** across **150 categories** grouped into
+**20 color-coded mega-sectors** (incl. **100+ gigafactories** in 25 countries),
+built as a single self-contained `index.html` with no runtime dependencies
+(all data is embedded, zero external API calls).
 
 ## Live features
 
-- **Full-text search** across name, category and sector — debounced, with a
-  `/` keyboard shortcut and match highlighting.
-- **Sidebar navigation tree**: 20 mega-sectors → drill down to any of the
-  146 categories, each with a live entry count.
-- **Type filter** (18 values: Manufacturer/OEM, Materials, Mining, Equipment,
-  Software, Testing, Logistics, Finance, Consulting, …).
-- **Technology / chemistry filter** (Solid-State, LFP, NMC/NCA, Sodium-ion,
-  Silicon Anode, Lithium-Metal, Graphene, Supercapacitor, Cathode, Anode,
-  Electrolyte, Separator) — all detected deterministically from entry text.
-- **Verified links**: 269 marquee entries link to their official website
-  (marked with a ✓ badge); the rest fall back to a web search.
-- **Quick-filter pills** for the most-used sectors.
-- **Active-filter chips** (sector / category / type / tech / search) with
-  one-click clear. All filters combine (AND).
-- **Sort**: Relevance · A→Z · Z→A.
-- **Pagination** at 60 entries per page.
-- **Responsive** — collapsible filter drawer on mobile.
-- **Design**: light mode, 48px grid, sharp 1px borders, JetBrains Mono body +
-  Instrument Serif italic headings, electric-blue / hot-orange accents.
+- **Three views** via a toggle: a **Sector landscape** market-map home (20
+  colored tiles), a **List** of entry cards, and a self-contained **world Map**
+  of plants/companies (bubbles by country, no map library).
+- **Full-text search** across name, category and sector — debounced, `/`
+  shortcut, match highlighting. Header stats update live with the result set.
+- **Sidebar tree**: 20 mega-sectors → 150 categories with live counts;
+  color-coded per sector.
+- **Filters** (all AND-combine, shown as clearable chips): **Type** (18),
+  **Technology/chemistry** (12, auto-detected), and **Region/Country**
+  (grouped by region).
+- **Company detail drawer** — click a card for a slide-in profile with smart
+  research links (Official site · Google · LinkedIn · News · Patents) and
+  related companies in the same category.
+- **Logos** on every card (favicon of the verified domain, with a colored
+  monogram fallback). 315 entries link to their official website (✓ badge).
+- **Dark mode** toggle (remembers your choice; follows system by default).
+- **Shareable URLs** — the current view/filters/search are encoded in the
+  page hash, so any filtered state can be bookmarked or linked.
+- **Submit a company** button + per-entry "suggest an edit" link
+  (set `SUBMIT_URL` in `build.py` to your Google Form / Tally).
+- Quick-filter pills, Relevance/A→Z/Z→A sort, 60/page pagination, responsive.
+- **Design**: light + dark, 48px grid, per-sector accent colors, gradient
+  header strip, JetBrains Mono body + Instrument Serif italic headings.
 
-Verified: Recycling & Circular Economy sector → 80 · Recycling & Second Life
-category → 20 · "tesla" search → 5.
+Verified in-browser: landscape 20 tiles · Recycling sector → 80 · drill-down
+Recycling & Second Life → 20 · "tesla" → 5 · map 215 located entries in 25
+countries · drawer + dark mode + hash deep-links all working.
 
 ## Files
 

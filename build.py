@@ -26,7 +26,7 @@ OUT_JSON = ROOT / "data" / "directory.json"
 # Any category id not listed falls back to "Other".
 # ---------------------------------------------------------------------------
 MEGA_SECTORS = {
-    "Cell Manufacturing & OEMs": [1, 2, 33, 103, 104],
+    "Cell Manufacturing & OEMs": [1, 2, 33, 103, 104, 147, 148, 149],
     "Materials & Chemicals": [3, 17, 55, 56, 57, 58, 85, 86],
     "Mining & Raw Materials": [11, 54],
     "BMS & Power Electronics": [4],
@@ -44,7 +44,7 @@ MEGA_SECTORS = {
     "Thermal & Safety": [19, 36],
     "Research & Academia": [6, 16, 52, 77],
     "Education, Training & Workforce": [22, 30, 50, 67, 117, 118, 121, 122],
-    "Media, Community & Events": [7, 14, 20, 21, 31, 51, 71, 75, 81, 119, 120],
+    "Media, Community & Events": [7, 14, 20, 21, 31, 51, 71, 75, 81, 119, 120, 150],
     "Finance & Investment": [15, 24, 60, 72, 126, 127],
     "Insurance & Risk": [25, 61, 128, 129],
     "Consulting & Professional Services": [28, 29, 43, 64, 115, 116, 130,
@@ -113,6 +113,69 @@ TECH_RULES = [
                         "metal-hydrogen", "liquid metal", "magnesium", "flow battery",
                         "niobium"]),
 ]
+
+# ---------------------------------------------------------------------------
+# Geography: country -> (lat, lon) centroid for the self-contained world map,
+# country -> region for the Region facet, and a small HQ-country lookup for
+# major brands so the facet has coverage beyond the location-tagged plants.
+# ---------------------------------------------------------------------------
+COUNTRY_CENTROIDS = {
+    "China": (35, 105), "USA": (39, -98), "Germany": (51, 10),
+    "South Korea": (36, 128), "Japan": (36, 138), "Sweden": (62, 15),
+    "France": (46, 2), "UK": (54, -2), "Norway": (61, 8), "Hungary": (47, 19),
+    "Poland": (52, 19), "Canada": (56, -106), "Spain": (40, -4),
+    "Italy": (42, 12), "Netherlands": (52, 5), "Finland": (64, 26),
+    "Australia": (-25, 133), "India": (22, 79), "Indonesia": (-2, 118),
+    "Chile": (-30, -71), "Brazil": (-10, -55), "Mexico": (23, -102),
+    "Czechia": (49, 15), "Slovakia": (48, 19), "Austria": (47, 14),
+    "Switzerland": (47, 8), "Belgium": (50, 4), "Portugal": (39, -8),
+    "Ireland": (53, -8), "Denmark": (56, 10), "Turkey": (39, 35),
+    "Morocco": (32, -6), "Serbia": (44, 20), "Thailand": (15, 101),
+    "Vietnam": (16, 106), "Taiwan": (24, 121), "Singapore": (1, 104),
+    "Russia": (61, 100), "Argentina": (-34, -64), "South Africa": (-30, 25),
+}
+
+REGION_OF = {
+    "China": "Asia-Pacific", "South Korea": "Asia-Pacific", "Japan": "Asia-Pacific",
+    "India": "Asia-Pacific", "Indonesia": "Asia-Pacific", "Thailand": "Asia-Pacific",
+    "Vietnam": "Asia-Pacific", "Taiwan": "Asia-Pacific", "Singapore": "Asia-Pacific",
+    "Australia": "Asia-Pacific",
+    "USA": "North America", "Canada": "North America", "Mexico": "North America",
+    "Chile": "South America", "Brazil": "South America", "Argentina": "South America",
+    "Morocco": "Africa", "South Africa": "Africa", "Turkey": "Middle East",
+    "Germany": "Europe", "Sweden": "Europe", "France": "Europe", "UK": "Europe",
+    "Norway": "Europe", "Hungary": "Europe", "Poland": "Europe", "Spain": "Europe",
+    "Italy": "Europe", "Netherlands": "Europe", "Finland": "Europe", "Czechia": "Europe",
+    "Slovakia": "Europe", "Austria": "Europe", "Switzerland": "Europe", "Belgium": "Europe",
+    "Portugal": "Europe", "Ireland": "Europe", "Denmark": "Europe", "Serbia": "Europe",
+    "Russia": "Europe",
+}
+
+# HQ country for major, unambiguous brands (cleaned-name prefix match, like URLs).
+KNOWN_COUNTRY = {
+    "catl": "China", "byd": "China", "eve energy": "China", "calb": "China",
+    "gotion": "China", "svolt": "China", "sunwoda": "China", "farasis": "China",
+    "ganfeng lithium": "China", "tianqi lithium": "China", "cmoc": "China",
+    "zijin mining": "China", "lg energy solution": "South Korea", "lg chem": "South Korea",
+    "samsung sdi": "South Korea", "sk on": "South Korea", "posco": "South Korea",
+    "ecopro": "South Korea", "panasonic": "Japan", "toyota": "Japan", "honda": "Japan",
+    "nissan": "Japan", "sumitomo metal mining": "Japan", "toray": "Japan",
+    "asahi kasei": "Japan", "gs yuasa": "Japan", "tesla": "USA", "rivian": "USA",
+    "lucid": "USA", "general motors": "USA", "ford": "USA", "redwood materials": "USA",
+    "quantumscape": "USA", "solid power": "USA", "sila": "USA", "enovix": "USA",
+    "form energy": "USA", "microvast": "USA", "albemarle": "USA", "amprius": "USA",
+    "group14": "USA", "our next energy": "USA", "one": "USA", "kore power": "USA",
+    "northvolt": "Sweden", "freyr": "Norway", "morrow": "Norway", "verkor": "France",
+    "saft": "France", "acc": "France", "automotive cells": "France", "umicore": "Belgium",
+    "solvay": "Belgium", "basf": "Germany", "volkswagen": "Germany", "bmw": "Germany",
+    "mercedes-benz": "Germany", "bosch": "Germany", "customcells": "Germany",
+    "prologium": "Taiwan", "vinfast": "Vietnam", "inobat": "Slovakia",
+    "britishvolt": "UK", "agratas": "UK", "johnson matthey": "UK", "nyobolt": "UK",
+    "amte power": "UK", "ola electric": "India", "reliance": "India", "amara raja": "India",
+    "exide": "India", "rio tinto": "Australia", "bhp": "Australia", "pilbara minerals": "Australia",
+    "syrah resources": "Australia", "sqm": "Chile", "vale": "Brazil", "eramet": "France",
+    "glencore": "Switzerland", "sungrow": "China", "fluence": "USA",
+}
 
 # ---------------------------------------------------------------------------
 # Curated verified official domains for high-confidence, unambiguous brands.
@@ -205,6 +268,17 @@ def match_url(name):
     return best and best_url or ""
 
 
+def match_country(name):
+    """Longest-prefix match against KNOWN_COUNTRY; '' if none."""
+    cn = clean_name(name)
+    best = ""
+    for key, country in KNOWN_COUNTRY.items():
+        if cn == key or cn.startswith(key + " "):
+            if len(key) > len(best):
+                best, best_country = key, country
+    return best and best_country or ""
+
+
 def derive_tech(name, category):
     hay = (name + " " + category).lower()
     tags = []
@@ -247,15 +321,22 @@ def parse():
         m = entry_re.match(line)
         if m and current is not None:
             text = m.group(2)
-            # optional explicit URL:  "Name | https://example.com"
-            url = ""
+            # optional pipe-separated fields:  "Name | https://url | country=Germany"
+            url, country = "", ""
             if "|" in text:
-                text, _, maybe = text.partition("|")
-                text, maybe = text.strip(), maybe.strip()
-                if maybe.startswith("http"):
-                    url = maybe
+                parts = [p.strip() for p in text.split("|")]
+                text = parts[0]
+                for extra in parts[1:]:
+                    if extra.startswith("http"):
+                        url = extra
+                    elif "=" in extra:
+                        k, _, v = extra.partition("=")
+                        if k.strip().lower() == "country":
+                            country = v.strip()
             if not url:
                 url = match_url(text)
+            if not country:
+                country = match_country(text)
             entries.append({
                 "id": int(m.group(1)),
                 "name": text,
@@ -265,6 +346,8 @@ def parse():
                 "url": url,
                 "type": SECTOR_TYPE.get(current["sector"], "Other"),
                 "tech": derive_tech(text, current["name"]),
+                "country": country,
+                "region": REGION_OF.get(country, ""),
             })
     return categories, entries
 
@@ -291,10 +374,12 @@ def main():
         })
     tree = {s: cats for s, cats in tree.items() if cats}
 
+    present_countries = [c for c in COUNTRY_CENTROIDS if any(e["country"] == c for e in entries)]
     payload = {
         "entries": [
             {"i": e["id"], "n": e["name"], "c": e["cid"], "cn": e["cat"],
-             "s": e["sector"], "u": e["url"], "t": e["type"], "tech": e["tech"]}
+             "s": e["sector"], "u": e["url"], "t": e["type"], "tech": e["tech"],
+             "co": e["country"], "rg": e["region"]}
             for e in entries
         ],
         "tree": tree,
@@ -302,11 +387,15 @@ def main():
                    for i, sec in enumerate(tree.keys())},
         "types": sorted({e["type"] for e in entries}),
         "techs": sorted({t for e in entries for t in e["tech"]}),
+        "countries": sorted({e["country"] for e in entries if e["country"]}),
+        "regions": sorted({e["region"] for e in entries if e["region"]}),
+        "centroids": {c: COUNTRY_CENTROIDS[c] for c in present_countries},
         "stats": {
             "entries": len(entries),
             "categories": len(categories),
             "sectors": len(tree),
             "withUrl": sum(1 for e in entries if e["url"]),
+            "withCountry": sum(1 for e in entries if e["country"]),
         },
     }
 
@@ -362,6 +451,25 @@ def _search_url(name):
     return "https://www.google.com/search?q=" + quote(clean + " battery")
 
 
+def _initials(name):
+    base = re.sub(r"\([^)]*\)", " ", name)
+    base = re.sub(r"[^A-Za-z0-9 ]", " ", base).strip()
+    w = base.split()
+    if not w:
+        return "?"
+    return (w[0][:2] if len(w) == 1 else w[0][0] + w[1][0]).upper()
+
+
+def _logo_html(entry, color):
+    from urllib.parse import urlparse
+    host = urlparse(entry["u"]).hostname or "" if entry["u"] else ""
+    fav = (f'<img class="fav" loading="lazy" alt="" '
+           f'src="https://www.google.com/s2/favicons?domain={host}&sz=64" '
+           f'onerror="this.remove()">') if host else ""
+    return (f'<span class="logo" style="--sc:{color}">'
+            f'<span class="mono">{escape(_initials(entry["n"]))}</span>{fav}</span>')
+
+
 def render_blogger_page(payload):
     """No-JavaScript, no-form-element directory that survives Blogger's Page
     sanitizer. Pure <style> + <div>/<a> + native <details>/<summary>."""
@@ -382,11 +490,13 @@ def render_blogger_page(payload):
         badge = '<span class="badge">✓ LINK</span>' if verified else ""
         tags = "".join(f'<span class="tag">{escape(t)}</span>' for t in e["tech"][:3])
         tags = f'<span class="tags">{tags}</span>' if tags else ""
+        color = colors.get(e["s"], "#0a0a0a")
         return (
             f'<a class="card{" v" if verified else ""}" '
-            f'style="--sc:{colors.get(e["s"], "#0a0a0a")}" href="{escape(href)}" '
+            f'style="--sc:{color}" href="{escape(href)}" '
             f'target="_blank" rel="noopener">'
-            f'<span class="idx">#{e["i"]}{badge}</span>'
+            f'<span class="idx">{_logo_html(e, color)}<span class="cid">#{e["i"]}</span>'
+            f'<span class="grow"></span>{badge}</span>'
             f'<span class="nm">{escape(e["n"])}</span>{tags}'
             f'<span class="go">↗ {"visit site" if verified else "web search"}</span></a>'
         )
@@ -500,8 +610,13 @@ STYLE_PAGE = r"""<style>
 #lx .card.v{box-shadow:inset 3px 0 0 var(--blue)}
 #lx .card:hover{box-shadow:4px 4px 0 var(--ink)}
 #lx .card.v:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
-#lx .idx{font-size:9px; color:var(--muted); letter-spacing:.1em;
-  display:flex; justify-content:space-between; align-items:center}
+#lx .idx{display:flex; align-items:center; gap:8px}
+#lx .cid{font-size:9px; color:var(--muted); letter-spacing:.1em}
+#lx .grow{flex:1}
+#lx .logo{position:relative; width:30px; height:30px; flex:0 0 auto; border:1px solid var(--line); overflow:hidden}
+#lx .logo .mono{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:#fff; background:var(--sc,var(--ls))}
+#lx .logo .fav{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; padding:3px}
 #lx .badge{font-size:8px; letter-spacing:.12em; color:#fff; background:var(--blue); border:1px solid var(--blue); padding:1px 5px}
 #lx .nm{font-family:"JetBrains Mono",ui-monospace,monospace; font-weight:700; font-size:14px;
   line-height:1.4; letter-spacing:-.2px; flex:1; overflow-wrap:anywhere; word-break:break-word}
@@ -532,18 +647,20 @@ STYLE_EMBED = r"""<style>
   box-sizing:border-box; overflow:hidden;
   /* Break out of the theme's (often narrow) content column and use the
      viewport width, capped, so the directory actually widens on big screens.
-     Assumes a centered content column (the Blogger norm). */
-  position:relative; left:50%; transform:translateX(-50%);
-  width:94vw; max-width:1500px; margin:20px 0;
+     Assumes a centered content column (the Blogger norm). No transform, so
+     the fixed drawer still anchors to the viewport; inner content is capped. */
+  position:relative; left:50%; right:50%; width:100vw;
+  margin:18px -50vw;
   -webkit-font-smoothing:antialiased;
 }
 #li-root *{box-sizing:border-box; margin:0; padding:0}
+#li-root .bar,#li-root .wrap,#li-root footer{max-width:1500px;margin-left:auto;margin-right:auto}
 #li-root a{color:inherit;text-decoration:none}
 #li-root button,#li-root input,#li-root select{font-family:inherit}
 #li-root .menu-toggle{display:none !important}
 #li-root h1{font-size:26px;font-weight:400}
 
-#li-root header{display:block;position:relative;background:#fff;border-bottom:1px solid var(--line-strong)}
+#li-root header{display:block;position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line-strong)}
 #li-root header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;
   background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 #li-root .bar{padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -576,7 +693,7 @@ STYLE_EMBED = r"""<style>
 #li-root .sector>.row{display:flex;align-items:center;justify-content:space-between;
   padding:9px 12px;cursor:pointer;user-select:none}
 #li-root .sector>.row:hover{background:#f3f3f3}
-#li-root .sector>.row.on{background:var(--ink);color:#fff}
+#li-root .sector>.row.on{background:var(--sc,var(--ink));color:#fff}
 #li-root .sector .nm{font-weight:500;font-size:12px;display:flex;align-items:flex-start;gap:8px;min-width:0}
 #li-root .sector .tw{font-size:9px;color:var(--muted);transition:transform .15s;flex:0 0 auto;margin-top:3px}
 #li-root .sector>.row.on .tw{color:#bbb}
@@ -636,8 +753,13 @@ STYLE_EMBED = r"""<style>
 #li-root .card:hover .go{color:var(--orange)}
 #li-root .card.verified{box-shadow:inset 3px 0 0 var(--blue)}
 #li-root .card.verified:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
-#li-root .card .idx{font-size:9px;color:var(--muted);letter-spacing:.1em;
-  display:flex;align-items:center;justify-content:space-between}
+#li-root .card .idx{display:flex;align-items:center;gap:8px}
+#li-root .card .cid{font-size:9px;color:var(--muted);letter-spacing:.1em}
+#li-root .card .grow{flex:1}
+#li-root .logo{position:relative;width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);overflow:hidden}
+#li-root .logo .mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;background:var(--sc,var(--ink))}
+#li-root .logo .fav{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:3px}
 #li-root .badge{font-size:8px;letter-spacing:.12em;color:#fff;background:var(--blue);
   border:1px solid var(--blue);padding:1px 5px}
 #li-root .tags{display:flex;flex-wrap:wrap;gap:4px}
@@ -654,7 +776,7 @@ STYLE_EMBED = r"""<style>
 #li-root .pager button{font-size:11px;background:var(--panel);border:1px solid var(--line-strong);
   padding:7px 12px;cursor:pointer;min-width:38px}
 #li-root .pager button:hover:not(:disabled){background:#f0f0f0}
-#li-root .pager button.on{background:var(--ink);color:#fff}
+#li-root .pager button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 #li-root .pager button:disabled{opacity:.35;cursor:default}
 #li-root .pager .gap{color:var(--muted);padding:0 2px}
 
@@ -677,6 +799,77 @@ STYLE_EMBED = r"""<style>
   #li-root .brand h1{font-size:21px}
   #li-root .stats{display:none}
 }
+#li-root .hactions{display:flex;align-items:center;gap:8px}
+#li-root .hbtn{font-family:inherit;font-size:11px;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line-strong);padding:7px 10px;cursor:pointer}
+#li-root .hbtn:hover{background:#f0f0f0}
+#li-root .hbtn.icon{padding:6px 9px;font-size:13px;line-height:1}
+#li-root .viewtabs{display:flex;border:1px solid var(--line-strong)}
+#li-root .viewtabs button{font-family:inherit;font-size:11px;background:var(--panel);color:var(--ink);
+  border:0;border-right:1px solid var(--line-strong);padding:6px 10px;cursor:pointer;white-space:nowrap}
+#li-root .viewtabs button:last-child{border-right:0}
+#li-root .viewtabs button.on{background:var(--blue);color:#fff}
+#li-root .landscape{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+#li-root .tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
+  border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
+  padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink);
+  transition:transform .08s,box-shadow .08s}
+#li-root .tile:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--sc,var(--ink))}
+#li-root .tile-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+#li-root .tile-n{font-weight:700;font-size:14px;line-height:1.25}
+#li-root .tile-c{font-size:16px;font-weight:700;color:var(--sc,var(--ink))}
+#li-root .tile-sub{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#li-root .tile-top{font-size:10.5px;color:var(--muted);line-height:1.5}
+#li-root .mapwrap{border:1px solid var(--line-strong);background:var(--panel);padding:8px}
+#li-root .worldmap{width:100%;height:auto;display:block}
+#li-root .worldmap .ocean{fill:transparent}
+#li-root .worldmap .grat{stroke:var(--line);stroke-width:1}
+#li-root .worldmap .guide{fill:var(--muted);font-size:13px;letter-spacing:.18em;text-anchor:middle;opacity:.45}
+#li-root .worldmap .bub{cursor:pointer}
+#li-root .worldmap .bub circle{transition:fill-opacity .1s}
+#li-root .worldmap .bub:hover circle{fill-opacity:.85}
+#li-root .worldmap .bub-n{fill:var(--ink);font-size:11px;text-anchor:middle;pointer-events:none}
+#li-root .worldmap .bub.on .bub-n{font-weight:700}
+#li-root .drawer{position:fixed;inset:0;z-index:2000}
+#li-root .drawer[hidden]{display:none}
+#li-root .drawer .scrim{position:absolute;inset:0;background:rgba(0,0,0,.35);opacity:0;transition:opacity .2s}
+#li-root .drawer.open .scrim{opacity:1}
+#li-root .drawer .panel{position:absolute;top:0;right:0;height:100%;width:min(420px,92vw);
+  background:var(--panel);border-left:1px solid var(--line-strong);box-shadow:-8px 0 24px rgba(0,0,0,.15);
+  padding:18px;overflow:auto;transform:translateX(100%);transition:transform .2s;
+  display:flex;flex-direction:column;gap:12px}
+#li-root .drawer.open .panel{transform:none}
+#li-root .d-top{display:flex;align-items:flex-start;gap:10px}
+#li-root .d-top .logo{width:38px;height:38px}
+#li-root .d-title{flex:1;min-width:0}
+#li-root .d-title h3{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;
+  font-size:22px;line-height:1.15;overflow-wrap:anywhere}
+#li-root .d-sec{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:5px;margin-top:4px}
+#li-root .d-x{background:none;border:0;font-family:inherit;font-size:14px;cursor:pointer;color:var(--muted)}
+#li-root .d-cat{font-size:11px;color:var(--blue);cursor:pointer}
+#li-root .d-cat:hover{text-decoration:underline}
+#li-root .d-links{display:flex;flex-wrap:wrap;gap:6px}
+#li-root .d-link{font-size:11px;border:1px solid var(--line-strong);padding:6px 9px;color:var(--ink)}
+#li-root .d-link:hover{background:#f0f0f0}
+#li-root .d-link.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+#li-root .d-h{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  border-top:1px solid var(--line);padding-top:12px}
+#li-root .d-related{display:flex;flex-direction:column;gap:4px}
+#li-root .d-rel{display:flex;align-items:center;gap:8px;text-align:left;font-family:inherit;font-size:12px;
+  background:none;border:1px solid var(--line);padding:6px;cursor:pointer;color:var(--ink)}
+#li-root .d-rel:hover{background:#f4f4f4}
+#li-root .d-rel .logo{width:22px;height:22px}
+#li-root .d-rel span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#li-root .d-empty{font-size:11px;color:var(--muted)}
+#li-root .d-suggest{font-size:11px;color:var(--blue);margin-top:4px}
+#li-root mark{color:#111}
+#li-root[data-theme=dark]{--bg:#0c0d10;--panel:#15171c;--ink:#e8e8ea;--muted:#8b909a;
+  --line:#262a31;--line-strong:#3a3f48;--grid:rgba(255,255,255,.035)}
+#li-root[data-theme=dark] .hbtn:hover,#li-root[data-theme=dark] .d-link:hover,
+#li-root[data-theme=dark] .pill:hover,#li-root[data-theme=dark] .d-rel:hover,
+#li-root[data-theme=dark] .sort:hover,#li-root[data-theme=dark] .cat:hover,
+#li-root[data-theme=dark] .pager button:hover:not(:disabled){background:#22252c}
 </style>"""
 
 
@@ -753,7 +946,7 @@ aside{position:sticky;top:84px;border:1px solid var(--line-strong);
 .sector>.row{display:flex;align-items:center;justify-content:space-between;
   padding:9px 12px;cursor:pointer;user-select:none}
 .sector>.row:hover{background:#f3f3f3}
-.sector>.row.on{background:var(--ink);color:#fff}
+.sector>.row.on{background:var(--sc,var(--ink));color:#fff}
 .sector .nm{font-weight:500;font-size:12px;display:flex;align-items:flex-start;gap:8px;min-width:0}
 .sector .tw{font-size:9px;color:var(--muted);transition:transform .15s;flex:0 0 auto;margin-top:3px}
 .sector>.row.on .tw{color:#bbb}
@@ -817,7 +1010,13 @@ select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
 .card:hover .go{color:var(--orange)}
 .card.verified{box-shadow:inset 3px 0 0 var(--blue)}
 .card.verified:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
-.card .idx{display:flex;align-items:center;justify-content:space-between}
+.card .idx{display:flex;align-items:center;gap:8px}
+.card .cid{font-size:9px;color:var(--muted);letter-spacing:.1em}
+.card .grow{flex:1}
+.logo{position:relative;width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);overflow:hidden}
+.logo .mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;background:var(--sc,var(--ink))}
+.logo .fav{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:3px}
 .badge{font-size:8px;letter-spacing:.12em;color:#fff;background:var(--blue);
   border:1px solid var(--blue);padding:1px 5px}
 .tags{display:flex;flex-wrap:wrap;gap:4px}
@@ -834,7 +1033,7 @@ mark{background:linear-gradient(transparent 55%, #ffe08a 55%);color:inherit;padd
 .pager button{font-family:inherit;font-size:11px;background:var(--panel);
   border:1px solid var(--line-strong);padding:7px 12px;cursor:pointer;min-width:38px}
 .pager button:hover:not(:disabled){background:#f0f0f0}
-.pager button.on{background:var(--ink);color:#fff}
+.pager button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .pager button:disabled{opacity:.35;cursor:default}
 .pager .gap{color:var(--muted);padding:0 2px}
 
@@ -861,6 +1060,83 @@ footer a{color:var(--blue)}
   .pills{display:none}
 }
 @media(max-width:420px){.grid{grid-template-columns:1fr}}
+
+/* header actions, view tabs */
+.hactions{display:flex;align-items:center;gap:8px}
+.hbtn{font-family:inherit;font-size:11px;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line-strong);padding:7px 10px;cursor:pointer}
+.hbtn:hover{background:#f0f0f0}
+.hbtn.icon{padding:6px 9px;font-size:13px;line-height:1}
+.viewtabs{display:flex;border:1px solid var(--line-strong)}
+.viewtabs button{font-family:inherit;font-size:11px;background:var(--panel);color:var(--ink);
+  border:0;border-right:1px solid var(--line-strong);padding:6px 10px;cursor:pointer;white-space:nowrap}
+.viewtabs button:last-child{border-right:0}
+.viewtabs button.on{background:var(--blue);color:#fff}
+/* landscape tiles */
+.landscape{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
+  border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
+  padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink);
+  transition:transform .08s,box-shadow .08s}
+.tile:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--sc,var(--ink))}
+.tile-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tile-n{font-weight:700;font-size:14px;line-height:1.25}
+.tile-c{font-size:16px;font-weight:700;color:var(--sc,var(--ink))}
+.tile-sub{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tile-top{font-size:10.5px;color:var(--muted);line-height:1.5}
+/* world map */
+.mapwrap{border:1px solid var(--line-strong);background:var(--panel);padding:8px}
+.worldmap{width:100%;height:auto;display:block}
+.worldmap .ocean{fill:transparent}
+.worldmap .grat{stroke:var(--line);stroke-width:1}
+.worldmap .guide{fill:var(--muted);font-size:13px;letter-spacing:.18em;text-anchor:middle;opacity:.45}
+.worldmap .bub{cursor:pointer}
+.worldmap .bub circle{transition:fill-opacity .1s}
+.worldmap .bub:hover circle{fill-opacity:.85}
+.worldmap .bub-n{fill:var(--ink);font-size:11px;text-anchor:middle;pointer-events:none}
+.worldmap .bub.on .bub-n{font-weight:700}
+/* detail drawer */
+.drawer{position:fixed;inset:0;z-index:200}
+.drawer[hidden]{display:none}
+.drawer .scrim{position:absolute;inset:0;background:rgba(0,0,0,.35);opacity:0;transition:opacity .2s}
+.drawer.open .scrim{opacity:1}
+.drawer .panel{position:absolute;top:0;right:0;height:100%;width:min(420px,92vw);
+  background:var(--panel);border-left:1px solid var(--line-strong);box-shadow:-8px 0 24px rgba(0,0,0,.15);
+  padding:18px;overflow:auto;transform:translateX(100%);transition:transform .2s;
+  display:flex;flex-direction:column;gap:12px}
+.drawer.open .panel{transform:none}
+.d-top{display:flex;align-items:flex-start;gap:10px}
+.d-top .logo{width:38px;height:38px}
+.d-title{flex:1;min-width:0}
+.d-title h3{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;
+  font-size:22px;line-height:1.15;overflow-wrap:anywhere}
+.d-sec{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:5px;margin-top:4px}
+.d-x{background:none;border:0;font-family:inherit;font-size:14px;cursor:pointer;color:var(--muted)}
+.d-cat{font-size:11px;color:var(--blue);cursor:pointer}
+.d-cat:hover{text-decoration:underline}
+.d-links{display:flex;flex-wrap:wrap;gap:6px}
+.d-link{font-size:11px;border:1px solid var(--line-strong);padding:6px 9px;color:var(--ink)}
+.d-link:hover{background:#f0f0f0}
+.d-link.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.d-h{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  border-top:1px solid var(--line);padding-top:12px}
+.d-related{display:flex;flex-direction:column;gap:4px}
+.d-rel{display:flex;align-items:center;gap:8px;text-align:left;font-family:inherit;font-size:12px;
+  background:none;border:1px solid var(--line);padding:6px;cursor:pointer;color:var(--ink)}
+.d-rel:hover{background:#f4f4f4}
+.d-rel .logo{width:22px;height:22px}
+.d-rel span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.d-empty{font-size:11px;color:var(--muted)}
+.d-suggest{font-size:11px;color:var(--blue);margin-top:4px}
+mark{color:#111}
+/* dark theme */
+:root[data-theme=dark]{--bg:#0c0d10;--panel:#15171c;--ink:#e8e8ea;--muted:#8b909a;
+  --line:#262a31;--line-strong:#3a3f48;--grid:rgba(255,255,255,.035)}
+:root[data-theme=dark] .hbtn:hover,:root[data-theme=dark] .d-link:hover,
+:root[data-theme=dark] .pill:hover,:root[data-theme=dark] .d-rel:hover,
+:root[data-theme=dark] .sort:hover,:root[data-theme=dark] .cat:hover,
+:root[data-theme=dark] .pager button:hover:not(:disabled){background:#22252c}
 </style>
 </head>
 <body>
@@ -883,6 +1159,10 @@ footer a{color:var(--blue)}
       <div><b id="statCats">__N_CATS__</b><span>Categories</span></div>
       <div><b id="statSecs">__N_SECTORS__</b><span>Sectors</span></div>
     </div>
+    <div class="hactions">
+      <button class="hbtn" id="submitBtn" title="Submit a company">＋ Submit</button>
+      <button class="hbtn icon" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode">◐</button>
+    </div>
   </div>
 </header>
 
@@ -897,17 +1177,30 @@ footer a{color:var(--blue)}
 
   <main>
     <div class="toolbar">
+      <div class="viewtabs" id="viewTabs">
+        <button data-view="landscape" title="Sector overview">▦ Sectors</button>
+        <button data-view="grid" title="Browse all entries">▤ List</button>
+        <button data-view="map" title="World map">◍ Map</button>
+      </div>
       <div class="pills" id="pills"></div>
       <span class="spacer"></span>
+      <select class="sort" id="regionSel" title="Filter by region / country"></select>
       <select class="sort" id="typeSel" title="Filter by type"></select>
       <select class="sort" id="techSel" title="Filter by technology / chemistry"></select>
       <button class="sort" id="sortBtn">Sort: Relevance</button>
     </div>
     <div class="chips" id="chips"></div>
     <div class="resultline" id="resultLine"></div>
+    <div class="landscape" id="landscape"></div>
+    <div class="mapwrap" id="map"></div>
     <div class="grid" id="grid"></div>
     <div class="pager" id="pager"></div>
   </main>
+</div>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="scrim" data-close></div>
+  <div class="panel" id="drawerPanel" role="dialog" aria-modal="true"></div>
 </div>
 
 <footer>
@@ -918,14 +1211,20 @@ footer a{color:var(--blue)}
 <script>
 const DB = /*__DATA__*/;
 const PER_PAGE = 60;
+// Replace with your Google Form / Tally link to collect submissions.
+const SUBMIT_URL = "https://docs.google.com/forms/";
 const QUICK = ["Cell Manufacturing & OEMs","Materials & Chemicals","Mining & Raw Materials",
   "Recycling & Circular Economy","Manufacturing Equipment","Software, Data & Simulation"];
 
-const state = {q:"", sector:null, cat:null, type:"", tech:"", sort:"rel", page:1};
+const state = {q:"", sector:null, cat:null, type:"", tech:"", region:"", country:"", sort:"rel", view:"landscape", page:1};
 
 const $ = s => document.querySelector(s);
 const grid = $("#grid"), pager = $("#pager"), chips = $("#chips"),
-      resultLine = $("#resultLine"), treeEl = $("#tree"), pillsEl = $("#pills");
+      resultLine = $("#resultLine"), treeEl = $("#tree"), pillsEl = $("#pills"),
+      landscapeEl = $("#landscape"), mapEl = $("#map"),
+      drawer = $("#drawer"), drawerPanel = $("#drawerPanel");
+// Theme applies to #li-root inside a Blogger embed, else the document root.
+const ROOT = document.getElementById("li-root") || document.documentElement;
 
 // ---- build sidebar tree ----
 function buildTree(){
@@ -956,6 +1255,17 @@ function buildSelects(){
     DB.types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
   techSel.innerHTML = `<option value="">All technologies</option>` +
     DB.techs.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
+  const regionSel=$("#regionSel");
+  const optGroups = (DB.regions||[]).map(r=>{
+    const cs = (DB.countries||[]).filter(c=>entriesRegion(c)===r);
+    return `<optgroup label="${esc(r)}"><option value="reg:${esc(r)}">All ${esc(r)}</option>`+
+      cs.map(c=>`<option value="co:${esc(c)}">${esc(c)}</option>`).join("")+`</optgroup>`;
+  }).join("");
+  regionSel.innerHTML = `<option value="">All regions</option>`+optGroups;
+}
+function entriesRegion(country){
+  const e = DB.entries.find(x=>x.co===country);
+  return e ? e.rg : "";
 }
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
@@ -968,6 +1278,8 @@ function filtered(){
   else if(state.sector){ rows = rows.filter(e=>e.s===state.sector); }
   if(state.type){ rows = rows.filter(e=>e.t===state.type); }
   if(state.tech){ rows = rows.filter(e=>e.tech.indexOf(state.tech)>=0); }
+  if(state.region){ rows = rows.filter(e=>e.rg===state.region); }
+  if(state.country){ rows = rows.filter(e=>e.co===state.country); }
   if(q){
     rows = rows.filter(e=>
       e.n.toLowerCase().includes(q) ||
@@ -993,18 +1305,51 @@ function searchUrl(name){
   const clean = name.replace(/\s*\([^)]*\)\s*/g," ").trim() || name;
   return "https://www.google.com/search?q="+encodeURIComponent(clean+" battery");
 }
+function cleanName(name){ return name.replace(/\([^)]*\)/g," ").replace(/\s[-/–]\s.*$/,"").trim(); }
+function initials(name){
+  const c = cleanName(name).replace(/[^A-Za-z0-9 ]/g," ").trim();
+  const w = c.split(/\s+/).filter(Boolean);
+  if(!w.length) return "?";
+  return (w.length===1 ? w[0].slice(0,2) : w[0][0]+w[1][0]).toUpperCase();
+}
+function hostOf(u){ try{ return new URL(u).hostname; }catch(_){ return ""; } }
+function logoHtml(e){
+  const h = e.u ? hostOf(e.u) : "";
+  const fav = h ? `<img class="fav" loading="lazy" alt="" src="https://www.google.com/s2/favicons?domain=${h}&sz=64" onerror="this.remove()">` : "";
+  return `<span class="logo" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"><span class="mono">${esc(initials(e.n))}</span>${fav}</span>`;
+}
 
 function render(){
   const rows = filtered();
   const q = state.q.trim().toLowerCase();
+  $("#statShown").textContent = rows.length.toLocaleString();
+  $("#statCats").textContent = new Set(rows.map(e=>e.c)).size;
+  $("#statSecs").textContent = new Set(rows.map(e=>e.s)).size;
+
+  const view = state.view;
+  landscapeEl.style.display = view==="landscape" ? "" : "none";
+  mapEl.style.display       = view==="map"       ? "" : "none";
+  grid.style.display        = view==="grid"      ? "" : "none";
+  document.querySelectorAll("#viewTabs button").forEach(b=>b.classList.toggle("on", b.dataset.view===view));
+
+  renderChips(); syncSidebar();
+
+  if(view==="landscape"){
+    renderLandscape();
+    resultLine.innerHTML = `<b>${DB.stats.sectors}</b> mega-sectors · <b>${rows.length.toLocaleString()}</b> entries — pick a sector to explore`;
+    pager.innerHTML=""; updateHash(); return;
+  }
+  if(view==="map"){
+    renderMap(rows);
+    const located = rows.filter(e=>e.co && DB.centroids[e.co]);
+    resultLine.innerHTML = `<b>${located.length.toLocaleString()}</b> located entries in <b>${new Set(located.map(e=>e.co)).size}</b> countries — click a bubble to filter`;
+    pager.innerHTML=""; updateHash(); return;
+  }
+
   const pages = Math.max(1, Math.ceil(rows.length/PER_PAGE));
   if(state.page>pages) state.page = pages;
   const start = (state.page-1)*PER_PAGE;
   const slice = rows.slice(start, start+PER_PAGE);
-
-  $("#statShown").textContent = rows.length.toLocaleString();
-  $("#statCats").textContent = new Set(rows.map(e=>e.c)).size;
-  $("#statSecs").textContent = new Set(rows.map(e=>e.s)).size;
   resultLine.innerHTML = rows.length
     ? `Showing <b>${start+1}–${start+slice.length}</b> of <b>${rows.length.toLocaleString()}</b> entries`
     : "";
@@ -1012,7 +1357,7 @@ function render(){
   if(!rows.length){
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
       <b>No matches</b>Try a different term or clear the active filters.</div>`;
-    pager.innerHTML=""; renderChips(); return;
+    pager.innerHTML=""; updateHash(); return;
   }
 
   grid.innerHTML = slice.map(e=>{
@@ -1021,21 +1366,96 @@ function render(){
     const tags = (e.tech||[]).slice(0,3)
       .map(t=>`<span class="tag">${esc(t)}</span>`).join("");
     return `
-    <a class="card${verified?" verified":""}" style="--sc:${DB.colors[e.s]||'#0a0a0a'}" href="${href}" target="_blank" rel="noopener">
-      <div class="idx">#${e.i}${verified?'<span class="badge">✓ LINK</span>':''}</div>
+    <a class="card${verified?" verified":""}" style="--sc:${DB.colors[e.s]||'#0a0a0a'}" href="${href}" target="_blank" rel="noopener" data-id="${e.i}">
+      <div class="idx">${logoHtml(e)}<span class="cid">#${e.i}</span><span class="grow"></span>${verified?'<span class="badge">✓ LINK</span>':''}</div>
       <div class="nm">${hl(e.n,q)}</div>
       ${tags?`<div class="tags">${tags}</div>`:""}
       <div class="meta">
         <div class="cat" data-cat="${e.c}">${hl(e.cn,q)}</div>
-        <div class="sec"><span class="dot"></span>${esc(e.s)}</div>
+        <div class="sec"><span class="dot"></span>${esc(e.s)}${e.co?' · '+esc(e.co):''}</div>
       </div>
       <div class="go">↗ ${verified?"visit site":"web search"}</div>
     </a>`;}).join("");
 
   renderPager(pages);
-  renderChips();
-  syncSidebar();
+  updateHash();
 }
+
+function renderLandscape(){
+  landscapeEl.innerHTML = Object.entries(DB.tree).map(([sec,cats])=>{
+    const total = cats.reduce((a,c)=>a+c.count,0);
+    const top = cats.slice().sort((a,b)=>b.count-a.count).slice(0,4).map(c=>esc(c.name)).join(" · ");
+    return `<button class="tile" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'#0a0a0a'}">
+      <div class="tile-h"><span class="tile-n">${esc(sec)}</span><span class="tile-c">${total}</span></div>
+      <div class="tile-sub">${cats.length} categories</div>
+      <div class="tile-top">${top}</div>
+    </button>`;
+  }).join("");
+}
+
+function renderMap(rows){
+  const W=1000, H=500;
+  const proj=(lat,lon)=>[(lon+180)/360*W, (90-lat)/180*H];
+  const byC={};
+  rows.forEach(e=>{ if(e.co && DB.centroids[e.co]) (byC[e.co]=byC[e.co]||[]).push(e); });
+  const maxN = Math.max(1, ...Object.values(byC).map(a=>a.length));
+  let grat="";
+  for(let lon=-150;lon<=150;lon+=30){ const x=(lon+180)/360*W; grat+=`<line class="grat" x1="${x}" y1="0" x2="${x}" y2="${H}"/>`; }
+  for(let lat=-60;lat<=60;lat+=30){ const y=(90-lat)/180*H; grat+=`<line class="grat" x1="0" y1="${y}" x2="${W}" y2="${y}"/>`; }
+  const guides=[["NORTH AMERICA",45,-100],["SOUTH AMERICA",-15,-60],["EUROPE",54,15],
+                ["AFRICA",5,20],["ASIA",46,90],["OCEANIA",-25,140]]
+    .map(([t,lat,lon])=>{const[x,y]=proj(lat,lon);return `<text class="guide" x="${x.toFixed(0)}" y="${y.toFixed(0)}">${t}</text>`;}).join("");
+  const bubbles = Object.entries(byC).sort((a,b)=>b[1].length-a[1].length).map(([co,arr])=>{
+    const [lat,lon]=DB.centroids[co]; const [x,y]=proj(lat,lon);
+    const r = 6 + 30*Math.sqrt(arr.length/maxN);
+    const cnt={}; arr.forEach(e=>cnt[e.s]=(cnt[e.s]||0)+1);
+    const dom = Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];
+    const col = DB.colors[dom] || "#2563eb";
+    const on = state.country===co;
+    return `<g class="bub${on?' on':''}" data-co="${esc(co)}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})" tabindex="0">
+      <circle r="${r.toFixed(1)}" fill="${col}" fill-opacity="${on?0.85:0.5}" stroke="${col}" stroke-width="1.5"/>
+      <text class="bub-n" y="${(-r-4).toFixed(1)}">${esc(co)} · ${arr.length}</text>
+    </g>`;
+  }).join("");
+  mapEl.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="worldmap" preserveAspectRatio="xMidYMid meet" role="img" aria-label="World map of battery entries by country">
+    <rect class="ocean" x="0" y="0" width="${W}" height="${H}"/>${grat}${guides}${bubbles}
+  </svg>`;
+}
+
+function openDetail(e){
+  const cn = cleanName(e.n) || e.n;
+  const site = e.u ? ["Official site", e.u, true] : null;
+  const links = [
+    site,
+    ["Google", "https://www.google.com/search?q="+encodeURIComponent(cn)],
+    ["LinkedIn", "https://www.google.com/search?q="+encodeURIComponent(cn+" site:linkedin.com/company")],
+    ["News", "https://news.google.com/search?q="+encodeURIComponent(cn+" battery")],
+    ["Patents", "https://patents.google.com/?q="+encodeURIComponent(cn)],
+  ].filter(Boolean);
+  const tags = (e.tech||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+  const related = DB.entries.filter(x=>x.c===e.c && x.i!==e.i).slice(0,10);
+  drawerPanel.innerHTML = `
+    <div class="d-top">
+      ${logoHtml(e)}
+      <div class="d-title"><h3>${esc(e.n)}</h3>
+        <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.s)}${e.co?' · '+esc(e.co):''}</div>
+      </div>
+      <button class="d-x" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="d-cat" data-cat="${e.c}">${esc(e.cn)} ↗</div>
+    ${tags?`<div class="tags d-tags">${tags}</div>`:""}
+    <div class="d-links">
+      ${links.map(([label,url,primary])=>`<a class="d-link${primary?' primary':''}" href="${url}" target="_blank" rel="noopener">${esc(label)} ↗</a>`).join("")}
+    </div>
+    <div class="d-h">Related in ${esc(e.cn)}</div>
+    <div class="d-related">
+      ${related.length?related.map(r=>`<button class="d-rel" data-id="${r.i}">${logoHtml(r)}<span>${esc(r.n)}</span></button>`).join(""):'<span class="d-empty">No other entries in this category.</span>'}
+    </div>
+    <a class="d-suggest" href="${SUBMIT_URL}" target="_blank" rel="noopener">✎ Suggest an edit or add a link</a>`;
+  drawer.hidden = false;
+  requestAnimationFrame(()=>drawer.classList.add("open"));
+}
+function closeDrawer(){ drawer.classList.remove("open"); setTimeout(()=>{drawer.hidden=true;}, 200); }
 
 function renderChips(){
   const c = [];
@@ -1046,6 +1466,8 @@ function renderChips(){
   }
   if(state.type) c.push(`<span class="chip"><b>Type:</b> ${esc(state.type)} <span class="x" data-clear="type">✕</span></span>`);
   if(state.tech) c.push(`<span class="chip"><b>Tech:</b> ${esc(state.tech)} <span class="x" data-clear="tech">✕</span></span>`);
+  if(state.region) c.push(`<span class="chip"><b>Region:</b> ${esc(state.region)} <span class="x" data-clear="region">✕</span></span>`);
+  if(state.country) c.push(`<span class="chip"><b>Country:</b> ${esc(state.country)} <span class="x" data-clear="country">✕</span></span>`);
   if(state.q.trim()) c.push(`<span class="chip"><b>Search:</b> "${esc(state.q.trim())}" <span class="x" data-clear="q">✕</span></span>`);
   chips.innerHTML = c.join("");
 }
@@ -1103,11 +1525,12 @@ function scrollToSelectedSector(){
   const el = row && row.closest(".sector");
   if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
 }
-function setSector(s){ state.sector=s; state.cat=null; state.page=1; render(); if(s) scrollToSelectedSector(); }
+function setSector(s){ state.sector=s; state.cat=null; state.page=1; if(s) state.view="grid"; render(); if(s) scrollToSelectedSector(); }
 function setCat(id){
   const e = DB.entries.find(e=>e.c===id);
-  state.cat=id; state.sector=e?e.s:state.sector; state.page=1; render(); flashResults();
+  state.cat=id; state.sector=e?e.s:state.sector; state.page=1; state.view="grid"; render(); flashResults();
 }
+function setView(v){ state.view=v; state.page=1; render(); }
 
 treeEl.addEventListener("click", ev=>{
   const sec = ev.target.closest(".sector");
@@ -1131,13 +1554,40 @@ chips.addEventListener("click", ev=>{
   if(k==="cat") state.cat=null;
   if(k==="type"){ state.type=""; $("#typeSel").value=""; }
   if(k==="tech"){ state.tech=""; $("#techSel").value=""; }
+  if(k==="region"){ state.region=""; $("#regionSel").value=""; }
+  if(k==="country"){ state.country=""; $("#regionSel").value=""; }
   if(k==="q"){ state.q=""; $("#q").value=""; }
   state.page=1; render();
 });
 grid.addEventListener("click", ev=>{
   const cat = ev.target.closest(".cat[data-cat]");
-  if(cat){ ev.preventDefault(); setCat(Number(cat.dataset.cat)); }
+  if(cat){ ev.preventDefault(); ev.stopPropagation(); setCat(Number(cat.dataset.cat)); return; }
+  const card = ev.target.closest(".card");
+  if(card){ ev.preventDefault(); const e = DB.entries.find(x=>x.i===Number(card.dataset.id)); if(e) openDetail(e); }
 });
+landscapeEl.addEventListener("click", ev=>{
+  const tile = ev.target.closest(".tile"); if(!tile) return;
+  setSector(tile.dataset.sector);
+});
+mapEl.addEventListener("click", ev=>{
+  const g = ev.target.closest(".bub"); if(!g) return;
+  const co = g.dataset.co;
+  state.country = state.country===co ? "" : co;
+  $("#regionSel").value = state.country ? "co:"+state.country : "";
+  state.view="grid"; state.page=1; render(); flashResults();
+});
+$("#viewTabs").addEventListener("click", ev=>{
+  const b = ev.target.closest("button[data-view]"); if(!b) return;
+  setView(b.dataset.view);
+});
+drawer.addEventListener("click", ev=>{
+  if(ev.target.closest("[data-close]")){ closeDrawer(); return; }
+  const rel = ev.target.closest(".d-rel");
+  if(rel){ const e=DB.entries.find(x=>x.i===Number(rel.dataset.id)); if(e) openDetail(e); return; }
+  const cat = ev.target.closest(".d-cat[data-cat]");
+  if(cat){ closeDrawer(); setCat(Number(cat.dataset.cat)); }
+});
+$("#submitBtn").addEventListener("click", ()=>window.open(SUBMIT_URL, "_blank", "noopener"));
 pager.addEventListener("click", ev=>{
   const b=ev.target.closest("button[data-page]"); if(!b||b.disabled) return;
   state.page=Number(b.dataset.page); window.scrollTo({top:0,behavior:"smooth"}); render();
@@ -1146,15 +1596,21 @@ pager.addEventListener("click", ev=>{
 let t=null;
 $("#q").addEventListener("input", e=>{
   clearTimeout(t);
-  t=setTimeout(()=>{ state.q=e.target.value; state.page=1; render(); }, 140);
+  t=setTimeout(()=>{ state.q=e.target.value; state.page=1; if(state.q.trim()&&state.view!=="grid") state.view="grid"; render(); }, 140);
 });
 document.addEventListener("keydown", e=>{
   if(e.key==="/" && document.activeElement!==$("#q")){ e.preventDefault(); $("#q").focus(); }
-  if(e.key==="Escape"){ $("#q").blur(); }
+  if(e.key==="Escape"){ if(!drawer.hidden){ closeDrawer(); } else { $("#q").blur(); } }
 });
 
-$("#typeSel").addEventListener("change", e=>{ state.type=e.target.value; state.page=1; render(); });
-$("#techSel").addEventListener("change", e=>{ state.tech=e.target.value; state.page=1; render(); });
+$("#typeSel").addEventListener("change", e=>{ state.type=e.target.value; state.page=1; state.view="grid"; render(); });
+$("#techSel").addEventListener("change", e=>{ state.tech=e.target.value; state.page=1; state.view="grid"; render(); });
+$("#regionSel").addEventListener("change", e=>{
+  const v=e.target.value;
+  state.region = v.startsWith("reg:") ? v.slice(4) : "";
+  state.country = v.startsWith("co:") ? v.slice(3) : "";
+  state.page=1; state.view="grid"; render();
+});
 
 const SORTS=[["rel","Relevance"],["az","A → Z"],["za","Z → A"]];
 $("#sortBtn").addEventListener("click", ()=>{
@@ -1165,9 +1621,56 @@ $("#sortBtn").addEventListener("click", ()=>{
 
 $("#clearNav").addEventListener("click", resetAll);
 $("#brandReset").addEventListener("click", e=>{e.preventDefault();resetAll();});
-function resetAll(){ state.q="";state.sector=null;state.cat=null;state.type="";state.tech="";state.page=1;
-  $("#q").value=""; $("#typeSel").value=""; $("#techSel").value="";
+function resetAll(){ Object.assign(state,{q:"",sector:null,cat:null,type:"",tech:"",region:"",country:"",page:1,view:"landscape"});
+  $("#q").value=""; $("#typeSel").value=""; $("#techSel").value=""; $("#regionSel").value="";
   document.querySelectorAll(".sector.open").forEach(s=>s.classList.remove("open")); render(); }
+
+// ---- dark mode ----
+function applyTheme(mode){ ROOT.setAttribute("data-theme", mode); $("#themeBtn").textContent = mode==="dark"?"☀":"◐"; }
+(function initTheme(){
+  let saved=null; try{ saved=localStorage.getItem("li-theme"); }catch(_){}
+  const mode = saved || (matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light");
+  applyTheme(mode);
+})();
+$("#themeBtn").addEventListener("click", ()=>{
+  const mode = ROOT.getAttribute("data-theme")==="dark"?"light":"dark";
+  applyTheme(mode); try{ localStorage.setItem("li-theme", mode); }catch(_){}
+});
+
+// ---- shareable URL (location hash) ----
+let hashLock=false;
+function updateHash(){
+  if(hashLock) return;
+  const p=new URLSearchParams();
+  if(state.view!=="landscape") p.set("v",state.view);
+  if(state.sector) p.set("sec",state.sector);
+  if(state.cat) p.set("cat",state.cat);
+  if(state.type) p.set("t",state.type);
+  if(state.tech) p.set("tech",state.tech);
+  if(state.region) p.set("rg",state.region);
+  if(state.country) p.set("co",state.country);
+  if(state.q.trim()) p.set("q",state.q.trim());
+  if(state.page>1) p.set("pg",state.page);
+  const h=p.toString();
+  try{ history.replaceState(null,"", h?("#"+h):location.pathname+location.search); }catch(_){}
+}
+function applyHash(){
+  const h=location.hash.replace(/^#/,""); if(!h) return;
+  const p=new URLSearchParams(h);
+  state.view = p.get("v")||"landscape";
+  state.sector = p.get("sec")||null;
+  state.cat = p.get("cat")?Number(p.get("cat")):null;
+  state.type = p.get("t")||"";
+  state.tech = p.get("tech")||"";
+  state.region = p.get("rg")||"";
+  state.country = p.get("co")||"";
+  state.q = p.get("q")||"";
+  state.page = p.get("pg")?Number(p.get("pg")):1;
+  $("#q").value=state.q; $("#typeSel").value=state.type; $("#techSel").value=state.tech;
+  $("#regionSel").value = state.country?("co:"+state.country):(state.region?("reg:"+state.region):"");
+  const si=SORTS.findIndex(s=>s[0]===state.sort); if(si>=0)$("#sortBtn").textContent="Sort: "+SORTS[si][1];
+}
+window.addEventListener("hashchange", ()=>{ hashLock=true; applyHash(); render(); hashLock=false; });
 
 // mobile nav
 const body=document.body;
@@ -1178,7 +1681,9 @@ document.addEventListener("click",e=>{
     closeNav();
 });
 
-buildTree(); buildPills(); buildSelects(); render();
+buildTree(); buildPills(); buildSelects();
+hashLock=true; applyHash(); hashLock=false;
+render();
 </script>
 </body>
 </html>

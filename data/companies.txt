@@ -2285,3 +2285,144 @@
 1996. Oliver Wyman (Post-merger integration)
 1997. A.T. Kearney (M&A integration)
 1998. L.E.K. Consulting (M&A strategy)
+
+## 147 | Gigafactories & Cell Plants — North America
+1999. Tesla Gigafactory Nevada (Panasonic) | country=USA
+2000. Tesla Gigafactory Texas — Austin | country=USA
+2001. Panasonic Energy — De Soto, Kansas | country=USA
+2002. Ultium Cells — Warren, Ohio (GM–LGES) | country=USA
+2003. Ultium Cells — Spring Hill, Tennessee (GM–LGES) | country=USA
+2004. BlueOval SK — Glendale, Kentucky (Ford–SK On) | country=USA
+2005. BlueOval City — Stanton, Tennessee (Ford–SK On) | country=USA
+2006. SK On — Commerce, Georgia | country=USA
+2007. LG Energy Solution — Holland, Michigan | country=USA
+2008. LG Energy Solution — Queen Creek, Arizona | country=USA
+2009. StarPlus Energy — Kokomo, Indiana (Stellantis–Samsung SDI) | country=USA
+2010. Toyota Battery Manufacturing — Liberty, North Carolina | country=USA
+2011. Envision AESC — Bowling Green, Kentucky | country=USA
+2012. Envision AESC — Florence, South Carolina | country=USA
+2013. AESC — Smyrna, Tennessee | country=USA
+2014. Redwood Materials — Storey County, Nevada | country=USA
+2015. Kore Power KOREPlex — Buckeye, Arizona | country=USA
+2016. Our Next Energy (ONE) — Van Buren, Michigan | country=USA
+2017. Microvast — Clarksville, Tennessee | country=USA
+2018. Natron Energy — Holland, Michigan | country=USA
+2019. L-H Battery (LG Energy Solution–Honda) — Jeffersonville, Ohio | country=USA
+2020. Gotion — Manteno, Illinois | country=USA
+2021. Gotion — Big Rapids, Michigan | country=USA
+2022. Statevolt — Imperial Valley, California | country=USA
+2023. FREYR Battery — Coweta County, Georgia | country=USA
+2024. Amprius Technologies — Brighton, Colorado | country=USA
+2025. NextStar Energy — Windsor, Ontario (LGES–Stellantis) | country=Canada
+2026. Volkswagen PowerCo — St. Thomas, Ontario | country=Canada
+2027. Northvolt Six — Montreal, Quebec | country=Canada
+2028. Ultium CAM — Bécancour, Quebec (GM–POSCO) | country=Canada
+2029. Lion Electric — Mirabel, Quebec | country=Canada
+
+## 148 | Gigafactories & Cell Plants — Europe
+2030. Northvolt Ett — Skellefteå | country=Sweden
+2031. Northvolt Drei — Heide | country=Germany
+2032. Tesla Gigafactory Berlin-Brandenburg | country=Germany
+2033. CATL — Arnstadt, Thuringia | country=Germany
+2034. Volkswagen PowerCo — Salzgitter | country=Germany
+2035. Microvast — Ludwigsfelde | country=Germany
+2036. Mercedes-Benz — Kamenz (ACCUMOTIVE) | country=Germany
+2037. Customcells — Itzehoe | country=Germany
+2038. Cellforce Group (Porsche) — Kirchentellinsfurt | country=Germany
+2039. Leclanché — Willstätt | country=Germany
+2040. Automotive Cells Company (ACC) — Douvrin | country=France
+2041. Automotive Cells Company (ACC) — Kaiserslautern | country=Germany
+2042. Automotive Cells Company (ACC) — Termoli | country=Italy
+2043. Verkor — Dunkirk | country=France
+2044. Envision AESC — Douai | country=France
+2045. ProLogium — Dunkirk | country=France
+2046. Volkswagen PowerCo — Sagunto, Valencia | country=Spain
+2047. Basquevolt — Vitoria-Gasteiz | country=Spain
+2048. Italvolt — Scarmagno | country=Italy
+2049. LG Energy Solution — Wrocław | country=Poland
+2050. SK On — Komárom | country=Hungary
+2051. SK On — Iváncsa | country=Hungary
+2052. Samsung SDI — Göd | country=Hungary
+2053. CATL — Debrecen | country=Hungary
+2054. EVE Energy — Debrecen | country=Hungary
+2055. InoBat — Voderady | country=Slovakia
+2056. Morrow Batteries — Arendal | country=Norway
+2057. FREYR — Mo i Rana | country=Norway
+2058. Beyonder — Sandnes | country=Norway
+2059. AESC — Sunderland (Nissan) | country=UK
+2060. Agratas (Tata) — Bridgwater, Somerset | country=UK
+2061. Britishvolt — Blyth | country=UK
+2062. AMTE Power — Dundee | country=UK
+
+## 149 | Gigafactories & Cell Plants — Asia-Pacific
+2063. CATL — Ningde, Fujian | country=China
+2064. CATL — Yibin, Sichuan | country=China
+2065. CATL — Liyang, Jiangsu | country=China
+2066. BYD (FinDreams) — Shenzhen | country=China
+2067. BYD (FinDreams) — Changzhou | country=China
+2068. CALB — Changzhou | country=China
+2069. EVE Energy — Jingmen | country=China
+2070. Gotion High-tech — Hefei | country=China
+2071. SVOLT — Changzhou | country=China
+2072. Sunwoda — Shenzhen | country=China
+2073. Farasis Energy — Ganzhou | country=China
+2074. REPT (Ruipu Lanjun) — Wenzhou | country=China
+2075. LG Energy Solution — Nanjing | country=China
+2076. Panasonic Energy — Dalian | country=China
+2077. Samsung SDI — Xi'an | country=China
+2078. SK On — Yancheng | country=China
+2079. Tesla Megafactory — Shanghai | country=China
+2080. LG Energy Solution — Ochang | country=South Korea
+2081. Samsung SDI — Cheonan | country=South Korea
+2082. Samsung SDI — Ulsan | country=South Korea
+2083. SK On — Seosan | country=South Korea
+2084. Panasonic Energy — Kaizuka, Osaka | country=Japan
+2085. Panasonic Energy — Wakayama | country=Japan
+2086. Prime Planet Energy (Toyota–Panasonic) — Himeji | country=Japan
+2087. Envision AESC — Ibaraki | country=Japan
+2088. GS Yuasa — Kyoto | country=Japan
+2089. Toshiba SCiB — Yokohama | country=Japan
+2090. Ola Electric Gigafactory — Krishnagiri, Tamil Nadu | country=India
+2091. Reliance New Energy — Jamnagar, Gujarat | country=India
+2092. Amara Raja Giga — Telangana | country=India
+2093. Exide Energy — Bengaluru, Karnataka | country=India
+2094. Agratas (Tata) — Sanand, Gujarat | country=India
+2095. VinFast (VinES) — Ha Tinh | country=Vietnam
+2096. ProLogium — Taoyuan | country=Taiwan
+2097. HLI Green Power (Hyundai–LGES) — Karawang | country=Indonesia
+2098. Energy Absolute (Amita) — Chachoengsao | country=Thailand
+2099. Recharge Industries — Geelong | country=Australia
+2100. Energy Renaissance — Tomago | country=Australia
+
+## 150 | Battery & EV News / Media (Extended)
+2101. Electrive (EV & battery industry news) | country=Germany
+2102. Recharge News (energy transition)
+2103. Energy-Storage.news
+2104. Battery Design (batterydesign.net)
+2105. The Faraday Institution Insights
+2106. Benchmark Source (Benchmark Mineral Intelligence)
+2107. Mining.com (battery metals)
+2108. Battery Technology (batterytechonline.com)
+2109. BatteryIndustry.tech
+2110. Battery-News.de (English edition) | country=Germany
+2111. Autovista24
+2112. Just Auto — Batteries
+2113. Automotive News — EV
+2114. Canary Media
+2115. Latitude Media
+2116. Heatmap News
+2117. Cipher (Breakthrough Energy)
+2118. Transport Evolved
+2119. Undecided with Matt Ferrell
+2120. Ars Technica — Cars
+2121. TechCrunch — Transportation
+2122. Sifted — Climate & Mobility
+2123. Tech Funding News — Batteries
+2124. Bloomberg Hyperdrive
+2125. The Driven (Australia)
+2126. Electrifying.com
+2127. Battery Power Online
+2128. pv magazine International
+2129. Clean Energy Wire (CLEW)
+2130. Rho Motion (news & data)
+2131. Adamas Intelligence (insights)
