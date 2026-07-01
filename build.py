@@ -547,10 +547,10 @@ STYLE_EMBED = r"""<style>
   padding:9px 14px;cursor:pointer;user-select:none}
 #li-root .sector>.row:hover{background:#f3f3f3}
 #li-root .sector>.row.on{background:var(--ink);color:#fff}
-#li-root .sector .nm{font-weight:500;font-size:12px;display:flex;align-items:center;gap:8px}
-#li-root .sector .tw{font-size:9px;color:var(--muted);transition:transform .15s}
+#li-root .sector .nm{font-weight:500;font-size:12px;display:flex;align-items:flex-start;gap:8px;min-width:0}
+#li-root .sector .tw{font-size:9px;color:var(--muted);transition:transform .15s;flex:0 0 auto;margin-top:3px}
 #li-root .sector>.row.on .tw{color:#bbb}
-#li-root .sector .ct{font-size:10px;color:var(--muted)}
+#li-root .sector .ct{font-size:10px;color:var(--muted);white-space:nowrap;flex:0 0 auto;padding-left:10px}
 #li-root .sector>.row.on .ct{color:#bbb}
 #li-root .cats{display:none;background:#fcfcfc;border-top:1px solid var(--line)}
 #li-root .sector.open .cats{display:block}
@@ -711,10 +711,10 @@ aside{position:sticky;top:84px;border:1px solid var(--line-strong);
   padding:9px 14px;cursor:pointer;user-select:none}
 .sector>.row:hover{background:#f3f3f3}
 .sector>.row.on{background:var(--ink);color:#fff}
-.sector .nm{font-weight:500;font-size:12px;display:flex;align-items:center;gap:8px}
-.sector .tw{font-size:9px;color:var(--muted);transition:transform .15s}
+.sector .nm{font-weight:500;font-size:12px;display:flex;align-items:flex-start;gap:8px;min-width:0}
+.sector .tw{font-size:9px;color:var(--muted);transition:transform .15s;flex:0 0 auto;margin-top:3px}
 .sector>.row.on .tw{color:#bbb}
-.sector .ct{font-size:10px;color:var(--muted)}
+.sector .ct{font-size:10px;color:var(--muted);white-space:nowrap;flex:0 0 auto;padding-left:10px}
 .sector>.row.on .ct{color:#bbb}
 .cats{display:none;background:#fcfcfc;border-top:1px solid var(--line)}
 .sector.open .cats{display:block}
