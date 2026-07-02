@@ -84,12 +84,25 @@ SECTOR_TYPE = {
 # saturated-but-professional palette; used on the sidebar, cards and pills to
 # color-code the taxonomy.
 # ---------------------------------------------------------------------------
+# Order + values validated with the dataviz palette checker (light & dark):
+# lightness band, chroma floor, adjacent-pair CVD separation all PASS; the
+# yellow/deep-blue contrast WARNs are relieved by direct labels on every mark.
 SECTOR_COLORS = [
-    "#2563eb", "#7c3aed", "#b45309", "#0891b2", "#16a34a",
-    "#ea580c", "#4f46e5", "#0d9488", "#db2777", "#ca8a04",
-    "#0284c7", "#dc2626", "#9333ea", "#059669", "#e11d48",
-    "#15803d", "#a16207", "#1d4ed8", "#6d28d9", "#475569",
+    "#2563eb", "#ea580c", "#16a34a", "#7c3aed", "#0891b2",
+    "#dc2626", "#ca8a04", "#db2777", "#0d9488", "#9333ea",
+    "#b45309", "#1d4ed8", "#15803d", "#e11d48", "#0284c7",
+    "#a16207", "#6d28d9", "#059669", "#c2410c", "#4f46e5",
 ]
+# Dark mode selects its own step where needed (yellow exceeds the dark band).
+SECTOR_COLORS_DARK = list(SECTOR_COLORS)
+SECTOR_COLORS_DARK[6] = "#d97706"
+
+
+def palette_css():
+    light = "".join(f"--c{i+1}:{c};" for i, c in enumerate(SECTOR_COLORS))
+    dark = "".join(f"--c{i+1}:{c};" for i, c in enumerate(SECTOR_COLORS_DARK)
+                   if c != SECTOR_COLORS[i])
+    return light, dark
 
 # ---------------------------------------------------------------------------
 # Technology / chemistry tags, detected from the entry name + category text.
@@ -279,6 +292,24 @@ def match_country(name):
     return best and best_country or ""
 
 
+# Plain-language tooltips for technology jargon (learner-friendly).
+GLOSSARY = {
+    "Solid-State": "Solid electrolyte instead of liquid — higher energy density and safety",
+    "LFP": "Lithium Iron Phosphate (LiFePO4) — cobalt-free cathode; long life, lower cost",
+    "NMC / NCA": "Nickel Manganese Cobalt / Nickel Cobalt Aluminium — high-energy cathode chemistries",
+    "Sodium-ion": "Uses sodium instead of lithium — cheaper, abundant materials",
+    "Silicon Anode": "Silicon replaces graphite in the anode for higher capacity",
+    "Lithium-Metal": "Pure lithium-metal anode — next-generation energy density",
+    "Graphene": "Carbon nanomaterial used for electrodes and conductivity",
+    "Supercapacitor": "Stores charge electrostatically — very fast charge/discharge",
+    "Cathode": "The positive electrode of a battery cell",
+    "Anode / Graphite": "The negative electrode of a cell, typically graphite",
+    "Electrolyte": "The medium that carries lithium ions between electrodes",
+    "Separator": "Membrane keeping electrodes apart while letting ions pass",
+    "Alt. Chemistry": "Beyond Li-ion: flow, zinc, iron-air and other chemistries",
+}
+
+
 def derive_tech(name, category):
     hay = (name + " " + category).lower()
     tags = []
@@ -383,10 +414,11 @@ def main():
             for e in entries
         ],
         "tree": tree,
-        "colors": {sec: SECTOR_COLORS[i % len(SECTOR_COLORS)]
+        "colors": {sec: f"var(--c{(i % len(SECTOR_COLORS)) + 1})"
                    for i, sec in enumerate(tree.keys())},
         "types": sorted({e["type"] for e in entries}),
         "techs": sorted({t for e in entries for t in e["tech"]}),
+        "gloss": GLOSSARY,
         "countries": sorted({e["country"] for e in entries if e["country"]}),
         "regions": sorted({e["region"] for e in entries if e["region"]}),
         "centroids": {c: COUNTRY_CENTROIDS[c] for c in present_countries},
@@ -418,7 +450,10 @@ def main():
 def _fill(text, payload):
     data_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     stats = payload["stats"]
+    light, dark = palette_css()
     return text.replace("/*__DATA__*/", data_json) \
+        .replace("/*__PAL__*/", light) \
+        .replace("/*__PALD__*/", dark) \
         .replace("__N_ENTRIES__", f'{stats["entries"]:,}') \
         .replace("__N_CATS__", str(stats["categories"])) \
         .replace("__N_SECTORS__", str(stats["sectors"]))
@@ -488,7 +523,9 @@ def render_blogger_page(payload):
         verified = bool(e["u"])
         href = e["u"] if verified else _search_url(e["n"])
         badge = '<span class="badge">✓ LINK</span>' if verified else ""
-        tags = "".join(f'<span class="tag">{escape(t)}</span>' for t in e["tech"][:3])
+        tags = "".join(
+            f'<span class="tag" title="{escape(GLOSSARY.get(t, t))}">{escape(t)}</span>'
+            for t in e["tech"][:3])
         tags = f'<span class="tags">{tags}</span>' if tags else ""
         color = colors.get(e["s"], "#0a0a0a")
         return (
@@ -533,7 +570,10 @@ def render_blogger_page(payload):
         "form elements). Paste this whole block into a Blogger Page/Post in "
         "HTML view. Browse by expanding sectors; use Ctrl/Cmd+F to find text. -->\n"
         + STYLE_PAGE + '\n<div id="lx"><a id="lx-top"></a>\n'
-        f'<div class="head"><div class="brand"><span class="mark"></span>'
+        f'<div class="head"><div class="brand"><span class="mark">'
+        '<svg class="ic batt" viewBox="0 0 24 24" aria-hidden="true">'
+        '<rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/>'
+        '<path class="bolt" d="m11.5 9-2.2 3.2h4l-2.2 3.2"/></svg></span>'
         f'<h1>The Lithium Index</h1></div>'
         f'<div class="sub">Li-ion Battery Industry Directory</div>'
         f'<div class="stat"><b>{n_entries}</b> entries · '
@@ -547,16 +587,19 @@ def render_blogger_page(payload):
         f'<div class="foot">The Lithium Index · a ✓ marks a verified official '
         f'link, others open a web search · built as a static Blogger page</div>'
         "</div>\n"
-    )
+    ).replace("/*__PAL__*/", palette_css()[0])
 
 
 STYLE_PAGE = r"""<style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
 #lx{
-  --bg:#fafafa; --panel:#fff; --ink:#0a0a0a; --muted:#6b6b6b; --line:#e4e4e4;
+  --bg:#fafafa; --panel:#fff; --ink:#0a0a0a; --muted:#5f6368; --line:#e4e4e4;
   --ls:#0a0a0a; --blue:#1452ff; --orange:#ff5a1f; --grid:rgba(10,10,10,.035);
+  --sans:"Inter",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  /*__PAL__*/
   container-type:inline-size;
-  font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-family:var(--sans);
   color:var(--ink); font-size:13px; line-height:1.5; text-align:left;
   background:var(--bg);
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),
@@ -569,13 +612,18 @@ STYLE_PAGE = r"""<style>
 }
 #lx *{box-sizing:border-box; margin:0; padding:0}
 #lx a{color:inherit; text-decoration:none}
+#lx .stat,#lx .sub,#lx .tip,#lx .scount,#lx .cid,#lx .idx,#lx .badge,#lx .tag,#lx .toc a,#lx .foot{font-family:var(--mono)}
 #lx summary::-webkit-details-marker{display:none}
 #lx summary::marker{content:""}
 #lx .head{padding:22px 20px; border-bottom:1px solid var(--ls); background:#fff; position:relative}
-#lx .head::after{content:""; position:absolute; left:0; right:0; bottom:-1px; height:3px;
+#lx .head::after{content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px;
   background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 #lx .brand{display:flex; align-items:baseline; gap:10px}
-#lx .mark{width:11px; height:11px; background:var(--blue); box-shadow:3px 0 0 var(--orange)}
+#lx .mark{display:inline-flex; color:var(--blue); transform:translateY(3px)}
+#lx .ic{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px}
+#lx .mark .ic{width:24px;height:20px;stroke-width:1.8}
+#lx .mark .bolt{stroke:var(--orange)}
 #lx h1{font-family:"Instrument Serif",Georgia,serif; font-style:italic; font-weight:400;
   font-size:30px; line-height:1}
 #lx .sub{color:var(--muted); font-size:10px; letter-spacing:.18em; text-transform:uppercase; margin-top:8px}
@@ -604,9 +652,9 @@ STYLE_PAGE = r"""<style>
 #lx details.cat[open]>summary{color:var(--blue); font-weight:700; border-bottom:1px solid var(--line)}
 #lx details.cat>summary>span:first-child{display:flex; align-items:center}
 #lx .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; padding:12px}
-#lx .card{display:flex; flex-direction:column; gap:8px; border:1px solid var(--ls);
+#lx .card{display:flex; flex-direction:column; gap:9px; border:1px solid var(--ls);
   border-top:3px solid var(--sc,var(--ls));
-  background:#fff; padding:12px; min-height:112px; transition:box-shadow .08s}
+  background:#fff; padding:16px; min-height:112px; transition:box-shadow 160ms cubic-bezier(.2,.7,.4,1)}
 #lx .card.v{box-shadow:inset 3px 0 0 var(--blue)}
 #lx .card:hover{box-shadow:4px 4px 0 var(--ink)}
 #lx .card.v:hover{box-shadow:4px 4px 0 var(--ink),inset 3px 0 0 var(--blue)}
@@ -617,11 +665,12 @@ STYLE_PAGE = r"""<style>
 #lx .logo .mono{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
   font-size:11px; font-weight:700; color:#fff; background:var(--sc,var(--ls))}
 #lx .logo .fav{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; padding:3px}
-#lx .badge{font-size:8px; letter-spacing:.12em; color:#fff; background:var(--blue); border:1px solid var(--blue); padding:1px 5px}
-#lx .nm{font-family:"JetBrains Mono",ui-monospace,monospace; font-weight:700; font-size:14px;
-  line-height:1.4; letter-spacing:-.2px; flex:1; overflow-wrap:anywhere; word-break:break-word}
+#lx .badge{font-size:9px; letter-spacing:.12em; color:#fff; background:var(--blue); border:1px solid var(--blue); padding:1px 5px}
+#lx .nm{font-family:var(--sans); font-weight:600; font-size:14px;
+  line-height:1.4; letter-spacing:-.1px; flex:1; overflow-wrap:anywhere; word-break:break-word}
 #lx .tags{display:flex; flex-wrap:wrap; gap:4px}
-#lx .tag{font-size:9px; color:#444; background:#f1f3ff; border:1px solid #d6ddff; padding:2px 6px}
+#lx .tag{font-size:9px; color:#444; background:#f1f3ff; border:1px solid #d6ddff; padding:2px 6px;
+  cursor:help; text-decoration:underline dotted; text-underline-offset:2px}
 #lx .go{font-size:10px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px}
 #lx .card:hover .go{color:var(--orange)}
 #lx .top{display:block; text-align:right; font-size:10px; color:var(--blue); padding:8px 4px 2px}
@@ -631,13 +680,18 @@ STYLE_PAGE = r"""<style>
 
 
 STYLE_EMBED = r"""<style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
 #li-root{
-  --bg:#fafafa; --panel:#ffffff; --ink:#0a0a0a; --muted:#6b6b6b;
+  --bg:#fafafa; --panel:#ffffff; --ink:#0a0a0a; --muted:#5f6368;
   --line:#e4e4e4; --line-strong:#0a0a0a; --blue:#1452ff; --orange:#ff5a1f;
   --grid:rgba(10,10,10,.035); --cell:48px;
+  --sans:"Inter",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --fs-label:10px; --fs-body:13px; --fs-title:15px; --fs-display:26px;
+  --ease:cubic-bezier(.2,.7,.4,1); --speed:160ms;
+  /*__PAL__*/
   container-type:inline-size;
-  font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-family:var(--sans);
   color:var(--ink); font-size:13px; line-height:1.5; text-align:left;
   background:var(--bg);
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),
@@ -656,17 +710,29 @@ STYLE_EMBED = r"""<style>
 #li-root *{box-sizing:border-box; margin:0; padding:0}
 #li-root .bar,#li-root .wrap,#li-root footer{max-width:1500px;margin-left:auto;margin-right:auto}
 #li-root a{color:inherit;text-decoration:none}
+#li-root .stats,#li-root .ct,#li-root .cid,#li-root .kbd,#li-root .sec,#li-root .aside-h,
+#li-root .resultline,#li-root .idx,#li-root .badge,#li-root .tag,#li-root .chip,
+#li-root .tile-c,#li-root .tile-sub,#li-root .search input,#li-root .d-sec,#li-root .d-h{font-family:var(--mono)}
+#li-root .ic{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;flex:0 0 auto}
+#li-root .tw .ic{width:10px;height:10px}
+#li-root .viewtabs .ic,#li-root .hbtn .ic{margin-right:5px}
+#li-root .chip .x .ic,#li-root .d-x .ic{width:11px;height:11px}
+#li-root .go .ic{width:11px;height:11px;margin-right:5px}
+#li-root .batt-empty{width:46px;height:46px;fill:none;stroke:var(--muted);stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto 12px}
 #li-root button,#li-root input,#li-root select{font-family:inherit}
 #li-root .menu-toggle{display:none !important}
 #li-root h1{font-size:26px;font-weight:400}
 
 #li-root header{display:block;position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line-strong)}
-#li-root header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;
+#li-root header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
   background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 #li-root .bar{padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 #li-root .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
-#li-root .brand .mark{width:11px;height:11px;background:var(--blue);
-  box-shadow:3px 0 0 var(--orange);transform:translateY(1px)}
+#li-root .brand .mark{display:inline-flex;color:var(--blue);transform:translateY(2px)}
+#li-root .brand .mark .ic{width:22px;height:18px;stroke-width:1.8}
+#li-root .brand .mark .bolt{stroke:var(--orange)}
 #li-root .brand h1{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
   font-weight:400;font-size:25px;letter-spacing:.2px;line-height:1}
 #li-root .brand small{color:var(--muted);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
@@ -709,7 +775,7 @@ STYLE_EMBED = r"""<style>
 #li-root .cat .ct{color:var(--muted);font-weight:400}
 
 #li-root main{min-width:0}
-#li-root .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+#li-root .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
 #li-root .pills{display:flex;gap:6px;flex-wrap:wrap}
 #li-root .pill{font-size:11px;background:var(--panel);border:1px solid var(--line-strong);
   border-left:3px solid var(--sc,var(--line-strong));padding:6px 11px;cursor:pointer;white-space:nowrap}
@@ -728,17 +794,37 @@ STYLE_EMBED = r"""<style>
 #li-root .chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;
   background:#fff;border:1px solid var(--line-strong);padding:5px 8px}
 #li-root .chip b{font-weight:500}
-#li-root .chip .x{cursor:pointer;color:var(--orange);font-weight:700}
+#li-root .chip .x{cursor:pointer;color:var(--muted);font-weight:700}
+#li-root .chip .x:hover{color:var(--orange)}
 #li-root .resultline{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.04em}
 #li-root .resultline b{color:var(--ink)}
+#li-root .crumb{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:10px;
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+#li-root .crumb a{color:var(--blue);cursor:pointer}
+#li-root .crumb a:hover{text-decoration:underline}
+#li-root .crumb b{color:var(--ink);font-weight:600}
+#li-root .crumb .sep{color:var(--muted)}
+#li-root .search .sug{position:absolute;top:100%;left:0;right:0;z-index:90;background:var(--panel);
+  border:1px solid var(--line-strong);border-top:0;max-height:330px;overflow:auto;
+  box-shadow:4px 4px 0 rgba(10,10,10,.12)}
+#li-root .sug button{display:flex;width:100%;gap:9px;align-items:center;padding:9px 12px;
+  font-family:var(--sans);font-size:12.5px;background:none;border:0;
+  border-bottom:1px solid var(--line);cursor:pointer;text-align:left;color:var(--ink)}
+#li-root .sug button:last-child{border-bottom:0}
+#li-root .sug button:hover,#li-root .sug button.on{background:rgba(20,82,255,.07)}
+#li-root .sug .k{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:#fff;
+  background:var(--ink);padding:2px 5px;flex:0 0 auto}
+#li-root .sug .k.kc{background:var(--blue)}
+#li-root .sug .sn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#li-root .sug .cnt{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
 
-#li-root .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
-#li-root .card{background:var(--panel);border:1px solid var(--line-strong);padding:15px 15px 13px;
-  display:flex;flex-direction:column;gap:9px;min-height:124px;
-  transition:transform .08s, box-shadow .08s;position:relative;overflow:hidden}
+#li-root .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+#li-root .card{background:var(--panel);border:1px solid var(--line-strong);padding:18px 18px 15px;
+  display:flex;flex-direction:column;gap:10px;min-height:128px;
+  transition:transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease);position:relative;overflow:hidden}
 #li-root .card:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
-#li-root .card .nm{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;
-  font-size:14px;line-height:1.4;letter-spacing:-.2px;flex:1;
+#li-root .card .nm{font-family:var(--sans);font-weight:600;
+  font-size:14px;line-height:1.4;letter-spacing:-.1px;flex:1;
   overflow-wrap:anywhere;word-break:break-word}
 #li-root .card .meta{display:flex;flex-direction:column;gap:5px}
 #li-root .card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer;
@@ -760,7 +846,7 @@ STYLE_EMBED = r"""<style>
 #li-root .logo .mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:700;color:#fff;background:var(--sc,var(--ink))}
 #li-root .logo .fav{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:3px}
-#li-root .badge{font-size:8px;letter-spacing:.12em;color:#fff;background:var(--blue);
+#li-root .badge{font-size:9px;letter-spacing:.12em;color:#fff;background:var(--blue);
   border:1px solid var(--blue);padding:1px 5px}
 #li-root .tags{display:flex;flex-wrap:wrap;gap:4px}
 #li-root .tag{font-size:9px;letter-spacing:.04em;color:#444;background:#f1f3ff;
@@ -809,11 +895,25 @@ STYLE_EMBED = r"""<style>
   border:0;border-right:1px solid var(--line-strong);padding:6px 10px;cursor:pointer;white-space:nowrap}
 #li-root .viewtabs button:last-child{border-right:0}
 #li-root .viewtabs button.on{background:var(--blue);color:#fff}
-#li-root .landscape{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+#li-root .landscape .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+#li-root .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:16px}
+#li-root .kpi{background:var(--panel);border:1px solid var(--line-strong);padding:14px 16px}
+#li-root .kpi b{display:block;font-family:var(--mono);font-size:24px;font-weight:700;line-height:1.15}
+#li-root .kpi span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#li-root .secbar{background:var(--panel);border:1px solid var(--line-strong);padding:16px 18px;margin-bottom:16px}
+#li-root .secbar-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+#li-root .sbrow{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;
+  padding:3px 0;cursor:pointer;font-family:var(--sans);font-size:12px;color:var(--ink)}
+#li-root .sbrow:hover .sbn{color:var(--blue)}
+#li-root .sbn{flex:0 0 230px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#li-root .sbtrack{flex:1;height:8px}
+#li-root .sbfill{display:block;height:100%;border-radius:0 4px 4px 0;min-width:2px}
+#li-root .sbv{flex:0 0 46px;text-align:left;font-family:var(--mono);font-size:11px;color:var(--muted)}
+@container (max-width:700px){#li-root .sbn{flex-basis:120px;font-size:11px}}
 #li-root .tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
   border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
   padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink);
-  transition:transform .08s,box-shadow .08s}
+  transition:transform var(--speed) var(--ease),box-shadow var(--speed) var(--ease)}
 #li-root .tile:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--sc,var(--ink))}
 #li-root .tile-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 #li-root .tile-n{font-weight:700;font-size:14px;line-height:1.25}
@@ -864,8 +964,18 @@ STYLE_EMBED = r"""<style>
 #li-root .d-empty{font-size:11px;color:var(--muted)}
 #li-root .d-suggest{font-size:11px;color:var(--blue);margin-top:4px}
 #li-root mark{color:#111}
-#li-root[data-theme=dark]{--bg:#0c0d10;--panel:#15171c;--ink:#e8e8ea;--muted:#8b909a;
-  --line:#262a31;--line-strong:#3a3f48;--grid:rgba(255,255,255,.035)}
+#li-root :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#li-root .pill:active,#li-root .sort:active,#li-root .hbtn:active,#li-root .viewtabs button:active,
+#li-root .pager button:active,#li-root .tile:active,#li-root .sbrow:active{transform:translateY(1px)}
+#li-root .tag{cursor:help;text-decoration:underline dotted;text-underline-offset:2px;text-decoration-thickness:1px}
+@container (max-width:679px){
+  #li-root .sector>.row{min-height:44px}
+  #li-root .cat{min-height:40px;align-items:center}
+  #li-root .pill,#li-root .sort,#li-root .hbtn,#li-root .viewtabs button{min-height:40px}
+  #li-root .pager button{min-height:42px;min-width:44px}
+}
+#li-root[data-theme=dark]{--bg:#0c0d10;--panel:#15171c;--ink:#e8e8ea;--muted:#9aa1ab;
+  --line:#262a31;--line-strong:#3a3f48;--grid:rgba(255,255,255,.035);/*__PALD__*/}
 #li-root[data-theme=dark] .hbtn:hover,#li-root[data-theme=dark] .d-link:hover,
 #li-root[data-theme=dark] .pill:hover,#li-root[data-theme=dark] .d-rel:hover,
 #li-root[data-theme=dark] .sort:hover,#li-root[data-theme=dark] .cat:hover,
@@ -882,40 +992,53 @@ TEMPLATE = r"""<!DOCTYPE html>
 <meta name="description" content="A futuristic-minimalist directory of __N_ENTRIES__ lithium-ion battery industry entries across __N_CATS__ categories and __N_SECTORS__ mega-sectors. Search, filter and drill down the entire Li-ion value chain.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#fafafa; --panel:#ffffff; --ink:#0a0a0a; --muted:#6b6b6b;
+  --bg:#fafafa; --panel:#ffffff; --ink:#0a0a0a; --muted:#5f6368;
   --line:#e4e4e4; --line-strong:#0a0a0a;
   --blue:#1452ff; --orange:#ff5a1f;
   --grid:rgba(10,10,10,.03); --cell:48px;
   --maxw:1560px;
+  --sans:"Inter",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --fs-label:10px; --fs-body:13px; --fs-title:15px; --fs-display:26px;
+  --ease:cubic-bezier(.2,.7,.4,1); --speed:160ms;
+  /*__PAL__*/
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  font-family:"JetBrains Mono",ui-monospace,monospace;
-  background:var(--bg); color:var(--ink); font-size:13px; line-height:1.5;
+  font-family:var(--sans);
+  background:var(--bg); color:var(--ink); font-size:var(--fs-body); line-height:1.5;
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),
                    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:var(--cell) var(--cell);
   -webkit-font-smoothing:antialiased;
 }
 a{color:inherit;text-decoration:none}
-.serif{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400}
+.stats,.ct,.cid,.kbd,.sec,.aside-h,.resultline,.idx,.badge,.tag,.chip,
+.tile-c,.tile-sub,.search input,.d-sec,.d-h{font-family:var(--mono)}
+.ic{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;flex:0 0 auto}
+.tw .ic{width:10px;height:10px}
+.viewtabs .ic,.hbtn .ic{margin-right:5px}
+.chip .x .ic,.d-x .ic{width:11px;height:11px}
+.go .ic{width:11px;height:11px;margin-right:5px}
 
 /* ---------- header ---------- */
 header{
   position:sticky;top:0;z-index:50;background:rgba(250,250,250,.86);
   backdrop-filter:blur(10px);border-bottom:1px solid var(--line-strong);
 }
-header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;
+header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
   background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 .bar{max-width:var(--maxw);margin:0 auto;padding:14px 20px;
   display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
-.brand .mark{width:11px;height:11px;background:var(--blue);
-  box-shadow:3px 0 0 var(--orange);transform:translateY(1px)}
+.brand .mark{display:inline-flex;color:var(--blue);transform:translateY(2px)}
+.brand .mark .ic{width:22px;height:18px;stroke-width:1.8}
+.brand .mark .bolt{stroke:var(--orange)}
 .brand h1{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
   font-weight:400;font-size:26px;margin:0;letter-spacing:.2px}
 .brand small{color:var(--muted);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
@@ -963,7 +1086,7 @@ aside{position:sticky;top:84px;border:1px solid var(--line-strong);
 
 /* ---------- main ---------- */
 main{min-width:0}
-.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
 .pills{display:flex;gap:6px;flex-wrap:wrap}
 .pill{font-family:inherit;font-size:11px;background:var(--panel);
   border:1px solid var(--line-strong);border-left:3px solid var(--sc,var(--line-strong));
@@ -983,19 +1106,39 @@ select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
 .chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;
   background:#fff;border:1px solid var(--line-strong);padding:5px 8px}
 .chip b{font-weight:500}
-.chip .x{cursor:pointer;color:var(--orange);font-weight:700}
+.chip .x{cursor:pointer;color:var(--muted);font-weight:700}
+.chip .x:hover{color:var(--orange)}
 .resultline{font-size:11px;color:var(--muted);margin-bottom:10px;
   letter-spacing:.04em}
 .resultline b{color:var(--ink)}
+.crumb{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:10px;
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.crumb a{color:var(--blue);cursor:pointer}
+.crumb a:hover{text-decoration:underline}
+.crumb b{color:var(--ink);font-weight:600}
+.crumb .sep{color:var(--muted)}
+.search .sug{position:absolute;top:100%;left:0;right:0;z-index:90;background:var(--panel);
+  border:1px solid var(--line-strong);border-top:0;max-height:330px;overflow:auto;
+  box-shadow:4px 4px 0 rgba(10,10,10,.12)}
+.sug button{display:flex;width:100%;gap:9px;align-items:center;padding:9px 12px;
+  font-family:var(--sans);font-size:12.5px;background:none;border:0;
+  border-bottom:1px solid var(--line);cursor:pointer;text-align:left;color:var(--ink)}
+.sug button:last-child{border-bottom:0}
+.sug button:hover,.sug button.on{background:rgba(20,82,255,.07)}
+.sug .k{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:#fff;
+  background:var(--ink);padding:2px 5px;flex:0 0 auto}
+.sug .k.kc{background:var(--blue)}
+.sug .sn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sug .cnt{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.card{background:var(--panel);border:1px solid var(--line-strong);padding:15px 15px 13px;
-  display:flex;flex-direction:column;gap:9px;min-height:124px;
-  transition:transform .08s, box-shadow .08s;position:relative;overflow:hidden}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line-strong);padding:18px 18px 15px;
+  display:flex;flex-direction:column;gap:10px;min-height:128px;
+  transition:transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease);position:relative;overflow:hidden}
 .card:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
 .card .idx{font-size:9px;color:var(--muted);letter-spacing:.1em}
-.card .nm{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;
-  font-size:14px;line-height:1.4;letter-spacing:-.2px;flex:1;
+.card .nm{font-family:var(--sans);font-weight:600;
+  font-size:14px;line-height:1.4;letter-spacing:-.1px;flex:1;
   overflow-wrap:anywhere;word-break:break-word}
 .card .meta{display:flex;flex-direction:column;gap:5px}
 .card .cat{font-size:10px;color:var(--blue);letter-spacing:.02em;cursor:pointer;
@@ -1017,7 +1160,7 @@ select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
 .logo .mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:700;color:#fff;background:var(--sc,var(--ink))}
 .logo .fav{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:3px}
-.badge{font-size:8px;letter-spacing:.12em;color:#fff;background:var(--blue);
+.badge{font-size:9px;letter-spacing:.12em;color:#fff;background:var(--blue);
   border:1px solid var(--blue);padding:1px 5px}
 .tags{display:flex;flex-wrap:wrap;gap:4px}
 .tag{font-size:9px;letter-spacing:.04em;color:#444;background:#f1f3ff;
@@ -1027,6 +1170,8 @@ mark{background:linear-gradient(transparent 55%, #ffe08a 55%);color:inherit;padd
 .empty{padding:60px 20px;text-align:center;color:var(--muted);
   border:1px dashed var(--line-strong);background:var(--panel)}
 .empty b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px}
+.batt-empty{width:46px;height:46px;fill:none;stroke:var(--muted);stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto 12px}
 
 .pager{display:flex;align-items:center;justify-content:center;gap:6px;
   margin:26px 0 8px;flex-wrap:wrap}
@@ -1073,11 +1218,25 @@ footer a{color:var(--blue)}
 .viewtabs button:last-child{border-right:0}
 .viewtabs button.on{background:var(--blue);color:#fff}
 /* landscape tiles */
-.landscape{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.landscape .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--line-strong);padding:14px 16px}
+.kpi b{display:block;font-family:var(--mono);font-size:24px;font-weight:700;line-height:1.15}
+.kpi span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.secbar{background:var(--panel);border:1px solid var(--line-strong);padding:16px 18px;margin-bottom:16px}
+.secbar-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sbrow{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;
+  padding:3px 0;cursor:pointer;font-family:var(--sans);font-size:12px;color:var(--ink)}
+.sbrow:hover .sbn{color:var(--blue)}
+.sbn{flex:0 0 230px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbtrack{flex:1;height:8px}
+.sbfill{display:block;height:100%;border-radius:0 4px 4px 0;min-width:2px}
+.sbv{flex:0 0 46px;text-align:left;font-family:var(--mono);font-size:11px;color:var(--muted)}
+@media(max-width:700px){.sbn{flex-basis:120px;font-size:11px}}
 .tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
   border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
   padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink);
-  transition:transform .08s,box-shadow .08s}
+  transition:transform var(--speed) var(--ease),box-shadow var(--speed) var(--ease)}
 .tile:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--sc,var(--ink))}
 .tile-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .tile-n{font-weight:700;font-size:14px;line-height:1.25}
@@ -1130,9 +1289,20 @@ footer a{color:var(--blue)}
 .d-empty{font-size:11px;color:var(--muted)}
 .d-suggest{font-size:11px;color:var(--blue);margin-top:4px}
 mark{color:#111}
+/* accessibility & feel */
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.pill:active,.sort:active,.hbtn:active,.viewtabs button:active,
+.pager button:active,.tile:active,.sbrow:active{transform:translateY(1px)}
+.tag{cursor:help;text-decoration:underline dotted;text-underline-offset:2px;text-decoration-thickness:1px}
+@media(max-width:900px){
+  .sector>.row{min-height:44px}
+  .cat{min-height:40px;align-items:center}
+  .pill,.sort,.hbtn,.viewtabs button{min-height:40px}
+  .pager button{min-height:42px;min-width:44px}
+}
 /* dark theme */
-:root[data-theme=dark]{--bg:#0c0d10;--panel:#15171c;--ink:#e8e8ea;--muted:#8b909a;
-  --line:#262a31;--line-strong:#3a3f48;--grid:rgba(255,255,255,.035)}
+:root[data-theme=dark]{--bg:#0c0d10;--panel:#15171c;--ink:#e8e8ea;--muted:#9aa1ab;
+  --line:#262a31;--line-strong:#3a3f48;--grid:rgba(255,255,255,.035);/*__PALD__*/}
 :root[data-theme=dark] .hbtn:hover,:root[data-theme=dark] .d-link:hover,
 :root[data-theme=dark] .pill:hover,:root[data-theme=dark] .d-rel:hover,
 :root[data-theme=dark] .sort:hover,:root[data-theme=dark] .cat:hover,
@@ -1142,17 +1312,18 @@ mark{color:#111}
 <body>
 <header>
   <div class="bar">
-    <button class="menu-toggle" id="menuToggle">☰ Filters</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open filters">☰ Filters</button>
     <a class="brand" href="#" id="brandReset" title="Reset all filters">
-      <span class="mark"></span>
+      <span class="mark"><svg class="ic batt" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/><path class="bolt" d="m11.5 9-2.2 3.2h4l-2.2 3.2"/></svg></span>
       <span>
         <h1>The Lithium Index</h1><br>
         <small>Li-ion Battery Industry Directory</small>
       </span>
     </a>
     <div class="search">
-      <input id="q" type="search" placeholder="Search companies, labs, equipment, services…" autocomplete="off" spellcheck="false">
+      <input id="q" type="search" placeholder="Search companies, labs, equipment, services…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="sug">
       <span class="kbd">/</span>
+      <div class="sug" id="sug" role="listbox" hidden></div>
     </div>
     <div class="stats">
       <div><b id="statShown">0</b><span>Showing</span></div>
@@ -1160,8 +1331,8 @@ mark{color:#111}
       <div><b id="statSecs">__N_SECTORS__</b><span>Sectors</span></div>
     </div>
     <div class="hactions">
-      <button class="hbtn" id="submitBtn" title="Submit a company">＋ Submit</button>
-      <button class="hbtn icon" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode">◐</button>
+      <button class="hbtn" id="submitBtn" title="Submit a company"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Submit</button>
+      <button class="hbtn icon" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode"></button>
     </div>
   </div>
 </header>
@@ -1177,10 +1348,10 @@ mark{color:#111}
 
   <main>
     <div class="toolbar">
-      <div class="viewtabs" id="viewTabs">
-        <button data-view="landscape" title="Sector overview">▦ Sectors</button>
-        <button data-view="grid" title="Browse all entries">▤ List</button>
-        <button data-view="map" title="World map">◍ Map</button>
+      <div class="viewtabs" id="viewTabs" role="tablist" aria-label="View">
+        <button data-view="landscape" title="Sector overview"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Sectors</button>
+        <button data-view="grid" title="Browse all entries"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>List</button>
+        <button data-view="map" title="World map"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18"/></svg>Map</button>
       </div>
       <div class="pills" id="pills"></div>
       <span class="spacer"></span>
@@ -1190,6 +1361,7 @@ mark{color:#111}
       <button class="sort" id="sortBtn">Sort: Relevance</button>
     </div>
     <div class="chips" id="chips"></div>
+    <div class="crumb" id="crumb" hidden></div>
     <div class="resultline" id="resultLine"></div>
     <div class="landscape" id="landscape"></div>
     <div class="mapwrap" id="map"></div>
@@ -1215,12 +1387,21 @@ const PER_PAGE = 60;
 const SUBMIT_URL = "https://docs.google.com/forms/";
 const QUICK = ["Cell Manufacturing & OEMs","Materials & Chemicals","Mining & Raw Materials",
   "Recycling & Circular Economy","Manufacturing Equipment","Software, Data & Simulation"];
+const I = {
+  x:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  ext:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>',
+  chev:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>',
+  sun:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  moon:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>',
+  batt:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/></svg>'
+};
 
 const state = {q:"", sector:null, cat:null, type:"", tech:"", region:"", country:"", sort:"rel", view:"landscape", page:1};
 
 const $ = s => document.querySelector(s);
 const grid = $("#grid"), pager = $("#pager"), chips = $("#chips"),
       resultLine = $("#resultLine"), treeEl = $("#tree"), pillsEl = $("#pills"),
+      crumbEl = $("#crumb"), sugEl = $("#sug"),
       landscapeEl = $("#landscape"), mapEl = $("#map"),
       drawer = $("#drawer"), drawerPanel = $("#drawerPanel");
 // Theme applies to #li-root inside a Blogger embed, else the document root.
@@ -1233,7 +1414,7 @@ function buildTree(){
     const total = cats.reduce((a,c)=>a+c.count,0);
     html += `<div class="sector" data-sector="${esc(sector)}" style="--sc:${DB.colors[sector]||'#0a0a0a'}">
       <div class="row" data-act="sector">
-        <span class="nm"><span class="tw">▶</span>${esc(sector)}</span>
+        <span class="nm"><span class="tw">${I.chev}</span>${esc(sector)}</span>
         <span class="ct">${total}</span>
       </div>
       <div class="cats">
@@ -1332,7 +1513,7 @@ function render(){
   grid.style.display        = view==="grid"      ? "" : "none";
   document.querySelectorAll("#viewTabs button").forEach(b=>b.classList.toggle("on", b.dataset.view===view));
 
-  renderChips(); syncSidebar();
+  renderChips(); syncSidebar(); renderCrumb();
 
   if(view==="landscape"){
     renderLandscape();
@@ -1356,7 +1537,8 @@ function render(){
 
   if(!rows.length){
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
-      <b>No matches</b>Try a different term or clear the active filters.</div>`;
+      <svg class="batt-empty" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/><path d="M5.5 10v4" opacity=".35"/></svg>
+      <b>Battery empty — nothing found</b>Try a different term or clear a filter to recharge the list.</div>`;
     pager.innerHTML=""; updateHash(); return;
   }
 
@@ -1364,7 +1546,7 @@ function render(){
     const verified = !!e.u;
     const href = verified ? e.u : searchUrl(e.n);
     const tags = (e.tech||[]).slice(0,3)
-      .map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+      .map(t=>`<span class="tag" title="${esc(DB.gloss[t]||t)}">${esc(t)}</span>`).join("");
     return `
     <a class="card${verified?" verified":""}" style="--sc:${DB.colors[e.s]||'#0a0a0a'}" href="${href}" target="_blank" rel="noopener" data-id="${e.i}">
       <div class="idx">${logoHtml(e)}<span class="cid">#${e.i}</span><span class="grow"></span>${verified?'<span class="badge">✓ LINK</span>':''}</div>
@@ -1374,7 +1556,7 @@ function render(){
         <div class="cat" data-cat="${e.c}">${hl(e.cn,q)}</div>
         <div class="sec"><span class="dot"></span>${esc(e.s)}${e.co?' · '+esc(e.co):''}</div>
       </div>
-      <div class="go">↗ ${verified?"visit site":"web search"}</div>
+      <div class="go">${I.ext}${verified?"visit site":"web search"}</div>
     </a>`;}).join("");
 
   renderPager(pages);
@@ -1382,7 +1564,23 @@ function render(){
 }
 
 function renderLandscape(){
-  landscapeEl.innerHTML = Object.entries(DB.tree).map(([sec,cats])=>{
+  const st = DB.stats;
+  const kpis = `<div class="kpis">
+    <div class="kpi"><b>${st.entries.toLocaleString()}</b><span>Entries</span></div>
+    <div class="kpi"><b>${st.categories}</b><span>Categories</span></div>
+    <div class="kpi"><b>${(DB.countries||[]).length}</b><span>Countries</span></div>
+    <div class="kpi"><b>${st.withUrl}</b><span>Verified links</span></div>
+  </div>`;
+  const rows = Object.entries(DB.tree)
+    .map(([sec,cats])=>({sec, n:cats.reduce((a,c)=>a+c.count,0)}))
+    .sort((a,b)=>b.n-a.n);
+  const max = rows[0].n;
+  const chart = `<div class="secbar"><div class="secbar-h">Entries per mega-sector — click to browse</div>` +
+    rows.map(r=>`<button class="sbrow" data-sector="${esc(r.sec)}" title="Browse ${esc(r.sec)}">
+      <span class="sbn">${esc(r.sec)}</span>
+      <span class="sbtrack"><span class="sbfill" style="width:${(100*r.n/max).toFixed(1)}%;background:${DB.colors[r.sec]||'var(--c1)'}"></span></span>
+      <span class="sbv">${r.n}</span></button>`).join("") + `</div>`;
+  const tiles = Object.entries(DB.tree).map(([sec,cats])=>{
     const total = cats.reduce((a,c)=>a+c.count,0);
     const top = cats.slice().sort((a,b)=>b.count-a.count).slice(0,4).map(c=>esc(c.name)).join(" · ");
     return `<button class="tile" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'#0a0a0a'}">
@@ -1391,6 +1589,7 @@ function renderLandscape(){
       <div class="tile-top">${top}</div>
     </button>`;
   }).join("");
+  landscapeEl.innerHTML = kpis + chart + `<div class="tiles">` + tiles + `</div>`;
 }
 
 function renderMap(rows){
@@ -1432,7 +1631,7 @@ function openDetail(e){
     ["News", "https://news.google.com/search?q="+encodeURIComponent(cn+" battery")],
     ["Patents", "https://patents.google.com/?q="+encodeURIComponent(cn)],
   ].filter(Boolean);
-  const tags = (e.tech||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+  const tags = (e.tech||[]).map(t=>`<span class="tag" title="${esc(DB.gloss[t]||t)}">${esc(t)}</span>`).join("");
   const related = DB.entries.filter(x=>x.c===e.c && x.i!==e.i).slice(0,10);
   drawerPanel.innerHTML = `
     <div class="d-top">
@@ -1440,12 +1639,12 @@ function openDetail(e){
       <div class="d-title"><h3>${esc(e.n)}</h3>
         <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.s)}${e.co?' · '+esc(e.co):''}</div>
       </div>
-      <button class="d-x" data-close aria-label="Close">✕</button>
+      <button class="d-x" data-close aria-label="Close">${I.x}</button>
     </div>
-    <div class="d-cat" data-cat="${e.c}">${esc(e.cn)} ↗</div>
+    <div class="d-cat" data-cat="${e.c}">${esc(e.cn)} ${I.ext}</div>
     ${tags?`<div class="tags d-tags">${tags}</div>`:""}
     <div class="d-links">
-      ${links.map(([label,url,primary])=>`<a class="d-link${primary?' primary':''}" href="${url}" target="_blank" rel="noopener">${esc(label)} ↗</a>`).join("")}
+      ${links.map(([label,url,primary])=>`<a class="d-link${primary?' primary':''}" href="${url}" target="_blank" rel="noopener">${esc(label)} ${I.ext}</a>`).join("")}
     </div>
     <div class="d-h">Related in ${esc(e.cn)}</div>
     <div class="d-related">
@@ -1457,18 +1656,31 @@ function openDetail(e){
 }
 function closeDrawer(){ drawer.classList.remove("open"); setTimeout(()=>{drawer.hidden=true;}, 200); }
 
+function renderCrumb(){
+  if(state.view!=="grid" || (!state.sector && !state.cat)){ crumbEl.hidden=true; return; }
+  const parts = [`<a data-crumb="all">All sectors</a>`];
+  if(state.sector) parts.push(state.cat
+    ? `<a data-crumb="sector">${esc(state.sector)}</a>` : `<b>${esc(state.sector)}</b>`);
+  if(state.cat){
+    const name=(DB.entries.find(e=>e.c===state.cat)||{}).cn||("#"+state.cat);
+    parts.push(`<b>${esc(name)}</b>`);
+  }
+  crumbEl.innerHTML = parts.join('<span class="sep">▸</span>');
+  crumbEl.hidden=false;
+}
+
 function renderChips(){
   const c = [];
-  if(state.sector) c.push(`<span class="chip"><b>Sector:</b> ${esc(state.sector)} <span class="x" data-clear="sector">✕</span></span>`);
+  if(state.sector) c.push(`<span class="chip"><b>Sector:</b> ${esc(state.sector)} <span class="x" data-clear="sector">${I.x}</span></span>`);
   if(state.cat){
     const name = (DB.entries.find(e=>e.c===state.cat)||{}).cn || ("#"+state.cat);
-    c.push(`<span class="chip"><b>Category:</b> ${esc(name)} <span class="x" data-clear="cat">✕</span></span>`);
+    c.push(`<span class="chip"><b>Category:</b> ${esc(name)} <span class="x" data-clear="cat">${I.x}</span></span>`);
   }
-  if(state.type) c.push(`<span class="chip"><b>Type:</b> ${esc(state.type)} <span class="x" data-clear="type">✕</span></span>`);
-  if(state.tech) c.push(`<span class="chip"><b>Tech:</b> ${esc(state.tech)} <span class="x" data-clear="tech">✕</span></span>`);
-  if(state.region) c.push(`<span class="chip"><b>Region:</b> ${esc(state.region)} <span class="x" data-clear="region">✕</span></span>`);
-  if(state.country) c.push(`<span class="chip"><b>Country:</b> ${esc(state.country)} <span class="x" data-clear="country">✕</span></span>`);
-  if(state.q.trim()) c.push(`<span class="chip"><b>Search:</b> "${esc(state.q.trim())}" <span class="x" data-clear="q">✕</span></span>`);
+  if(state.type) c.push(`<span class="chip"><b>Type:</b> ${esc(state.type)} <span class="x" data-clear="type">${I.x}</span></span>`);
+  if(state.tech) c.push(`<span class="chip"><b>Tech:</b> ${esc(state.tech)} <span class="x" data-clear="tech">${I.x}</span></span>`);
+  if(state.region) c.push(`<span class="chip"><b>Region:</b> ${esc(state.region)} <span class="x" data-clear="region">${I.x}</span></span>`);
+  if(state.country) c.push(`<span class="chip"><b>Country:</b> ${esc(state.country)} <span class="x" data-clear="country">${I.x}</span></span>`);
+  if(state.q.trim()) c.push(`<span class="chip"><b>Search:</b> "${esc(state.q.trim())}" <span class="x" data-clear="q">${I.x}</span></span>`);
   chips.innerHTML = c.join("");
 }
 
@@ -1566,8 +1778,8 @@ grid.addEventListener("click", ev=>{
   if(card){ ev.preventDefault(); const e = DB.entries.find(x=>x.i===Number(card.dataset.id)); if(e) openDetail(e); }
 });
 landscapeEl.addEventListener("click", ev=>{
-  const tile = ev.target.closest(".tile"); if(!tile) return;
-  setSector(tile.dataset.sector);
+  const t = ev.target.closest("[data-sector]"); if(!t) return;
+  setSector(t.dataset.sector);
 });
 mapEl.addEventListener("click", ev=>{
   const g = ev.target.closest(".bub"); if(!g) return;
@@ -1588,6 +1800,53 @@ drawer.addEventListener("click", ev=>{
   if(cat){ closeDrawer(); setCat(Number(cat.dataset.cat)); }
 });
 $("#submitBtn").addEventListener("click", ()=>window.open(SUBMIT_URL, "_blank", "noopener"));
+crumbEl.addEventListener("click", ev=>{
+  const a=ev.target.closest("[data-crumb]"); if(!a) return;
+  if(a.dataset.crumb==="all"){ state.sector=null; state.cat=null; state.page=1; state.view="landscape"; render(); }
+  else { setSector(state.sector); }
+});
+
+// ---- search autocomplete ----
+let sugIdx=-1, sugItems=[];
+function buildSug(q){
+  q=q.trim().toLowerCase();
+  if(q.length<2){ hideSug(); return; }
+  const cats=[]; const seen=new Set();
+  for(const [sec,cs] of Object.entries(DB.tree)){
+    for(const c of cs){ if(c.name.toLowerCase().includes(q) && !seen.has(c.id)){ seen.add(c.id); cats.push({t:"cat",id:c.id,n:c.name,cnt:c.count}); if(cats.length>=4) break; } }
+    if(cats.length>=4) break;
+  }
+  const cos=[];
+  for(const e of DB.entries){ if(e.n.toLowerCase().includes(q)){ cos.push({t:"co",id:e.i,n:e.n}); if(cos.length>=8-cats.length) break; } }
+  sugItems=[...cats,...cos]; sugIdx=-1;
+  if(!sugItems.length){ hideSug(); return; }
+  sugEl.innerHTML=sugItems.map((it,i)=>`<button data-i="${i}" role="option">
+      <span class="k${it.t==="cat"?" kc":""}">${it.t==="cat"?"CAT":"CO"}</span>
+      <span class="sn">${hl(it.n,q)}</span>${it.cnt?`<span class="cnt">${it.cnt}</span>`:""}
+    </button>`).join("");
+  sugEl.hidden=false; $("#q").setAttribute("aria-expanded","true");
+}
+function hideSug(){ sugEl.hidden=true; sugIdx=-1; $("#q").setAttribute("aria-expanded","false"); }
+function pickSug(i){
+  const it=sugItems[i]; if(!it) return;
+  hideSug();
+  if(it.t==="cat"){ state.q=""; $("#q").value=""; setCat(it.id); }
+  else { const e=DB.entries.find(x=>x.i===it.id); if(e) openDetail(e); }
+}
+sugEl.addEventListener("mousedown", ev=>{
+  const b=ev.target.closest("button[data-i]"); if(!b) return;
+  ev.preventDefault(); pickSug(Number(b.dataset.i));
+});
+$("#q").addEventListener("keydown", ev=>{
+  if(sugEl.hidden) return;
+  if(ev.key==="ArrowDown"||ev.key==="ArrowUp"){
+    ev.preventDefault();
+    sugIdx=(sugIdx+(ev.key==="ArrowDown"?1:-1)+sugItems.length)%sugItems.length;
+    sugEl.querySelectorAll("button").forEach((b,i)=>b.classList.toggle("on",i===sugIdx));
+  } else if(ev.key==="Enter" && sugIdx>=0){ ev.preventDefault(); pickSug(sugIdx); }
+  else if(ev.key==="Escape"){ hideSug(); }
+});
+$("#q").addEventListener("blur", ()=>setTimeout(hideSug,150));
 pager.addEventListener("click", ev=>{
   const b=ev.target.closest("button[data-page]"); if(!b||b.disabled) return;
   state.page=Number(b.dataset.page); window.scrollTo({top:0,behavior:"smooth"}); render();
@@ -1596,7 +1855,7 @@ pager.addEventListener("click", ev=>{
 let t=null;
 $("#q").addEventListener("input", e=>{
   clearTimeout(t);
-  t=setTimeout(()=>{ state.q=e.target.value; state.page=1; if(state.q.trim()&&state.view!=="grid") state.view="grid"; render(); }, 140);
+  t=setTimeout(()=>{ state.q=e.target.value; state.page=1; if(state.q.trim()&&state.view!=="grid") state.view="grid"; render(); buildSug(e.target.value); }, 140);
 });
 document.addEventListener("keydown", e=>{
   if(e.key==="/" && document.activeElement!==$("#q")){ e.preventDefault(); $("#q").focus(); }
@@ -1626,7 +1885,7 @@ function resetAll(){ Object.assign(state,{q:"",sector:null,cat:null,type:"",tech
   document.querySelectorAll(".sector.open").forEach(s=>s.classList.remove("open")); render(); }
 
 // ---- dark mode ----
-function applyTheme(mode){ ROOT.setAttribute("data-theme", mode); $("#themeBtn").textContent = mode==="dark"?"☀":"◐"; }
+function applyTheme(mode){ ROOT.setAttribute("data-theme", mode); $("#themeBtn").innerHTML = mode==="dark"?I.sun:I.moon; }
 (function initTheme(){
   let saved=null; try{ saved=localStorage.getItem("li-theme"); }catch(_){}
   const mode = saved || (matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light");
