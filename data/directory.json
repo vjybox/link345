@@ -26976,6 +26976,70 @@
     "Separator": "Membrane keeping electrodes apart while letting ions pass",
     "Alt. Chemistry": "Beyond Li-ion: flow, zinc, iron-air and other chemistries"
   },
+  "stages": [
+    {
+      "n": "Extract",
+      "k": "core",
+      "sectors": [
+        "Mining & Raw Materials"
+      ]
+    },
+    {
+      "n": "Refine",
+      "k": "core",
+      "sectors": [
+        "Materials & Chemicals"
+      ]
+    },
+    {
+      "n": "Manufacture",
+      "k": "core",
+      "sectors": [
+        "Cell Manufacturing & OEMs",
+        "Manufacturing Equipment",
+        "Process & Facility Systems",
+        "BMS & Power Electronics",
+        "Thermal & Safety"
+      ]
+    },
+    {
+      "n": "Deploy & Use",
+      "k": "core",
+      "sectors": [
+        "Energy Storage & Charging"
+      ]
+    },
+    {
+      "n": "Recover ♻",
+      "k": "core",
+      "sectors": [
+        "Recycling & Circular Economy"
+      ]
+    },
+    {
+      "n": "Links",
+      "k": "links",
+      "sectors": [
+        "Logistics & Supply Chain"
+      ]
+    },
+    {
+      "n": "Enablers",
+      "k": "enabler",
+      "sectors": [
+        "Consulting & Professional Services",
+        "Education, Training & Workforce",
+        "Finance & Investment",
+        "Industry Bodies & Standards",
+        "Insurance & Risk",
+        "Legal, IP & Policy",
+        "Media, Community & Events",
+        "Research & Academia",
+        "Software, Data & Simulation",
+        "Testing, Certification & Quality"
+      ]
+    }
+  ],
   "countries": [
     "Australia",
     "Belgium",

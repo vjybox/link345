@@ -310,6 +310,22 @@ GLOSSARY = {
 }
 
 
+# ---------------------------------------------------------------------------
+# The Loop — linkplus.in circular-economy mapping. Core stages are arcs on the
+# ring; "links" ride the connectors; enablers orbit (every other sector).
+# ---------------------------------------------------------------------------
+LIFECYCLE_STAGES = [
+    ("Extract", ["Mining & Raw Materials"]),
+    ("Refine", ["Materials & Chemicals"]),
+    ("Manufacture", ["Cell Manufacturing & OEMs", "Manufacturing Equipment",
+                     "Process & Facility Systems", "BMS & Power Electronics",
+                     "Thermal & Safety"]),
+    ("Deploy & Use", ["Energy Storage & Charging"]),
+    ("Recover ♻", ["Recycling & Circular Economy"]),
+]
+LINKS_SECTORS = ["Logistics & Supply Chain"]
+
+
 def derive_tech(name, category):
     hay = (name + " " + category).lower()
     tags = []
@@ -419,6 +435,14 @@ def main():
         "types": sorted({e["type"] for e in entries}),
         "techs": sorted({t for e in entries for t in e["tech"]}),
         "gloss": GLOSSARY,
+        "stages": (
+            [{"n": n, "k": "core", "sectors": secs} for n, secs in LIFECYCLE_STAGES]
+            + [{"n": "Links", "k": "links", "sectors": LINKS_SECTORS}]
+            + [{"n": "Enablers", "k": "enabler", "sectors": sorted(
+                set(tree.keys())
+                - {sec for _, ss in LIFECYCLE_STAGES for sec in ss}
+                - set(LINKS_SECTORS))}]
+        ),
         "countries": sorted({e["country"] for e in entries if e["country"]}),
         "regions": sorted({e["region"] for e in entries if e["region"]}),
         "centroids": {c: COUNTRY_CENTROIDS[c] for c in present_countries},
@@ -505,6 +529,41 @@ def _logo_html(entry, color):
             f'<span class="mono">{escape(_initials(entry["n"]))}</span>{fav}</span>')
 
 
+def _loop_svg_static(payload):
+    """Non-interactive Loop for the no-JS Blogger page."""
+    import math
+    core = [st for st in payload["stages"] if st["k"] == "core"]
+    colors = payload["colors"]
+    cnt = {st["n"]: sum(1 for e in payload["entries"] if e["s"] in st["sectors"])
+           for st in core}
+    W, H, cx, cy, r = 900, 470, 450, 232, 150
+    seg, gap = 360 / len(core), 18
+    pt = lambda a, rr: (cx + rr * math.cos(math.radians(a)),
+                        cy + rr * math.sin(math.radians(a)))
+    arcs, labels = "", ""
+    for i, st in enumerate(core):
+        a0, a1 = -90 + i * seg + gap / 2, -90 + (i + 1) * seg - gap / 2
+        mid = (a0 + a1) / 2
+        (x0, y0), (x1, y1) = pt(a0, r), pt(a1, r)
+        col = colors.get(st["sectors"][0], "var(--c1)")
+        arcs += (f'<path d="M {x0:.1f} {y0:.1f} A {r} {r} 0 0 1 {x1:.1f} {y1:.1f}" '
+                 f'fill="none" stroke="{col}" stroke-width="26"/>')
+        lx, ly = pt(mid, r + 42)
+        c = math.cos(math.radians(mid))
+        anch = "start" if c > .35 else ("end" if c < -.35 else "middle")
+        labels += (f'<text class="lp-name" x="{lx:.1f}" y="{ly:.1f}" text-anchor="{anch}">'
+                   f'{i+1}·&#160;{escape(st["n"])}'
+                   f'<tspan class="lp-cnt" dx="7">{cnt[st["n"]]}</tspan></text>')
+    total = payload["stats"]["entries"]
+    center = (f'<circle cx="{cx}" cy="{cy-34}" r="13" class="lp-ring"/>'
+              f'<path d="M {cx} {cy-39.5} v 11 M {cx-5.5} {cy-34} h 11" class="lp-plus"/>'
+              f'<text class="lp-center-n" x="{cx}" y="{cy+8}" text-anchor="middle">{total:,}</text>'
+              f'<text class="lp-center-l" x="{cx}" y="{cy+26}" text-anchor="middle">COMPANIES LINKED</text>'
+              f'<text class="lp-center-l" x="{cx}" y="{cy+42}" text-anchor="middle">THE BATTERY LOOP</text>')
+    return (f'<div class="loop"><svg viewBox="0 0 {W} {H}" class="loopsvg" role="img" '
+            f'aria-label="The battery circular economy loop">{arcs}{labels}{center}</svg></div>')
+
+
 def render_blogger_page(payload):
     """No-JavaScript, no-form-element directory that survives Blogger's Page
     sanitizer. Pure <style> + <div>/<a> + native <details>/<summary>."""
@@ -571,21 +630,22 @@ def render_blogger_page(payload):
         "HTML view. Browse by expanding sectors; use Ctrl/Cmd+F to find text. -->\n"
         + STYLE_PAGE + '\n<div id="lx"><a id="lx-top"></a>\n'
         f'<div class="head"><div class="brand"><span class="mark">'
-        '<svg class="ic batt" viewBox="0 0 24 24" aria-hidden="true">'
-        '<rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/>'
-        '<path class="bolt" d="m11.5 9-2.2 3.2h4l-2.2 3.2"/></svg></span>'
+        '<svg class="ic lmark" viewBox="0 0 24 24" aria-hidden="true">'
+        '<circle cx="12" cy="12" r="8.5" stroke-dasharray="8.6 4.7"/>'
+        '<path d="M12 8.5v7M8.5 12h7"/></svg></span>'
         f'<h1>The Lithium Index</h1></div>'
-        f'<div class="sub">Li-ion Battery Industry Directory</div>'
+        f'<div class="sub">Linking the Battery Circular Economy</div>'
         f'<div class="stat"><b>{n_entries}</b> entries · '
         f'<b>{stats["categories"]}</b> categories · '
         f'<b>{stats["sectors"]}</b> mega-sectors · '
         f'<b>{stats["withUrl"]}</b> verified links</div>'
         f'<div class="tip">Click a sector to expand · '
         f'press Ctrl/⌘+F to search the page</div></div>'
+        + _loop_svg_static(payload) +
         f'<div class="toc">{toc}</div>'
         f'<div class="body">{"".join(sections)}</div>'
-        f'<div class="foot">The Lithium Index · a ✓ marks a verified official '
-        f'link, others open a web search · built as a static Blogger page</div>'
+        f'<div class="foot">The Lithium Index · linkplus.in — every company is a '
+        f'link · a ✓ marks a verified official link, others open a web search</div>'
         "</div>\n"
     ).replace("/*__PAL__*/", palette_css()[0])
 
@@ -596,7 +656,7 @@ STYLE_PAGE = r"""<style>
   --bg:#fafafa; --panel:#fff; --ink:#0a0a0a; --muted:#5f6368; --line:#e4e4e4;
   --ls:#0a0a0a; --blue:#1452ff; --orange:#ff5a1f; --grid:rgba(10,10,10,.035);
   --sans:"Inter",system-ui,-apple-system,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --mono:"JetBrains Mono",ui-monospace,monospace; --brand:#d92d0a;
   /*__PAL__*/
   container-type:inline-size;
   font-family:var(--sans);
@@ -618,8 +678,16 @@ STYLE_PAGE = r"""<style>
 #lx .head{padding:22px 20px; border-bottom:1px solid var(--ls); background:#fff; position:relative}
 #lx .head::after{content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px;
   background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
+#lx .loop{background:#fff;border-bottom:1px solid var(--line);padding:16px}
+#lx .loopsvg{width:100%;max-width:760px;height:auto;display:block;margin:0 auto}
+#lx .lp-name{font-family:var(--sans);font-weight:600;font-size:15px;fill:var(--ink)}
+#lx .lp-cnt{font-family:var(--mono);font-size:12px;fill:var(--muted)}
+#lx .lp-ring{fill:none;stroke:var(--brand);stroke-width:2;stroke-dasharray:8.2 4.5}
+#lx .lp-plus{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
+#lx .lp-center-n{font-family:var(--mono);font-weight:700;font-size:30px;fill:var(--ink)}
+#lx .lp-center-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;fill:var(--muted)}
 #lx .brand{display:flex; align-items:baseline; gap:10px}
-#lx .mark{display:inline-flex; color:var(--blue); transform:translateY(3px)}
+#lx .mark{display:inline-flex; color:var(--brand); transform:translateY(3px)}
 #lx .ic{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
   stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px}
 #lx .mark .ic{width:24px;height:20px;stroke-width:1.8}
@@ -688,7 +756,7 @@ STYLE_EMBED = r"""<style>
   --sans:"Inter",system-ui,-apple-system,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --fs-label:10px; --fs-body:13px; --fs-title:15px; --fs-display:26px;
-  --ease:cubic-bezier(.2,.7,.4,1); --speed:160ms;
+  --ease:cubic-bezier(.2,.7,.4,1); --speed:160ms; --brand:#d92d0a;
   /*__PAL__*/
   container-type:inline-size;
   font-family:var(--sans);
@@ -730,7 +798,7 @@ STYLE_EMBED = r"""<style>
   background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777,#ea580c,#f59e0b,#16a34a,#0891b2)}
 #li-root .bar{padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 #li-root .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
-#li-root .brand .mark{display:inline-flex;color:var(--blue);transform:translateY(2px)}
+#li-root .brand .mark{display:inline-flex;color:var(--brand);transform:translateY(2px)}
 #li-root .brand .mark .ic{width:22px;height:18px;stroke-width:1.8}
 #li-root .brand .mark .bolt{stroke:var(--orange)}
 #li-root .brand h1{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
@@ -909,7 +977,32 @@ STYLE_EMBED = r"""<style>
 #li-root .sbtrack{flex:1;height:8px}
 #li-root .sbfill{display:block;height:100%;border-radius:0 4px 4px 0;min-width:2px}
 #li-root .sbv{flex:0 0 46px;text-align:left;font-family:var(--mono);font-size:11px;color:var(--muted)}
-@container (max-width:700px){#li-root .sbn{flex-basis:120px;font-size:11px}}
+@container (max-width:700px){#li-root .sbn{flex-basis:120px;font-size:11px}
+  #li-root .lp-name{font-size:22px}#li-root .lp-cnt{font-size:18px}#li-root .lp-ret-t{font-size:16px}
+  #li-root .lp-center-n{font-size:40px}#li-root .lp-center-l{font-size:14px}}
+#li-root .loop{background:var(--panel);border:1px solid var(--line-strong);padding:14px 16px 16px;margin-bottom:16px}
+#li-root .loopsvg{width:100%;max-width:820px;height:auto;display:block;margin:0 auto}
+#li-root .lp-stage{cursor:pointer}
+#li-root .lp-stage path{transition:stroke-width var(--speed) var(--ease)}
+#li-root .lp-stage:hover path:last-child,#li-root .lp-stage:focus-visible path:last-child{stroke-width:34}
+#li-root .lp-link{cursor:pointer;fill:var(--muted)}
+#li-root .lp-link:hover{fill:var(--blue)}
+#li-root .lp-name{font-family:var(--sans);font-weight:600;font-size:15px;fill:var(--ink)}
+#li-root .lp-cnt{font-family:var(--mono);font-weight:400;font-size:12px;fill:var(--muted)}
+#li-root .lp-ret,#li-root .lp-name,#li-root .lp-center{pointer-events:none}
+#li-root .lp-ret path{stroke:var(--brand);stroke-width:2;stroke-dasharray:6 5}
+#li-root .lp-ret-head{fill:var(--brand)}
+#li-root .lp-ret-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;fill:var(--brand)}
+#li-root .lp-ring{fill:none;stroke:var(--brand);stroke-width:2;stroke-dasharray:8.2 4.5}
+#li-root .lp-plus{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
+#li-root .lp-center-n{font-family:var(--mono);font-weight:700;font-size:30px;fill:var(--ink)}
+#li-root .lp-center-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;fill:var(--muted)}
+#li-root .enablers{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+#li-root .enb-h{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);margin-right:6px;width:100%;text-align:center}
+#li-root .enb{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;background:none;border:1px solid var(--line);padding:5px 9px;cursor:pointer;color:var(--ink)}
+#li-root .enb:hover{border-color:var(--sc);color:var(--sc)}
+#li-root .enb .dot{width:7px;height:7px;border-radius:50%;background:var(--sc)}
+#li-root .d-sec .dot{width:7px;height:7px;border-radius:50%;background:var(--sc,var(--muted));flex:0 0 auto}
 #li-root .tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
   border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
   padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink);
@@ -1003,7 +1096,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   --sans:"Inter",system-ui,-apple-system,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --fs-label:10px; --fs-body:13px; --fs-title:15px; --fs-display:26px;
-  --ease:cubic-bezier(.2,.7,.4,1); --speed:160ms;
+  --ease:cubic-bezier(.2,.7,.4,1); --speed:160ms; --brand:#d92d0a;
   /*__PAL__*/
 }
 *{box-sizing:border-box}
@@ -1036,7 +1129,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px
 .bar{max-width:var(--maxw);margin:0 auto;padding:14px 20px;
   display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
-.brand .mark{display:inline-flex;color:var(--blue);transform:translateY(2px)}
+.brand .mark{display:inline-flex;color:var(--brand);transform:translateY(2px)}
 .brand .mark .ic{width:22px;height:18px;stroke-width:1.8}
 .brand .mark .bolt{stroke:var(--orange)}
 .brand h1{font-family:"Instrument Serif",Georgia,serif;font-style:italic;
@@ -1232,7 +1325,32 @@ footer a{color:var(--blue)}
 .sbtrack{flex:1;height:8px}
 .sbfill{display:block;height:100%;border-radius:0 4px 4px 0;min-width:2px}
 .sbv{flex:0 0 46px;text-align:left;font-family:var(--mono);font-size:11px;color:var(--muted)}
-@media(max-width:700px){.sbn{flex-basis:120px;font-size:11px}}
+@media(max-width:700px){.sbn{flex-basis:120px;font-size:11px}
+  .lp-name{font-size:22px}.lp-cnt{font-size:18px}.lp-ret-t{font-size:16px}
+  .lp-center-n{font-size:40px}.lp-center-l{font-size:14px}}
+.loop{background:var(--panel);border:1px solid var(--line-strong);padding:14px 16px 16px;margin-bottom:16px}
+.loopsvg{width:100%;max-width:820px;height:auto;display:block;margin:0 auto}
+.lp-stage{cursor:pointer}
+.lp-stage path{transition:stroke-width var(--speed) var(--ease)}
+.lp-stage:hover path:last-child,.lp-stage:focus-visible path:last-child{stroke-width:34}
+.lp-link{cursor:pointer;fill:var(--muted)}
+.lp-link:hover{fill:var(--blue)}
+.lp-name{font-family:var(--sans);font-weight:600;font-size:15px;fill:var(--ink)}
+.lp-cnt{font-family:var(--mono);font-weight:400;font-size:12px;fill:var(--muted)}
+.lp-ret,.lp-name,.lp-center{pointer-events:none}
+.lp-ret path{stroke:var(--brand);stroke-width:2;stroke-dasharray:6 5}
+.lp-ret-head{fill:var(--brand)}
+.lp-ret-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;fill:var(--brand)}
+.lp-ring{fill:none;stroke:var(--brand);stroke-width:2;stroke-dasharray:8.2 4.5}
+.lp-plus{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
+.lp-center-n{font-family:var(--mono);font-weight:700;font-size:30px;fill:var(--ink)}
+.lp-center-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;fill:var(--muted)}
+.enablers{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.enb-h{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);margin-right:6px;width:100%;text-align:center}
+.enb{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;background:none;border:1px solid var(--line);padding:5px 9px;cursor:pointer;color:var(--ink)}
+.enb:hover{border-color:var(--sc);color:var(--sc)}
+.enb .dot{width:7px;height:7px;border-radius:50%;background:var(--sc)}
+.d-sec .dot{width:7px;height:7px;border-radius:50%;background:var(--sc,var(--muted));flex:0 0 auto}
 .tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
   border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
   padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink);
@@ -1314,10 +1432,10 @@ mark{color:#111}
   <div class="bar">
     <button class="menu-toggle" id="menuToggle" aria-label="Open filters">☰ Filters</button>
     <a class="brand" href="#" id="brandReset" title="Reset all filters">
-      <span class="mark"><svg class="ic batt" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/><path class="bolt" d="m11.5 9-2.2 3.2h4l-2.2 3.2"/></svg></span>
+      <span class="mark"><svg class="ic lmark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke-dasharray="8.6 4.7"/><path d="M12 8.5v7M8.5 12h7"/></svg></span>
       <span>
         <h1>The Lithium Index</h1><br>
-        <small>Li-ion Battery Industry Directory</small>
+        <small>Linking the Battery Circular Economy</small>
       </span>
     </a>
     <div class="search">
@@ -1331,7 +1449,7 @@ mark{color:#111}
       <div><b id="statSecs">__N_SECTORS__</b><span>Sectors</span></div>
     </div>
     <div class="hactions">
-      <button class="hbtn" id="submitBtn" title="Submit a company"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Submit</button>
+      <button class="hbtn" id="submitBtn" title="Submit a company"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="stroke:var(--brand)"><path d="M12 5v14M5 12h14"/></svg>Submit</button>
       <button class="hbtn icon" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode"></button>
     </div>
   </div>
@@ -1377,7 +1495,7 @@ mark{color:#111}
 
 <footer>
   <span>The Lithium Index · __N_ENTRIES__ entries · __N_CATS__ categories · __N_SECTORS__ mega-sectors</span>
-  <span>Single-file build · ✓ marks a verified official link; others open a web search</span>
+  <span>linkplus.in — every company is a link · ✓ marks a verified official link; others open a web search</span>
 </footer>
 
 <script>
@@ -1396,7 +1514,13 @@ const I = {
   batt:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/></svg>'
 };
 
-const state = {q:"", sector:null, cat:null, type:"", tech:"", region:"", country:"", sort:"rel", view:"landscape", page:1};
+const state = {q:"", sector:null, cat:null, stage:null, type:"", tech:"", region:"", country:"", sort:"rel", view:"landscape", page:1};
+const STAGE_SECTORS = {}; (DB.stages||[]).forEach(st=>STAGE_SECTORS[st.n]=new Set(st.sectors));
+function stageOf(sector){
+  for(const st of DB.stages){ if(st.sectors.indexOf(sector)>=0) return st.n; }
+  return "";
+}
+function stageColor(st){ const secs=(STAGE_SECTORS[st]||new Set()); const first=[...secs][0]; return DB.colors[first]||"var(--c1)"; }
 
 const $ = s => document.querySelector(s);
 const grid = $("#grid"), pager = $("#pager"), chips = $("#chips"),
@@ -1427,8 +1551,8 @@ function buildTree(){
   treeEl.innerHTML = html;
 }
 function buildPills(){
-  pillsEl.innerHTML = `<button class="pill" data-pill="__all">All sectors</button>` +
-    QUICK.filter(s=>DB.tree[s]).map(s=>`<button class="pill" data-pill="${esc(s)}" style="--sc:${DB.colors[s]||'#0a0a0a'}">${esc(s)}</button>`).join("");
+  pillsEl.innerHTML = `<button class="pill" data-pill="__all">All</button>` +
+    DB.stages.map(st=>`<button class="pill" data-pill="stage:${esc(st.n)}" style="--sc:${stageColor(st.n)}">${esc(st.n)}</button>`).join("");
 }
 function buildSelects(){
   const typeSel=$("#typeSel"), techSel=$("#techSel");
@@ -1457,6 +1581,7 @@ function filtered(){
   let rows = DB.entries;
   if(state.cat){ rows = rows.filter(e=>e.c===state.cat); }
   else if(state.sector){ rows = rows.filter(e=>e.s===state.sector); }
+  else if(state.stage){ const ss=STAGE_SECTORS[state.stage]||new Set(); rows = rows.filter(e=>ss.has(e.s)); }
   if(state.type){ rows = rows.filter(e=>e.t===state.type); }
   if(state.tech){ rows = rows.filter(e=>e.tech.indexOf(state.tech)>=0); }
   if(state.region){ rows = rows.filter(e=>e.rg===state.region); }
@@ -1563,6 +1688,66 @@ function render(){
   updateHash();
 }
 
+function renderLoop(){
+  const W=900, H=470, cx=450, cy=232, r=150;
+  const rad=a=>a*Math.PI/180;
+  const pt=(a,rr)=>[cx+rr*Math.cos(rad(a)), cy+rr*Math.sin(rad(a))];
+  const core=DB.stages.filter(x=>x.k==="core");
+  const seg=360/core.length, gap=18, sw=26;
+  const cnt=st=>{ const ss=STAGE_SECTORS[st]; let n=0; DB.entries.forEach(e=>{if(ss.has(e.s))n++;}); return n; };
+  let arcs="", arrows="", labels="";
+  core.forEach((stg,i)=>{
+    const a0=-90+i*seg+gap/2, a1=-90+(i+1)*seg-gap/2, mid=(a0+a1)/2;
+    const [x0,y0]=pt(a0,r), [x1,y1]=pt(a1,r);
+    const col=stageColor(stg.n), n=cnt(stg.n);
+    arcs+=`<g class="lp-stage" data-stage="${esc(stg.n)}" tabindex="0" role="button" aria-label="${esc(stg.n)} — ${n} entries">
+      <title>${esc(stg.n)} · ${n} entries — click to browse</title>
+      <path d="M ${x0.toFixed(1)} ${y0.toFixed(1)} A ${r} ${r} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}"
+        fill="none" stroke="transparent" stroke-width="52"/>
+      <path d="M ${x0.toFixed(1)} ${y0.toFixed(1)} A ${r} ${r} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}"
+        fill="none" stroke="${col}" stroke-width="${sw}"/></g>`;
+    const [lx,ly]=pt(mid,r+42);
+    const anch=Math.cos(rad(mid))>0.35?"start":(Math.cos(rad(mid))<-0.35?"end":"middle");
+    labels+=`<text class="lp-name" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anch}">${i+1}·&#160;${esc(stg.n)}<tspan class="lp-cnt" dx="7">${n}</tspan></text>`;
+    // connector arrow at the boundary after this arc (the "link")
+    const b=-90+(i+1)*seg;
+    const [px,py]=pt(b,r);
+    const tx=-Math.sin(rad(b)), ty=Math.cos(rad(b));   // clockwise tangent
+    const nx=Math.cos(rad(b)), ny=Math.sin(rad(b));    // radial normal
+    const tip=[px+tx*9,py+ty*9], b1=[px-tx*5+nx*7,py-ty*5+ny*7], b2=[px-tx*5-nx*7,py-ty*5-ny*7];
+    arrows+=`<g class="lp-link" data-sector="Logistics & Supply Chain" tabindex="0" role="button" aria-label="Logistics and supply chain — the links between stages">
+      <title>Logistics &amp; Supply Chain — the links between stages</title>
+      <polygon points="${tip.map(v=>v.toFixed(1))} ${b1.map(v=>v.toFixed(1))} ${b2.map(v=>v.toFixed(1))}"/></g>`;
+  });
+  // brand-red return arc: Recover (mid of last arc) back to Refine (mid of 2nd)
+  const aFrom=-90+4*seg+seg/2+8, aTo=-90+seg+seg/2+360-14;
+  const r2=r-46;
+  const [fx,fy]=pt(aFrom,r2), [tx2,ty2]=pt(aTo,r2);
+  const [ex,ey]=pt(aTo,r2);
+  const tt=-Math.sin(rad(aTo)), tu=Math.cos(rad(aTo));
+  const rn=Math.cos(rad(aTo)), rm=Math.sin(rad(aTo));
+  const rtip=[ex+tt*8,ey+tu*8], rb1=[ex-tt*4+rn*5.5,ey-tu*4+rm*5.5], rb2=[ex-tt*4-rn*5.5,ey-tu*4-rm*5.5];
+  const ret=`<g class="lp-ret" aria-hidden="true">
+    <path d="M ${fx.toFixed(1)} ${fy.toFixed(1)} A ${r2} ${r2} 0 0 1 ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none"/>
+    <polygon points="${rtip.map(v=>v.toFixed(1))} ${rb1.map(v=>v.toFixed(1))} ${rb2.map(v=>v.toFixed(1))}" class="lp-ret-head"/>
+    <text class="lp-ret-t" x="${cx}" y="${(cy-r2+30).toFixed(1)}" text-anchor="middle">recovered materials re-enter the loop</text>
+  </g>`;
+  const center=`<g class="lp-center" aria-hidden="true">
+    <circle cx="${cx}" cy="${cy-34}" r="13" class="lp-ring"/>
+    <path d="M ${cx} ${cy-39.5} v 11 M ${cx-5.5} ${cy-34} h 11" class="lp-plus"/>
+    <text class="lp-center-n" x="${cx}" y="${cy+8}">${DB.stats.entries.toLocaleString()}</text>
+    <text class="lp-center-l" x="${cx}" y="${cy+26}">COMPANIES LINKED</text>
+    <text class="lp-center-l" x="${cx}" y="${cy+42}">THE BATTERY LOOP</text>
+  </g>`;
+  const enb=DB.stages.filter(x=>x.k!=="core");
+  const strip=`<div class="enablers"><span class="enb-h">ENABLERS — SERVING EVERY STAGE</span>` +
+    enb.flatMap(g=>g.sectors).map(sec=>`<button class="enb" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'var(--c1)'}"><span class="dot"></span>${esc(sec)}</button>`).join("") + `</div>`;
+  return `<div class="loop">
+    <svg viewBox="0 0 ${W} ${H}" class="loopsvg" role="img" aria-label="The battery circular economy loop">
+      ${arcs}${arrows}${ret}${labels}${center}
+    </svg>${strip}</div>`;
+}
+
 function renderLandscape(){
   const st = DB.stats;
   const kpis = `<div class="kpis">
@@ -1589,7 +1774,7 @@ function renderLandscape(){
       <div class="tile-top">${top}</div>
     </button>`;
   }).join("");
-  landscapeEl.innerHTML = kpis + chart + `<div class="tiles">` + tiles + `</div>`;
+  landscapeEl.innerHTML = renderLoop() + kpis + chart + `<div class="tiles">` + tiles + `</div>`;
 }
 
 function renderMap(rows){
@@ -1637,7 +1822,7 @@ function openDetail(e){
     <div class="d-top">
       ${logoHtml(e)}
       <div class="d-title"><h3>${esc(e.n)}</h3>
-        <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.s)}${e.co?' · '+esc(e.co):''}</div>
+        <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.s)}${e.co?' · '+esc(e.co):''} · Loop: ${esc(stageOf(e.s))}</div>
       </div>
       <button class="d-x" data-close aria-label="Close">${I.x}</button>
     </div>
@@ -1671,6 +1856,7 @@ function renderCrumb(){
 
 function renderChips(){
   const c = [];
+  if(state.stage) c.push(`<span class="chip"><b>Stage:</b> ${esc(state.stage)} <span class="x" data-clear="stage">${I.x}</span></span>`);
   if(state.sector) c.push(`<span class="chip"><b>Sector:</b> ${esc(state.sector)} <span class="x" data-clear="sector">${I.x}</span></span>`);
   if(state.cat){
     const name = (DB.entries.find(e=>e.c===state.cat)||{}).cn || ("#"+state.cat);
@@ -1712,7 +1898,7 @@ function syncSidebar(){
   });
   document.querySelectorAll(".pill").forEach(p=>{
     const v = p.dataset.pill;
-    p.classList.toggle("on", v==="__all" ? (!state.sector&&!state.cat) : v===state.sector);
+    p.classList.toggle("on", v==="__all" ? (!state.sector&&!state.cat&&!state.stage) : v==="stage:"+state.stage);
   });
 }
 
@@ -1737,10 +1923,11 @@ function scrollToSelectedSector(){
   const el = row && row.closest(".sector");
   if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
 }
-function setSector(s){ state.sector=s; state.cat=null; state.page=1; if(s) state.view="grid"; render(); if(s) scrollToSelectedSector(); }
+function setSector(s){ state.sector=s; state.cat=null; state.stage=null; state.page=1; if(s) state.view="grid"; render(); if(s) scrollToSelectedSector(); }
+function setStage(st){ state.stage=st; state.sector=null; state.cat=null; state.page=1; state.view="grid"; render(); flashResults(); }
 function setCat(id){
   const e = DB.entries.find(e=>e.c===id);
-  state.cat=id; state.sector=e?e.s:state.sector; state.page=1; state.view="grid"; render(); flashResults();
+  state.cat=id; state.sector=e?e.s:state.sector; state.stage=null; state.page=1; state.view="grid"; render(); flashResults();
 }
 function setView(v){ state.view=v; state.page=1; render(); }
 
@@ -1757,13 +1944,17 @@ treeEl.addEventListener("click", ev=>{
 pillsEl.addEventListener("click", ev=>{
   const b = ev.target.closest(".pill"); if(!b) return;
   const v=b.dataset.pill;
-  setSector(v==="__all"?null:(state.sector===v?null:v));
+  if(v==="__all"){ state.stage=null; setSector(null); return; }
+  const st=v.slice(6);
+  if(state.stage===st){ state.stage=null; state.page=1; render(); }
+  else setStage(st);
 });
 chips.addEventListener("click", ev=>{
   const x = ev.target.closest("[data-clear]"); if(!x) return;
   const k=x.dataset.clear;
   if(k==="sector") state.sector=null;
   if(k==="cat") state.cat=null;
+  if(k==="stage") state.stage=null;
   if(k==="type"){ state.type=""; $("#typeSel").value=""; }
   if(k==="tech"){ state.tech=""; $("#techSel").value=""; }
   if(k==="region"){ state.region=""; $("#regionSel").value=""; }
@@ -1778,6 +1969,8 @@ grid.addEventListener("click", ev=>{
   if(card){ ev.preventDefault(); const e = DB.entries.find(x=>x.i===Number(card.dataset.id)); if(e) openDetail(e); }
 });
 landscapeEl.addEventListener("click", ev=>{
+  const stg = ev.target.closest("[data-stage]");
+  if(stg){ setStage(stg.dataset.stage); return; }
   const t = ev.target.closest("[data-sector]"); if(!t) return;
   setSector(t.dataset.sector);
 });
@@ -1880,7 +2073,7 @@ $("#sortBtn").addEventListener("click", ()=>{
 
 $("#clearNav").addEventListener("click", resetAll);
 $("#brandReset").addEventListener("click", e=>{e.preventDefault();resetAll();});
-function resetAll(){ Object.assign(state,{q:"",sector:null,cat:null,type:"",tech:"",region:"",country:"",page:1,view:"landscape"});
+function resetAll(){ Object.assign(state,{q:"",sector:null,cat:null,stage:null,type:"",tech:"",region:"",country:"",page:1,view:"landscape"});
   $("#q").value=""; $("#typeSel").value=""; $("#techSel").value=""; $("#regionSel").value="";
   document.querySelectorAll(".sector.open").forEach(s=>s.classList.remove("open")); render(); }
 
@@ -1903,6 +2096,7 @@ function updateHash(){
   const p=new URLSearchParams();
   if(state.view!=="landscape") p.set("v",state.view);
   if(state.sector) p.set("sec",state.sector);
+  if(state.stage) p.set("st",state.stage);
   if(state.cat) p.set("cat",state.cat);
   if(state.type) p.set("t",state.type);
   if(state.tech) p.set("tech",state.tech);
@@ -1918,6 +2112,7 @@ function applyHash(){
   const p=new URLSearchParams(h);
   state.view = p.get("v")||"landscape";
   state.sector = p.get("sec")||null;
+  state.stage = p.get("st")||null;
   state.cat = p.get("cat")?Number(p.get("cat")):null;
   state.type = p.get("t")||"";
   state.tech = p.get("tech")||"";
