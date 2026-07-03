@@ -281,6 +281,43 @@ def match_country(name):
     return best and best_country or ""
 
 
+# --- metadata (Phase 1): stable IDs + auto-derived base fields --------------
+ENTITY_TYPE_BY_CAT = {
+    6: "Research", 8: "Institution", 7: "Media", 15: "Media",
+    28: "Facility", 29: "Facility", 30: "Facility",
+}
+
+
+def slugify(name):
+    base = re.sub(r"\([^)]*\)", " ", name)
+    base = re.split(r"\s[-–/|]\s", base)[0]
+    base = re.sub(r"[^A-Za-z0-9]+", "-", base).strip("-").lower()
+    return "-".join(base.split("-")[:4]) or "x"
+
+
+def infer_status(name):
+    n = name.lower()
+    if re.search(r"\b1\d{3}-\d{4}\b", n):
+        return "Defunct"
+    if any(w in n for w in ("acquired by", "acquired", "now part of", "now ",
+                            "acquiring")):
+        return "Acquired"
+    if "merger" in n or "formerly" in n:
+        return "Active"
+    return "Active"
+
+
+def infer_one_liner(name):
+    m = re.search(r"\(([^)]+)\)", name)
+    if m:
+        txt = m.group(1).strip()
+        if len(txt) > 3 and not txt.lower().startswith(("nyse", "nasdaq",
+                                                        "szse", "krx", "etr")):
+            return txt
+    parts = re.split(r"\s[-–]\s", name, 1)
+    return parts[1].strip() if len(parts) > 1 else ""
+
+
 # Plain-language tooltips for technology jargon (learner-friendly).
 GLOSSARY = {
     "Solid-State": "Solid electrolyte instead of liquid — higher energy density and safety",
@@ -409,14 +446,86 @@ def main():
         })
     tree = {s: cats for s, cats in tree.items() if cats}
 
+    # ---- Phase 1 metadata: stable IDs, auto-derived base, curated seed, graph
+    seen_ids = set()
+    for e in entries:
+        base = f"E{e['cid']:02d}-{slugify(e['name'])}"
+        eid, k = base, 2
+        while eid in seen_ids:
+            eid = f"{base}-{k}"; k += 1
+        seen_ids.add(eid); e["eid"] = eid
+        e["et"] = ENTITY_TYPE_BY_CAT.get(e["cid"], "Corporate")
+        e["status"] = infer_status(e["name"])
+        e["one"] = infer_one_liner(e["name"])
+
+    # index for resolving curated-seed keys -> entry (punctuation-tolerant,
+    # longest-prefix, like the URL matcher)
+    def norm(s):
+        return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", s.lower())).strip()
+
+    by_norm = {}
+    for e in entries:
+        by_norm.setdefault(norm(clean_name(e["name"])), e)
+
+    def resolve(key):
+        key = norm(key)
+        if key in by_norm:
+            return by_norm[key]
+        hit = hit_cn = None
+        for cn, e in by_norm.items():
+            if cn.startswith(key + " ") and (hit is None or len(cn) < len(hit_cn)):
+                hit, hit_cn = e, cn
+        return hit
+
+    meta_seed = json.loads((ROOT / "data" / "metadata.json").read_text("utf-8"))
+    seed_misses = []
+    for key, fields in meta_seed.items():
+        if key.startswith("_"):
+            continue
+        e = resolve(key)
+        if not e:
+            seed_misses.append(key); continue
+        e["meta"] = {k: v for k, v in fields.items()}
+        if fields.get("type"):
+            e["et"] = fields["type"]
+        if fields.get("status"):
+            e["status"] = fields["status"]
+        if fields.get("one_liner"):
+            e["one"] = fields["one_liner"]; e["one_verified"] = True
+
+    rels_doc = json.loads((ROOT / "data" / "relationships.json").read_text("utf-8"))
+    rels = {}   # eid -> list of {d:out/in, r:REL, n:name, e:eid}
+    rel_misses = []
+    seen_edges = set()
+    for src, rel, tgt in rels_doc["edges"]:
+        a, b = resolve(src), resolve(tgt)
+        if not a or not b:
+            rel_misses.append((src, rel, tgt)); continue
+        sig = (a["eid"], rel, b["eid"])
+        if sig in seen_edges:
+            continue
+        seen_edges.add(sig)
+        rels.setdefault(a["eid"], []).append({"d": "out", "r": rel, "n": b["name"], "e": b["eid"]})
+        rels.setdefault(b["eid"], []).append({"d": "in", "r": rel, "n": a["name"], "e": a["eid"]})
+    if seed_misses:
+        print(f"[warn] metadata keys not matched: {seed_misses}")
+    if rel_misses:
+        print(f"[warn] relationship keys not matched: {rel_misses}")
+    print(f"[ok] metadata: {sum(1 for e in entries if e.get('meta'))} seeded, "
+          f"{len(rels)} entities with connections, {len(rels_doc['edges'])} edges")
+
     present_countries = [c for c in COUNTRY_CENTROIDS if any(e["country"] == c for e in entries)]
     payload = {
         "entries": [
             {"i": e["id"], "n": e["name"], "c": e["cid"], "cn": e["cat"],
              "s": e["sector"], "u": e["url"], "t": e["type"], "tech": e["tech"],
-             "co": e["country"], "rg": e["region"]}
+             "co": e["country"], "rg": e["region"], "eid": e["eid"], "et": e["et"],
+             "stt": e["status"], "one": e["one"],
+             **({"ov": 1} if e.get("one_verified") else {}),
+             **({"m": e["meta"]} if e.get("meta") else {})}
             for e in entries
         ],
+        "rels": rels,
         "tree": tree,
         "colors": {sec: f"var(--c{(i % len(SECTOR_COLORS)) + 1})"
                    for i, sec in enumerate(tree.keys())},
@@ -1058,6 +1167,22 @@ STYLE_EMBED = r"""<style>
 #li-root .d-rel span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #li-root .d-empty{font-size:11px;color:var(--muted)}
 #li-root .d-suggest{font-size:11px;color:var(--blue);margin-top:4px}
+#li-root .d-one{font-size:13px;line-height:1.5;color:var(--ink);font-style:italic}
+#li-root .d-inf{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--line);padding:1px 4px;vertical-align:1px}
+#li-root .d-facts{display:flex;flex-direction:column;gap:6px}
+#li-root .d-fact{display:flex;gap:10px;font-size:12px;line-height:1.4}
+#li-root .d-fact .fk{flex:0 0 116px;color:var(--muted);font-family:var(--mono);font-size:10px;
+  letter-spacing:.04em;text-transform:uppercase;padding-top:1px}
+#li-root .d-fact .fv{flex:1;color:var(--ink);overflow-wrap:anywhere}
+#li-root .d-n{font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);padding:0 5px}
+#li-root .d-conns{display:flex;flex-direction:column;gap:4px}
+#li-root .d-conn{display:flex;flex-direction:column;gap:1px;text-align:left;font-family:var(--sans);
+  background:none;border:1px solid var(--line);border-left:3px solid var(--blue);
+  padding:6px 9px;cursor:pointer;color:var(--ink)}
+#li-root .d-conn:hover{background:rgba(20,82,255,.06)}
+#li-root .d-conn .cr{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+#li-root .d-conn .cn2{font-size:12px;font-weight:500}
 #li-root mark{color:#111}
 #li-root :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 #li-root .pill:active,#li-root .sort:active,#li-root .hbtn:active,#li-root .viewtabs button:active,
@@ -1416,6 +1541,22 @@ footer a{color:var(--blue)}
 .d-rel span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .d-empty{font-size:11px;color:var(--muted)}
 .d-suggest{font-size:11px;color:var(--blue);margin-top:4px}
+.d-one{font-size:13px;line-height:1.5;color:var(--ink);font-style:italic}
+.d-inf{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--line);padding:1px 4px;vertical-align:1px}
+.d-facts{display:flex;flex-direction:column;gap:6px}
+.d-fact{display:flex;gap:10px;font-size:12px;line-height:1.4}
+.d-fact .fk{flex:0 0 116px;color:var(--muted);font-family:var(--mono);font-size:10px;
+  letter-spacing:.04em;text-transform:uppercase;padding-top:1px}
+.d-fact .fv{flex:1;color:var(--ink);overflow-wrap:anywhere}
+.d-n{font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);padding:0 5px}
+.d-conns{display:flex;flex-direction:column;gap:4px}
+.d-conn{display:flex;flex-direction:column;gap:1px;text-align:left;font-family:var(--sans);
+  background:none;border:1px solid var(--line);border-left:3px solid var(--blue);
+  padding:6px 9px;cursor:pointer;color:var(--ink)}
+.d-conn:hover{background:rgba(20,82,255,.06)}
+.d-conn .cr{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.d-conn .cn2{font-size:12px;font-weight:500}
 mark{color:#111}
 /* accessibility & feel */
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -1828,17 +1969,19 @@ function openDetail(e){
     ["Patents", "https://patents.google.com/?q="+encodeURIComponent(cn)],
   ].filter(Boolean);
   const tags = (e.tech||[]).map(t=>`<span class="tag" title="${esc(DB.gloss[t]||t)}">${esc(t)}</span>`).join("");
-  const related = DB.entries.filter(x=>x.c===e.c && x.i!==e.i).slice(0,10);
+  const related = DB.entries.filter(x=>x.c===e.c && x.i!==e.i).slice(0,8);
   drawerPanel.innerHTML = `
     <div class="d-top">
       ${logoHtml(e)}
       <div class="d-title"><h3>${esc(e.n)}</h3>
-        <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.s)}${e.co?' · '+esc(e.co):''} · Loop: ${esc(stageOf(e.s))}</div>
+        <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.et||"")} · ${esc(e.s)}${e.co?' · '+esc(e.co):''} · Loop: ${esc(stageOf(e.s))}</div>
       </div>
       <button class="d-x" data-close aria-label="Close">${I.x}</button>
     </div>
-    <div class="d-cat" data-cat="${e.c}">${esc(e.cn)} ${I.ext}</div>
-    ${tags?`<div class="tags d-tags">${tags}</div>`:""}
+    ${entityProfile(e)}
+    ${connectionsHtml(e)}
+    ${tags?`<div class="d-h">Technology</div><div class="tags d-tags">${tags}</div>`:""}
+    <div class="d-h">Actions</div>
     <div class="d-links">
       ${links.map(([label,url,primary])=>`<a class="d-link${primary?' primary':''}" href="${url}" target="_blank" rel="noopener">${esc(label)} ${I.ext}</a>`).join("")}
     </div>
@@ -1850,6 +1993,45 @@ function openDetail(e){
   drawer.hidden = false;
   requestAnimationFrame(()=>drawer.classList.add("open"));
 }
+const REL_LABELS = {SUPPLIES_TO:"supplies", SUPPLIES_EQUIPMENT_TO:"supplies equipment",
+  EXPORTS_THROUGH:"exports through", USES_SOFTWARE:"uses", INVESTED_IN:"invested in",
+  SUBSIDIARY_OF:"subsidiary of", PARTNER_OF:"partner", JV_WITH:"joint venture",
+  RECYCLES_FOR:"recycles for", COMPETES_WITH:"competes with", FOUNDER_OF:"founder of",
+  FORMER_EMPLOYER:"formerly at", LEADS:"leads", MEMBER_OF:"member of", COVERS:"covers"};
+const PROFILE_ROWS = [
+  ["status","Status"],["ownership","Ownership"],["founded","Founded"],["ticker","Ticker"],
+  ["product","Core product / material"],["chemistry","Chemistry"],["form_factor","Form factor"],
+  ["deployment","Deployment"],["target","Target market"],["key_ip","Key IP"],["extraction","Extraction"],
+  ["facility_type","Facility type"],["capacity","Capacity"],["hazmat","Hazmat handling"],["strategic_role","Strategic role"],
+  ["institution_type","Institution type"],["funding_source","Funding source"],["notable_facility","Facility"],
+  ["title","Role"],["expertise","Expertise"],["esg","ESG"],["media_type","Format"]];
+function entityProfile(e){
+  const m = e.m || {};
+  const rows = [];
+  const status = m.status || e.stt;
+  if(status && status!=="Active") rows.push(["Status", esc(status)]);
+  for(const [k,label] of PROFILE_ROWS){
+    if(k==="status") continue;
+    if(m[k]!=null && m[k]!=="") rows.push([label, esc(String(m[k]))]);
+  }
+  const seeded = !!e.m;
+  const oneline = (e.one) ? `<div class="d-one">${esc(e.one)}${e.ov||seeded?"":' <span class="d-inf" title="auto-inferred from the entry name">inferred</span>'}</div>` : "";
+  if(!rows.length) return oneline;
+  return oneline + `<div class="d-h">Profile${seeded?"":' <span class="d-inf">inferred</span>'}</div>
+    <div class="d-facts">${rows.map(([k,v])=>`<div class="d-fact"><span class="fk">${esc(k)}</span><span class="fv">${v}</span></div>`).join("")}</div>`;
+}
+function connectionsHtml(e){
+  const list = (DB.rels||{})[e.eid] || [];
+  if(!list.length) return "";
+  const items = list.map(r=>{
+    const lbl = REL_LABELS[r.r] || r.r.toLowerCase().replace(/_/g," ");
+    const arrow = r.d==="out" ? "→" : "←";
+    return `<button class="d-conn" data-eid="${esc(r.e)}">
+        <span class="cr">${arrow} ${esc(lbl)}</span><span class="cn2">${esc(r.n)}</span></button>`;
+  }).join("");
+  return `<div class="d-h">Connections <span class="d-n">${list.length}</span></div><div class="d-conns">${items}</div>`;
+}
+function openByEid(eid){ const e = DB.entries.find(x=>x.eid===eid); if(e) openDetail(e); }
 function closeDrawer(){ drawer.classList.remove("open"); setTimeout(()=>{drawer.hidden=true;}, 200); }
 
 function renderCrumb(){
@@ -1998,8 +2180,10 @@ $("#viewTabs").addEventListener("click", ev=>{
 });
 drawer.addEventListener("click", ev=>{
   if(ev.target.closest("[data-close]")){ closeDrawer(); return; }
+  const conn = ev.target.closest(".d-conn[data-eid]");
+  if(conn){ drawerPanel.scrollTop=0; openByEid(conn.dataset.eid); return; }
   const rel = ev.target.closest(".d-rel");
-  if(rel){ const e=DB.entries.find(x=>x.i===Number(rel.dataset.id)); if(e) openDetail(e); return; }
+  if(rel){ const e=DB.entries.find(x=>x.i===Number(rel.dataset.id)); if(e){ drawerPanel.scrollTop=0; openDetail(e); } return; }
   const cat = ev.target.closest(".d-cat[data-cat]");
   if(cat){ closeDrawer(); setCat(Number(cat.dataset.cat)); }
 });

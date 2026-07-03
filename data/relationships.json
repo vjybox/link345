@@ -1,0 +1,75 @@
+{
+  "_doc": "Directed edges [source, RELATION, target] using the same cleaned-name keys as metadata.json. Rendered in the entity drawer as Connections (outgoing + incoming). Add edges freely; unmatched keys are skipped with a build warning.",
+  "edges": [
+    ["albemarle", "SUPPLIES_TO", "catl"],
+    ["albemarle", "SUPPLIES_TO", "lg energy solution"],
+    ["albemarle", "MEMBER_OF", "global battery alliance"],
+    ["sqm", "SUPPLIES_TO", "lg energy solution"],
+    ["ganfeng lithium", "SUPPLIES_TO", "tesla"],
+    ["ganfeng lithium", "SUPPLIES_TO", "lg energy solution"],
+    ["pilbara minerals", "SUPPLIES_TO", "ganfeng lithium"],
+    ["glencore", "SUPPLIES_TO", "umicore"],
+    ["vale", "SUPPLIES_TO", "umicore"],
+    ["bhp", "SUPPLIES_TO", "tesla"],
+    ["syrah resources", "SUPPLIES_TO", "tesla"],
+
+    ["umicore", "SUPPLIES_TO", "samsung sdi"],
+    ["umicore", "MEMBER_OF", "global battery alliance"],
+    ["posco future m", "SUPPLIES_TO", "lg energy solution"],
+    ["ecopro", "SUPPLIES_TO", "samsung sdi"],
+    ["sila", "SUPPLIES_TO", "panasonic"],
+    ["group14", "PARTNER_OF", "sk on"],
+    ["novonix", "SUPPLIES_TO", "lg energy solution"],
+    ["syrah resources", "SUPPLIES_TO", "tesla"],
+
+    ["wuxi lead", "SUPPLIES_EQUIPMENT_TO", "catl"],
+    ["manz", "SUPPLIES_EQUIPMENT_TO", "northvolt"],
+    ["trumpf", "SUPPLIES_EQUIPMENT_TO", "northvolt"],
+
+    ["analog devices", "SUPPLIES_TO", "general motors"],
+    ["infineon", "SUPPLIES_TO", "tesla"],
+    ["wolfspeed", "SUPPLIES_TO", "tesla"],
+
+    ["catl", "SUPPLIES_TO", "tesla"],
+    ["catl", "SUPPLIES_TO", "volkswagen"],
+    ["catl", "EXPORTS_THROUGH", "port of rotterdam"],
+    ["catl", "MEMBER_OF", "global battery alliance"],
+    ["lg energy solution", "SUPPLIES_TO", "general motors"],
+    ["lg energy solution", "JV_WITH", "general motors"],
+    ["sk on", "SUPPLIES_TO", "ford"],
+    ["sk on", "JV_WITH", "ford"],
+    ["panasonic", "SUPPLIES_TO", "tesla"],
+    ["samsung sdi", "SUPPLIES_TO", "volkswagen"],
+    ["gotion", "SUPPLIES_TO", "volkswagen"],
+    ["byd", "EXPORTS_THROUGH", "port of rotterdam"],
+
+    ["port of rotterdam", "USES_SOFTWARE", "twaice"],
+    ["fluence", "USES_SOFTWARE", "accure"],
+    ["nio", "USES_SOFTWARE", "voltaiq"],
+
+    ["redwood materials", "SUPPLIES_TO", "panasonic"],
+    ["redwood materials", "RECYCLES_FOR", "ford"],
+    ["redwood materials", "COMPETES_WITH", "albemarle"],
+    ["li-cycle", "SUPPLIES_TO", "glencore"],
+    ["ascend elements", "SUPPLIES_TO", "lg energy solution"],
+    ["brunp", "SUBSIDIARY_OF", "catl"],
+    ["cirba solutions", "RECYCLES_FOR", "general motors"],
+
+    ["breakthrough energy ventures", "INVESTED_IN", "redwood materials"],
+    ["breakthrough energy ventures", "INVESTED_IN", "quantumscape"],
+    ["breakthrough energy ventures", "INVESTED_IN", "sila"],
+    ["volkswagen", "INVESTED_IN", "quantumscape"],
+    ["volkswagen", "INVESTED_IN", "gotion"],
+
+    ["jb straubel", "FOUNDER_OF", "redwood materials"],
+    ["jb straubel", "FORMER_EMPLOYER", "tesla"],
+    ["elon musk", "LEADS", "tesla"],
+    ["peter carlsson", "FOUNDER_OF", "northvolt"],
+    ["peter carlsson", "FORMER_EMPLOYER", "tesla"],
+    ["gene berdichevsky", "FOUNDER_OF", "sila"],
+    ["gene berdichevsky", "FORMER_EMPLOYER", "tesla"],
+
+    ["benchmark mineral intelligence", "COVERS", "albemarle"],
+    ["bloombergnef", "COVERS", "catl"]
+  ]
+}

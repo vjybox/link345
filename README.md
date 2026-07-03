@@ -18,9 +18,11 @@ built as a single self-contained `index.html` with no runtime dependencies
 - **Filters** (all AND-combine, shown as clearable chips): **Type** (18),
   **Technology/chemistry** (12, auto-detected), and **Region/Country**
   (grouped by region).
-- **Company detail drawer** — click a card for a slide-in profile with smart
-  research links (Official site · Google · LinkedIn · News · Patents) and
-  related companies in the same category.
+- **Entity intelligence drawer** — click any card for a profile (status,
+  ownership, founded, chemistry, form factor, capacity…), a **Connections**
+  graph (supplies / exports-through / subsidiary-of / invested-in… — click a
+  connection to jump to that entity), smart research links, and related
+  companies. Schema + how to contribute: [`METADATA.md`](METADATA.md).
 - **Logos** on every card (favicon of the verified domain, with a colored
   monogram fallback). 214 entries link to their official website (✓ badge).
 - **Dark mode** toggle (remembers your choice; follows system by default).
