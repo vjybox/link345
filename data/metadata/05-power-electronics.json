@@ -1,0 +1,22 @@
+{
+  "_doc": "Power Electronics & BMS — BMS ICs, SiC, power semis. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "analog devices": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: ADI",
+    "one_liner": "BMS ICs incl. wireless BMS (absorbed Maxim, Linear)."
+  },
+  "infineon": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Power semis + BMS; SiC for EV inverters."
+  },
+  "wolfspeed": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Silicon-carbide (SiC) pure-play for EV power electronics."
+  }
+}

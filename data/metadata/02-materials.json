@@ -1,0 +1,61 @@
+{
+  "_doc": "Materials & Components — cathode/anode active materials, chemicals. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "umicore": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "EBR: UMI",
+    "founded": 1989,
+    "one_liner": "Belgian cathode-materials and battery-recycling leader.",
+    "product": "NMC cathode materials; recycling",
+    "chemistry": "NMC",
+    "esg": "Closed-loop recycling"
+  },
+  "posco future m": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean cathode & anode materials arm of POSCO (formerly POSCO Chemical).",
+    "product": "Cathode & anode active materials"
+  },
+  "ecopro": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean high-nickel NCA/NMC cathode specialist.",
+    "product": "NCA/NMC cathode",
+    "chemistry": "NCA, NMC"
+  },
+  "basf": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ETR: BAS",
+    "one_liner": "Chemicals major supplying cathode active materials and battery chemicals."
+  },
+  "novonix": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Synthetic graphite anode + battery test-equipment maker.",
+    "product": "Synthetic graphite anode"
+  },
+  "sila": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "founded": 2011,
+    "one_liner": "Silicon anode material; founded by ex-Tesla engineer Gene Berdichevsky.",
+    "product": "Silicon anode",
+    "chemistry": "Silicon anode",
+    "target": "EV cell makers, consumer electronics"
+  },
+  "group14": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "one_liner": "Silicon-carbon anode (SCC55); JV with SK and Porsche.",
+    "product": "Silicon-carbon anode",
+    "chemistry": "Silicon anode"
+  }
+}

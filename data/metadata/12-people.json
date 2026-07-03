@@ -1,0 +1,55 @@
+{
+  "_doc": "People — founders, executives, scientists. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "jb straubel": {
+    "type": "People",
+    "status": "Active",
+    "one_liner": "Architected Tesla's first pack; now closing the loop at Redwood.",
+    "title": "Founder & CEO, Redwood Materials",
+    "employer": "redwood materials",
+    "prev_employer": [
+      "tesla"
+    ],
+    "expertise": "Pack architecture, recycling"
+  },
+  "elon musk": {
+    "type": "People",
+    "status": "Active",
+    "one_liner": "CEO of Tesla; drove 4680 cell and Gigafactory strategy.",
+    "title": "CEO, Tesla",
+    "employer": "tesla"
+  },
+  "peter carlsson": {
+    "type": "People",
+    "status": "Active",
+    "one_liner": "Founded Northvolt after leading Tesla supply chain.",
+    "title": "Co-founder, Northvolt",
+    "employer": "northvolt",
+    "prev_employer": [
+      "tesla"
+    ]
+  },
+  "gene berdichevsky": {
+    "type": "People",
+    "status": "Active",
+    "one_liner": "Tesla employee #7; founded silicon-anode maker Sila.",
+    "title": "Co-founder & CEO, Sila",
+    "employer": "sila",
+    "prev_employer": [
+      "tesla"
+    ]
+  },
+  "prof. jeff dahn": {
+    "type": "People",
+    "status": "Active",
+    "one_liner": "Li-ion lifetime pioneer; Tesla's academic research partner at Dalhousie.",
+    "title": "Professor, Dalhousie University",
+    "expertise": "Cell longevity, electrolytes"
+  },
+  "dr. m. stanley whittingham": {
+    "type": "People",
+    "status": "Active",
+    "one_liner": "Nobel laureate; invented the lithium intercalation cathode.",
+    "title": "Professor, Binghamton University",
+    "expertise": "Intercalation chemistry"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "_doc": "Cells & Chemistry — cell manufacturers and battery OEM cell units. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "catl": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "SZSE: 300750",
+    "founded": 2011,
+    "one_liner": "World's largest EV & ESS battery maker.",
+    "product": "Li-ion cells, EV packs, ESS containers",
+    "chemistry": "LFP, NMC, M3P, Na-ion",
+    "form_factor": "Prismatic, Pouch",
+    "key_ip": "Cell-to-Pack (CTP), Shenxing fast-charge",
+    "deployment": "Mass production (gigafactory)"
+  },
+  "byd": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "founded": 1995,
+    "one_liner": "Chinese EV + battery maker; the LFP Blade Battery.",
+    "product": "LFP Blade cells, EVs",
+    "chemistry": "LFP",
+    "form_factor": "Prismatic (Blade)",
+    "key_ip": "Blade Battery (cell-to-body)"
+  },
+  "lg energy solution": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "KRX: 373220",
+    "founded": 2020,
+    "one_liner": "Korean cell major; NMC pouch/cylindrical for global OEMs.",
+    "chemistry": "NMC, LFP",
+    "form_factor": "Pouch, Cylindrical (46-series)",
+    "deployment": "Mass production"
+  },
+  "panasonic": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Tesla's long-time cylindrical-cell partner (2170, 4680).",
+    "chemistry": "NCA",
+    "form_factor": "Cylindrical (2170, 4680)"
+  },
+  "samsung sdi": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean cell maker; prismatic & cylindrical, premium NMC.",
+    "chemistry": "NMC",
+    "form_factor": "Prismatic, Cylindrical"
+  },
+  "sk on": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean pouch-cell maker; Ford BlueOval SK JV.",
+    "chemistry": "NMC",
+    "form_factor": "Pouch"
+  },
+  "northvolt": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "founded": 2016,
+    "one_liner": "European cell maker founded by ex-Tesla exec Peter Carlsson; Revolt recycling.",
+    "chemistry": "NMC",
+    "form_factor": "Prismatic, Cylindrical"
+  },
+  "tesla": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: TSLA",
+    "founded": 2003,
+    "one_liner": "EV & energy pioneer; in-house 4680 cell + Megapack ESS.",
+    "chemistry": "NCA, LFP",
+    "form_factor": "Cylindrical (4680)",
+    "key_ip": "4680 dry-electrode, structural pack"
+  },
+  "quantumscape": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: QS",
+    "one_liner": "Solid-state (ceramic separator, anode-free) developer; VW-backed.",
+    "chemistry": "Solid-state",
+    "form_factor": "Pouch"
+  },
+  "gotion": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese LFP cell maker; VW is a major shareholder.",
+    "chemistry": "LFP"
+  },
+  "eve energy": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell maker; large-format LFP + 46-series cylindrical.",
+    "chemistry": "LFP",
+    "form_factor": "Prismatic, Cylindrical (46)"
+  }
+}

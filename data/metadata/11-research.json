@@ -1,0 +1,25 @@
+{
+  "_doc": "Research & Standards — national labs and research consortia. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "argonne national laboratory": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "US DOE lab; CAMP cell-fab facility and Battery500/ReCell hubs.",
+    "institution_type": "National laboratory",
+    "funding_source": "US DOE",
+    "notable_facility": "CAMP Facility"
+  },
+  "national renewable energy laboratory": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "US DOE renewable-energy lab; battery testing & analysis.",
+    "institution_type": "National laboratory",
+    "funding_source": "US DOE"
+  },
+  "the faraday institution": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "UK's flagship battery research programme & talent pipeline.",
+    "institution_type": "Research consortium",
+    "funding_source": "UKRI"
+  }
+}

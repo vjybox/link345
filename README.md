@@ -46,8 +46,12 @@ drawer + dark mode + hash deep-links all working.
 | `blogger-page.html` | **No-JS directory that works pasted into a Blogger Page** (native `<details>`; no scripts/forms). |
 | `blogger-embed.html` | Scoped app for an HTML/JavaScript **gadget** — no `<head>`/`<body>`, container-query layout. |
 | `build.py` | Parses the dataset, assigns mega-sectors, renders all three HTML files + JSON. |
-| `data/companies.txt` | Source dataset — `## id \| Category` headers + numbered entries. |
-| `data/directory.json` | Generated structured data (also embedded in the HTML). |
+| `data/companies.txt` | Source dataset — `## id \| Category` headers + numbered entries (optional `\| url \| country= \| logo=`). |
+| `data/metadata/*.json` | Curated entity profiles, sharded one file per sector (glob-merged at build). |
+| `data/relationships.json` | Directed graph edges between entities (the Connections drawer). |
+| `data/ENRICHMENT_PROMPT.md` | Copy-paste AI prompt to populate/enrich the three data files at scale. |
+| `dist/directory.json` | Generated structured data (also embedded in the HTML) — git-ignored build artifact. |
+| `tools/legacy/` | One-time migration sources (`_source_v2.txt`, `_gigafactories.txt`) for `tools/migrate_v2.py`. |
 
 ## Build
 
@@ -83,14 +87,23 @@ For static hosting (GitHub Pages / Netlify / Cloudflare Pages / S3), serve
 domains via the curated `KNOWN_URLS` map in `build.py`; everything else links
 to a web search. Two ways to add more:
 
-1. **Per-entry override (highest priority).** Append a URL to any line in
-   `data/companies.txt`:
-   `1. CATL (Contemporary Amperex Technology Co., Limited) | https://www.catl.com`
+1. **Per-entry override (highest priority).** Append pipe-separated fields to
+   any line in `data/companies.txt` — a URL, `country=`, and/or `logo=`:
+   `1. CATL (…) | https://www.catl.com | country=China | logo=https://…/catl.svg`
+   The card logo prefers `logo=`, then the domain favicon, then a monogram.
 2. **Curated map.** Add `"<cleaned name>": "https://…"` to `KNOWN_URLS`.
    An entry matches when its cleaned name (parentheticals/notes stripped,
    lowercased) equals the key or begins with `"<key> "`.
 
 Re-run `python3 build.py` after either change.
+
+## Enriching entity metadata
+
+Profiles and relationships live in `data/metadata/*.json` (sharded per sector)
+and `data/relationships.json`. To populate them at scale, paste
+[`data/ENRICHMENT_PROMPT.md`](data/ENRICHMENT_PROMPT.md) into any AI with one
+category's entries; drop its three output blocks into the files and re-run
+`python3 build.py` (it reports matched records/edges and warns on bad keys).
 
 ## Suggested next steps
 

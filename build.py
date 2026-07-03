@@ -19,7 +19,7 @@ DATA = ROOT / "data" / "companies.txt"
 OUT_HTML = ROOT / "index.html"
 OUT_EMBED = ROOT / "blogger-embed.html"
 OUT_PAGE = ROOT / "blogger-page.html"
-OUT_JSON = ROOT / "data" / "directory.json"
+OUT_JSON = ROOT / "dist" / "directory.json"   # generated artifact (git-ignored)
 
 # ---------------------------------------------------------------------------
 # Mega-sector taxonomy: maps each category id (1-146) to a top-level sector.
@@ -393,8 +393,9 @@ def parse():
         m = entry_re.match(line)
         if m and current is not None:
             text = m.group(2)
-            # optional pipe-separated fields:  "Name | https://url | country=Germany"
-            url, country = "", ""
+            # optional pipe-separated fields:
+            #   "Name | https://url | country=Germany | logo=https://logo.svg"
+            url, country, logo = "", "", ""
             if "|" in text:
                 parts = [p.strip() for p in text.split("|")]
                 text = parts[0]
@@ -403,8 +404,11 @@ def parse():
                         url = extra
                     elif "=" in extra:
                         k, _, v = extra.partition("=")
-                        if k.strip().lower() == "country":
+                        k = k.strip().lower()
+                        if k == "country":
                             country = v.strip()
+                        elif k == "logo":
+                            logo = v.strip()
             if not url:
                 url = match_url(text)
             if not country:
@@ -416,6 +420,7 @@ def parse():
                 "cat": current["name"],
                 "sector": current["sector"],
                 "url": url,
+                "logo": logo,
                 "type": SECTOR_TYPE.get(current["sector"], "Other"),
                 "tech": derive_tech(text, current["name"]),
                 "country": country,
@@ -477,7 +482,21 @@ def main():
                 hit, hit_cn = e, cn
         return hit
 
-    meta_seed = json.loads((ROOT / "data" / "metadata.json").read_text("utf-8"))
+    # Metadata is sharded: merge every data/metadata/*.json (one file per
+    # sector, enriched independently) plus a legacy top-level metadata.json if
+    # it still exists. Later files override earlier keys.
+    meta_seed = {}
+    seed_files = []
+    legacy = ROOT / "data" / "metadata.json"
+    if legacy.exists():
+        seed_files.append(legacy)
+    meta_dir = ROOT / "data" / "metadata"
+    if meta_dir.is_dir():
+        seed_files += sorted(meta_dir.glob("*.json"))
+    for f in seed_files:
+        for key, fields in json.loads(f.read_text("utf-8")).items():
+            if not key.startswith("_"):
+                meta_seed[key] = fields
     seed_misses = []
     for key, fields in meta_seed.items():
         if key.startswith("_"):
@@ -521,6 +540,7 @@ def main():
              "s": e["sector"], "u": e["url"], "t": e["type"], "tech": e["tech"],
              "co": e["country"], "rg": e["region"], "eid": e["eid"], "et": e["et"],
              "stt": e["status"], "one": e["one"],
+             **({"lg": e["logo"]} if e.get("logo") else {}),
              **({"ov": 1} if e.get("one_verified") else {}),
              **({"m": e["meta"]} if e.get("meta") else {})}
             for e in entries
@@ -552,6 +572,7 @@ def main():
         },
     }
 
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[ok] wrote {OUT_JSON} ({len(entries)} entries, {len(categories)} categories, {len(tree)} sectors)")
 
@@ -622,10 +643,14 @@ def _initials(name):
 
 def _logo_html(entry, color):
     from urllib.parse import urlparse
-    host = urlparse(entry["u"]).hostname or "" if entry["u"] else ""
-    fav = (f'<img class="fav" loading="lazy" alt="" '
-           f'src="https://www.google.com/s2/favicons?domain={host}&sz=64" '
-           f'onerror="this.remove()">') if host else ""
+    # Pinned logo= override wins; else the domain favicon; else a monogram.
+    src = entry.get("lg", "")
+    if not src and entry.get("u"):
+        host = urlparse(entry["u"]).hostname or ""
+        if host:
+            src = f"https://www.google.com/s2/favicons?domain={host}&sz=64"
+    fav = (f'<img class="fav" loading="lazy" alt="" src="{escape(src)}" '
+           f'onerror="this.remove()">') if src else ""
     return (f'<span class="logo" style="--sc:{color}">'
             f'<span class="mono">{escape(_initials(entry["n"]))}</span>{fav}</span>')
 
@@ -1827,8 +1852,10 @@ function initials(name){
 }
 function hostOf(u){ try{ return new URL(u).hostname; }catch(_){ return ""; } }
 function logoHtml(e){
+  // Pinned logo (e.lg) wins; else the domain favicon; else the monogram.
   const h = e.u ? hostOf(e.u) : "";
-  const fav = h ? `<img class="fav" loading="lazy" alt="" src="https://www.google.com/s2/favicons?domain=${h}&sz=64" onerror="this.remove()">` : "";
+  const src = e.lg ? e.lg : (h ? `https://www.google.com/s2/favicons?domain=${h}&sz=64` : "");
+  const fav = src ? `<img class="fav" loading="lazy" alt="" src="${esc(src)}" onerror="this.remove()">` : "";
   return `<span class="logo" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"><span class="mono">${esc(initials(e.n))}</span>${fav}</span>`;
 }
 

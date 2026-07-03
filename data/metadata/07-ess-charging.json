@@ -1,0 +1,22 @@
+{
+  "_doc": "ESS & Charging — grid storage integrators, inverters, charging. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "fluence": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: FLNC",
+    "one_liner": "Grid-scale ESS integrator (Siemens + AES JV origin)."
+  },
+  "sungrow": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese PV inverter & ESS leader."
+  },
+  "chargepoint": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Large North American EV charging network operator."
+  }
+}

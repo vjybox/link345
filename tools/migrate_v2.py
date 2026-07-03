@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Build data/companies.txt from data/_source_v2.txt (24-sector ecosystem map),
-splitting the oversized cat 24 into four and re-appending the plant-level
-gigafactory geo layer (with country tags) preserved from v1."""
+"""Build data/companies.txt from tools/legacy/_source_v2.txt (24-sector
+ecosystem map), splitting the oversized cat 24 into four and re-appending the
+plant-level gigafactory geo layer (with country tags) preserved from v1.
+
+One-time migration: the source files live under tools/legacy/ since the
+generated data/companies.txt is now the source of truth."""
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "data" / "_source_v2.txt"
-GIGA = ROOT / "data" / "_gigafactories.txt"
+SRC = ROOT / "tools" / "legacy" / "_source_v2.txt"
+GIGA = ROOT / "tools" / "legacy" / "_gigafactories.txt"
 OUT = ROOT / "data" / "companies.txt"
 
 TITLES = {

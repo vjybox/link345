@@ -1,0 +1,37 @@
+{
+  "_doc": "Recycling & Circular Economy — recyclers, black mass, closed loop. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "li-cycle": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Spoke-and-hub Li-ion recycler producing black mass + battery-grade metals.",
+    "product": "Black mass, Li/Ni/Co"
+  },
+  "redwood materials": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "founded": 2017,
+    "one_liner": "Closed-loop recycler + cathode/anode-foil maker; founded by ex-Tesla CTO JB Straubel.",
+    "product": "Recycled cathode & copper foil"
+  },
+  "ascend elements": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "one_liner": "Hydro-to-Cathode direct recycling to pCAM/CAM."
+  },
+  "cirba solutions": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US battery-materials & recycling (formerly Retriev); Radix scrap-trading platform."
+  },
+  "brunp": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "parent": "catl",
+    "one_liner": "CATL's recycling subsidiary; closed-loop cathode metals."
+  }
+}

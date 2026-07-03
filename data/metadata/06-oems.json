@@ -1,0 +1,35 @@
+{
+  "_doc": "Vehicles / OEMs — automakers and EV makers. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "ford": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: F",
+    "one_liner": "US OEM; BlueOval SK (with SK On) and BlueOval City."
+  },
+  "general motors": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: GM",
+    "one_liner": "US OEM; Ultium platform & Ultium Cells JV with LGES."
+  },
+  "volkswagen": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "OEM group; PowerCo cell unit and unified prismatic cell."
+  },
+  "nio": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese premium EV maker; pioneer of battery swapping (Power Swap)."
+  },
+  "xiaomi": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Consumer-tech giant turned EV maker (SU7)."
+  }
+}

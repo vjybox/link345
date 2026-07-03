@@ -1,0 +1,25 @@
+{
+  "_doc": "Logistics & Supply Chain — ports, forwarders, hazmat handling. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "port of rotterdam": {
+    "type": "Facility",
+    "status": "Active",
+    "one_liner": "Europe's largest port; primary hub for Asian cell imports & EV exports.",
+    "facility_type": "Deep-water port / container terminal",
+    "capacity": "~15M TEU",
+    "hazmat": "Class 9 Li-ion handling",
+    "city": "Rotterdam",
+    "strategic_role": "Primary EU import hub for Asian cells"
+  },
+  "dhl": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Global logistics; dangerous-goods & battery supply-chain services."
+  },
+  "kuehne + nagel": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Freight forwarder with battery/hazmat & customs services."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "_doc": "Manufacturing Equipment & Factory — turnkey lines, assembly, laser. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "wuxi lead": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "World's largest battery-manufacturing equipment maker (turnkey lines)."
+  },
+  "manz": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "German high-precision assembly & stacking equipment."
+  },
+  "trumpf": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "German laser leader; welding/cutting for cell & pack assembly."
+  }
+}

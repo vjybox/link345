@@ -1,0 +1,27 @@
+{
+  "_doc": "Capital, Media & Institutions — funds, data houses, alliances. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "breakthrough energy ventures": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (Fund)",
+    "one_liner": "Bill Gates-founded climate fund; backs battery & materials startups."
+  },
+  "benchmark mineral intelligence": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "Price-reporting agency & data house for the battery supply chain.",
+    "media_type": "Data / price reporting"
+  },
+  "bloombergnef": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "Clean-energy research & data on batteries, storage and EVs.",
+    "media_type": "Research & data"
+  },
+  "global battery alliance": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "WEF-hosted alliance behind the Battery Passport standard.",
+    "institution_type": "Industry alliance"
+  }
+}

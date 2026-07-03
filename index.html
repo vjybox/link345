@@ -575,8 +575,10 @@ function initials(name){
 }
 function hostOf(u){ try{ return new URL(u).hostname; }catch(_){ return ""; } }
 function logoHtml(e){
+  // Pinned logo (e.lg) wins; else the domain favicon; else the monogram.
   const h = e.u ? hostOf(e.u) : "";
-  const fav = h ? `<img class="fav" loading="lazy" alt="" src="https://www.google.com/s2/favicons?domain=${h}&sz=64" onerror="this.remove()">` : "";
+  const src = e.lg ? e.lg : (h ? `https://www.google.com/s2/favicons?domain=${h}&sz=64` : "");
+  const fav = src ? `<img class="fav" loading="lazy" alt="" src="${esc(src)}" onerror="this.remove()">` : "";
   return `<span class="logo" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"><span class="mono">${esc(initials(e.n))}</span>${fav}</span>`;
 }
 
