@@ -51,6 +51,8 @@ drawer + dark mode + hash deep-links all working.
 | `data/relationships.json` | Directed graph edges between entities (the Connections drawer). |
 | `data/ENRICHMENT_PROMPT.md` | Copy-paste AI prompt to populate/enrich the three data files at scale. |
 | `dist/directory.json` | Generated structured data (also embedded in the HTML) — git-ignored build artifact. |
+| `dist/e/<slug>.html` | One generated **content page per entry** (profile, connections, links) — git-ignored. |
+| `dist/blogger-import.xml` | Blogger export: **import once** to create one post per entry — git-ignored. |
 | `tools/legacy/` | One-time migration sources (`_source_v2.txt`, `_gigafactories.txt`) for `tools/migrate_v2.py`. |
 
 ## Build
@@ -104,6 +106,26 @@ and `data/relationships.json`. To populate them at scale, paste
 [`data/ENRICHMENT_PROMPT.md`](data/ENRICHMENT_PROMPT.md) into any AI with one
 category's entries; drop its three output blocks into the files and re-run
 `python3 build.py` (it reports matched records/edges and warns on bad keys).
+
+## Per-entry content pages (free, no API)
+
+`python3 build.py` also generates **one content page per entry** — a profile,
+key facts (sector-aware), a written "About" paragraph, the connections graph,
+and research links — with **no API and no cost**: it's pure templating over the
+data you already have. The prose is composed deterministically from the
+metadata; add an optional `about` field (see `ENRICHMENT_PROMPT.md`) to override
+it with richer text — e.g. batch-written for free via a local model (Ollama) or
+a free chat tier. Two zero-cost ways to publish all ~1,632 pages:
+
+1. **Static hosting** — `dist/e/<slug>.html` + `dist/assets/lx-page.css` deploy
+   as-is to GitHub Pages / Netlify / Cloudflare Pages (all free). Real crawlable
+   URLs, good SEO (each page ships a meta description + JSON-LD).
+2. **Blogger import** — upload `dist/blogger-import.xml` via Blogger →
+   Settings → *Import content*. Creates one post per entry, labeled by
+   mega-sector + category, so they're browsable inside your existing blog. No
+   external host.
+
+(`dist/` is git-ignored — regenerate and deploy it; the repo stays lean.)
 
 ## Suggested next steps
 

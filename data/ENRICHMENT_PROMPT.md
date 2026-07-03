@@ -62,6 +62,8 @@ BASE (any entity):
   ownership e.g. "Public" | "Private" | "Private (VC)" | "Subsidiary" | "State-owned"
   founded   integer year
   one_liner ≤ 90 chars, factual, no marketing fluff
+  about     OPTIONAL 2–4 sentence factual paragraph; overrides the auto-composed
+            prose on the entry's content page. Omit to keep the templated text.
   parent    cleaned-name key of parent company (if a subsidiary)
 
 TYPE-SPECIFIC (add only the ones that apply):
