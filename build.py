@@ -560,8 +560,10 @@ def _loop_svg_static(payload):
               f'<text class="lp-center-n" x="{cx}" y="{cy+8}" text-anchor="middle">{total:,}</text>'
               f'<text class="lp-center-l" x="{cx}" y="{cy+26}" text-anchor="middle">COMPANIES LINKED</text>'
               f'<text class="lp-center-l" x="{cx}" y="{cy+42}" text-anchor="middle">THE BATTERY LOOP</text>')
+    flow = (f'<g class="lp-flow" aria-hidden="true"><circle r="5" cx="{cx}" '
+            f'cy="{cy-r:.1f}" class="lp-flow-dot"/></g>')
     return (f'<div class="loop"><svg viewBox="0 0 {W} {H}" class="loopsvg" role="img" '
-            f'aria-label="The battery circular economy loop">{arcs}{labels}{center}</svg></div>')
+            f'aria-label="The battery circular economy loop">{arcs}{flow}{labels}{center}</svg></div>')
 
 
 def render_blogger_page(payload):
@@ -686,6 +688,10 @@ STYLE_PAGE = r"""<style>
 #lx .lp-plus{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
 #lx .lp-center-n{font-family:var(--mono);font-weight:700;font-size:30px;fill:var(--ink)}
 #lx .lp-center-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;fill:var(--muted)}
+#lx .lp-flow{transform-origin:450px 232px;transform-box:view-box;pointer-events:none}
+#lx .lp-flow-dot{fill:var(--ink);stroke:#fff;stroke-width:2}
+@media(prefers-reduced-motion:no-preference){#lx .lp-flow{animation:lporbit 20s linear infinite}}
+@keyframes lporbit{to{transform:rotate(360deg)}}
 #lx .brand{display:flex; align-items:baseline; gap:10px}
 #lx .mark{display:inline-flex; color:var(--brand); transform:translateY(3px)}
 #lx .ic{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
@@ -989,8 +995,16 @@ STYLE_EMBED = r"""<style>
 #li-root .lp-link:hover{fill:var(--blue)}
 #li-root .lp-name{font-family:var(--sans);font-weight:600;font-size:15px;fill:var(--ink)}
 #li-root .lp-cnt{font-family:var(--mono);font-weight:400;font-size:12px;fill:var(--muted)}
-#li-root .lp-ret,#li-root .lp-name,#li-root .lp-center{pointer-events:none}
+#li-root .lp-ret,#li-root .lp-name,#li-root .lp-center,#li-root .lp-flow{pointer-events:none}
 #li-root .lp-ret path{stroke:var(--brand);stroke-width:2;stroke-dasharray:6 5}
+#li-root .lp-flow{transform-origin:450px 232px;transform-box:view-box}
+#li-root .lp-flow-dot{fill:var(--ink);stroke:var(--panel);stroke-width:2}
+@media(prefers-reduced-motion:no-preference){
+  #li-root .lp-flow{animation:lporbit 20s linear infinite}
+  #li-root .lp-ret path{animation:lpflow 1.1s linear infinite}
+}
+@keyframes lporbit{to{transform:rotate(360deg)}}
+@keyframes lpflow{to{stroke-dashoffset:-11}}
 #li-root .lp-ret-head{fill:var(--brand)}
 #li-root .lp-ret-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;fill:var(--brand)}
 #li-root .lp-ring{fill:none;stroke:var(--brand);stroke-width:2;stroke-dasharray:8.2 4.5}
@@ -1337,8 +1351,16 @@ footer a{color:var(--blue)}
 .lp-link:hover{fill:var(--blue)}
 .lp-name{font-family:var(--sans);font-weight:600;font-size:15px;fill:var(--ink)}
 .lp-cnt{font-family:var(--mono);font-weight:400;font-size:12px;fill:var(--muted)}
-.lp-ret,.lp-name,.lp-center{pointer-events:none}
+.lp-ret,.lp-name,.lp-center,.lp-flow{pointer-events:none}
 .lp-ret path{stroke:var(--brand);stroke-width:2;stroke-dasharray:6 5}
+.lp-flow{transform-origin:450px 232px;transform-box:view-box}
+.lp-flow-dot{fill:var(--ink);stroke:var(--panel);stroke-width:2}
+@media(prefers-reduced-motion:no-preference){
+  .lp-flow{animation:lporbit 20s linear infinite}
+  .lp-ret path{animation:lpflow 1.1s linear infinite}
+}
+@keyframes lporbit{to{transform:rotate(360deg)}}
+@keyframes lpflow{to{stroke-dashoffset:-11}}
 .lp-ret-head{fill:var(--brand)}
 .lp-ret-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;fill:var(--brand)}
 .lp-ring{fill:none;stroke:var(--brand);stroke-width:2;stroke-dasharray:8.2 4.5}
@@ -1742,9 +1764,10 @@ function renderLoop(){
   const enb=DB.stages.filter(x=>x.k!=="core");
   const strip=`<div class="enablers"><span class="enb-h">ENABLERS — SERVING EVERY STAGE</span>` +
     enb.flatMap(g=>g.sectors).map(sec=>`<button class="enb" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'var(--c1)'}"><span class="dot"></span>${esc(sec)}</button>`).join("") + `</div>`;
+  const flow = `<g class="lp-flow" aria-hidden="true"><circle r="5" cx="${cx}" cy="${(cy-r).toFixed(1)}" class="lp-flow-dot"/></g>`;
   return `<div class="loop">
     <svg viewBox="0 0 ${W} ${H}" class="loopsvg" role="img" aria-label="The battery circular economy loop">
-      ${arcs}${arrows}${ret}${labels}${center}
+      ${arcs}${arrows}${ret}${flow}${labels}${center}
     </svg>${strip}</div>`;
 }
 

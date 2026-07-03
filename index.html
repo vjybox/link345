@@ -259,8 +259,16 @@ footer a{color:var(--blue)}
 .lp-link:hover{fill:var(--blue)}
 .lp-name{font-family:var(--sans);font-weight:600;font-size:15px;fill:var(--ink)}
 .lp-cnt{font-family:var(--mono);font-weight:400;font-size:12px;fill:var(--muted)}
-.lp-ret,.lp-name,.lp-center{pointer-events:none}
+.lp-ret,.lp-name,.lp-center,.lp-flow{pointer-events:none}
 .lp-ret path{stroke:var(--brand);stroke-width:2;stroke-dasharray:6 5}
+.lp-flow{transform-origin:450px 232px;transform-box:view-box}
+.lp-flow-dot{fill:var(--ink);stroke:var(--panel);stroke-width:2}
+@media(prefers-reduced-motion:no-preference){
+  .lp-flow{animation:lporbit 20s linear infinite}
+  .lp-ret path{animation:lpflow 1.1s linear infinite}
+}
+@keyframes lporbit{to{transform:rotate(360deg)}}
+@keyframes lpflow{to{stroke-dashoffset:-11}}
 .lp-ret-head{fill:var(--brand)}
 .lp-ret-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;fill:var(--brand)}
 .lp-ring{fill:none;stroke:var(--brand);stroke-width:2;stroke-dasharray:8.2 4.5}
@@ -664,9 +672,10 @@ function renderLoop(){
   const enb=DB.stages.filter(x=>x.k!=="core");
   const strip=`<div class="enablers"><span class="enb-h">ENABLERS — SERVING EVERY STAGE</span>` +
     enb.flatMap(g=>g.sectors).map(sec=>`<button class="enb" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'var(--c1)'}"><span class="dot"></span>${esc(sec)}</button>`).join("") + `</div>`;
+  const flow = `<g class="lp-flow" aria-hidden="true"><circle r="5" cx="${cx}" cy="${(cy-r).toFixed(1)}" class="lp-flow-dot"/></g>`;
   return `<div class="loop">
     <svg viewBox="0 0 ${W} ${H}" class="loopsvg" role="img" aria-label="The battery circular economy loop">
-      ${arcs}${arrows}${ret}${labels}${center}
+      ${arcs}${arrows}${ret}${flow}${labels}${center}
     </svg>${strip}</div>`;
 }
 
