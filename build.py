@@ -569,7 +569,11 @@ def main():
 
 
 def _fill(text, payload):
-    data_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    # ensure_ascii=True so every non-ASCII char is emitted as a \uXXXX escape.
+    # Blogger re-encodes literal non-ASCII inside <script> to numeric HTML
+    # entities (e.g. ♻ -> &#9851;) which JS cannot decode, printing them
+    # literally. \uXXXX escapes are plain ASCII, decode correctly, and survive.
+    data_json = json.dumps(payload, ensure_ascii=True, separators=(",", ":"))
     stats = payload["stats"]
     light, dark = palette_css()
     return text.replace("/*__DATA__*/", data_json) \
@@ -649,7 +653,7 @@ def _loop_svg_static(payload):
         c = math.cos(math.radians(mid))
         anch = "start" if c > .35 else ("end" if c < -.35 else "middle")
         labels += (f'<text class="lp-name" x="{lx:.1f}" y="{ly:.1f}" text-anchor="{anch}">'
-                   f'{i+1}·&#160;{escape(st["n"])}'
+                   f'{i+1}· {escape(st["n"])}'
                    f'<tspan class="lp-cnt" dx="7">{cnt[st["n"]]}</tspan></text>')
     total = payload["stats"]["entries"]
     center = (f'<circle cx="{cx}" cy="{cy-34}" r="13" class="lp-ring"/>'
@@ -659,8 +663,32 @@ def _loop_svg_static(payload):
               f'<text class="lp-center-l" x="{cx}" y="{cy+42}" text-anchor="middle">THE BATTERY LOOP</text>')
     flow = (f'<g class="lp-flow" aria-hidden="true"><circle r="5" cx="{cx}" '
             f'cy="{cy-r:.1f}" class="lp-flow-dot"/></g>')
+    # Static legend: all 12 mega-sectors, grouped by loop role, equal weight.
+    seccount = {}
+    for e in payload["entries"]:
+        seccount[e["s"]] = seccount.get(e["s"], 0) + 1
+    ci = 0
+    groups = ""
+    for st in payload["stages"]:
+        if st["k"] == "core":
+            ci += 1
+            num = f"{ci}· "
+        else:
+            num = ""
+        chips = "".join(
+            f'<span class="ll-sec" style="--sc:{colors.get(sec, "var(--c1)")}">'
+            f'<span class="dot"></span><span class="ll-nm">{escape(sec)}</span>'
+            f'<span class="ll-ct">{seccount.get(sec, 0)}</span></span>'
+            for sec in st["sectors"])
+        groups += (f'<div class="ll-group ll-{st["k"]}">'
+                   f'<div class="ll-role">{num}{escape(st["n"])}</div>'
+                   f'<div class="ll-secs">{chips}</div></div>')
+    legend = (f'<div class="loop-legend"><div class="ll-h">All 12 mega-sectors — '
+              f'every company is a link in the loop</div>'
+              f'<div class="ll-groups">{groups}</div></div>')
     return (f'<div class="loop"><svg viewBox="0 0 {W} {H}" class="loopsvg" role="img" '
-            f'aria-label="The battery circular economy loop">{arcs}{flow}{labels}{center}</svg></div>')
+            f'aria-label="The battery circular economy loop">{arcs}{flow}{labels}{center}</svg>'
+            f'{legend}</div>')
 
 
 def render_blogger_page(payload):
@@ -789,6 +817,16 @@ STYLE_PAGE = r"""<style>
 #lx .lp-flow-dot{fill:var(--ink);stroke:#fff;stroke-width:2}
 @media(prefers-reduced-motion:no-preference){#lx .lp-flow{animation:lporbit 20s linear infinite}}
 @keyframes lporbit{to{transform:rotate(360deg)}}
+#lx .loop-legend{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+#lx .ll-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:12px}
+#lx .ll-groups{display:flex;flex-wrap:wrap;gap:12px 16px;justify-content:center;align-items:flex-start}
+#lx .ll-group{display:flex;flex-direction:column;gap:6px;min-width:150px}
+#lx .ll-role{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+#lx .ll-secs{display:flex;flex-direction:column;gap:5px}
+#lx .ll-sec{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:12px;border:1px solid var(--line);padding:6px 9px;color:var(--ink);width:100%;box-sizing:border-box}
+#lx .ll-sec .dot{width:8px;height:8px;border-radius:50%;background:var(--sc);flex:none}
+#lx .ll-nm{flex:1}
+#lx .ll-ct{font-family:var(--mono);font-size:11px;color:var(--muted)}
 #lx .brand{display:flex; align-items:baseline; gap:10px}
 #lx .mark{display:inline-flex; color:var(--brand); transform:translateY(3px)}
 #lx .ic{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
@@ -1108,11 +1146,20 @@ STYLE_EMBED = r"""<style>
 #li-root .lp-plus{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
 #li-root .lp-center-n{font-family:var(--mono);font-weight:700;font-size:30px;fill:var(--ink)}
 #li-root .lp-center-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;fill:var(--muted)}
-#li-root .enablers{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
-#li-root .enb-h{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);margin-right:6px;width:100%;text-align:center}
-#li-root .enb{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;background:none;border:1px solid var(--line);padding:5px 9px;cursor:pointer;color:var(--ink)}
-#li-root .enb:hover{border-color:var(--sc);color:var(--sc)}
-#li-root .enb .dot{width:7px;height:7px;border-radius:50%;background:var(--sc)}
+#li-root .loop-legend{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+#li-root .ll-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:12px}
+#li-root .ll-groups{display:flex;flex-wrap:wrap;gap:12px 16px;justify-content:center;align-items:flex-start}
+#li-root .ll-group{display:flex;flex-direction:column;gap:6px;min-width:150px}
+#li-root .ll-role{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+#li-root .ll-role[data-stage],#li-root .ll-role[data-sector]{cursor:pointer}
+#li-root .ll-role[data-stage]:hover,#li-root .ll-role[data-sector]:hover{color:var(--ink)}
+#li-root .ll-secs{display:flex;flex-direction:column;gap:5px}
+#li-root .ll-sec{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:12px;background:none;border:1px solid var(--line);padding:6px 9px;cursor:pointer;color:var(--ink);text-align:left;width:100%}
+#li-root .ll-sec:hover{border-color:var(--sc);color:var(--sc)}
+#li-root .ll-sec .dot{width:8px;height:8px;border-radius:50%;background:var(--sc);flex:none}
+#li-root .ll-nm{flex:1}
+#li-root .ll-ct{font-family:var(--mono);font-size:11px;color:var(--muted)}
+#li-root .ll-sec:hover .ll-ct{color:var(--sc)}
 #li-root .d-sec .dot{width:7px;height:7px;border-radius:50%;background:var(--sc,var(--muted));flex:0 0 auto}
 #li-root .tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
   border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
@@ -1480,11 +1527,20 @@ footer a{color:var(--blue)}
 .lp-plus{stroke:var(--brand);stroke-width:2;stroke-linecap:round}
 .lp-center-n{font-family:var(--mono);font-weight:700;font-size:30px;fill:var(--ink)}
 .lp-center-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;fill:var(--muted)}
-.enablers{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
-.enb-h{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);margin-right:6px;width:100%;text-align:center}
-.enb{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;background:none;border:1px solid var(--line);padding:5px 9px;cursor:pointer;color:var(--ink)}
-.enb:hover{border-color:var(--sc);color:var(--sc)}
-.enb .dot{width:7px;height:7px;border-radius:50%;background:var(--sc)}
+.loop-legend{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.ll-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:12px}
+.ll-groups{display:flex;flex-wrap:wrap;gap:12px 16px;justify-content:center;align-items:flex-start}
+.ll-group{display:flex;flex-direction:column;gap:6px;min-width:150px}
+.ll-role{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ll-role[data-stage],.ll-role[data-sector]{cursor:pointer}
+.ll-role[data-stage]:hover,.ll-role[data-sector]:hover{color:var(--ink)}
+.ll-secs{display:flex;flex-direction:column;gap:5px}
+.ll-sec{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:12px;background:none;border:1px solid var(--line);padding:6px 9px;cursor:pointer;color:var(--ink);text-align:left;width:100%}
+.ll-sec:hover{border-color:var(--sc);color:var(--sc)}
+.ll-sec .dot{width:8px;height:8px;border-radius:50%;background:var(--sc);flex:none}
+.ll-nm{flex:1}
+.ll-ct{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ll-sec:hover .ll-ct{color:var(--sc)}
 .d-sec .dot{width:7px;height:7px;border-radius:50%;background:var(--sc,var(--muted));flex:0 0 auto}
 .tile{text-align:left;font-family:inherit;cursor:pointer;background:var(--panel);
   border:1px solid var(--line-strong);border-top:4px solid var(--sc,var(--ink));
@@ -1859,7 +1915,7 @@ function renderLoop(){
         fill="none" stroke="${col}" stroke-width="${sw}"/></g>`;
     const [lx,ly]=pt(mid,r+42);
     const anch=Math.cos(rad(mid))>0.35?"start":(Math.cos(rad(mid))<-0.35?"end":"middle");
-    labels+=`<text class="lp-name" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anch}">${i+1}·&#160;${esc(stg.n)}<tspan class="lp-cnt" dx="7">${n}</tspan></text>`;
+    labels+=`<text class="lp-name" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anch}">${i+1}· ${esc(stg.n)}<tspan class="lp-cnt" dx="7">${n}</tspan></text>`;
     // connector arrow at the boundary after this arc (the "link")
     const b=-90+(i+1)*seg;
     const [px,py]=pt(b,r);
@@ -1890,14 +1946,24 @@ function renderLoop(){
     <text class="lp-center-l" x="${cx}" y="${cy+26}">COMPANIES LINKED</text>
     <text class="lp-center-l" x="${cx}" y="${cy+42}">THE BATTERY LOOP</text>
   </g>`;
-  const enb=DB.stages.filter(x=>x.k!=="core");
-  const strip=`<div class="enablers"><span class="enb-h">ENABLERS — SERVING EVERY STAGE</span>` +
-    enb.flatMap(g=>g.sectors).map(sec=>`<button class="enb" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'var(--c1)'}"><span class="dot"></span>${esc(sec)}</button>`).join("") + `</div>`;
+  // Legend: ALL 12 mega-sectors, grouped by their loop role, every chip the
+  // same weight & size — the 5-part circle expands here into its 12 sectors,
+  // with Links and Enablers shown at equal prominence (no longer demoted).
+  const secCount=sec=>{let n=0;DB.entries.forEach(e=>{if(e.s===sec)n++;});return n;};
+  let ci=0;
+  const groups=DB.stages.map(st=>{
+    const num = st.k==="core" ? (++ci)+"· " : "";
+    const roleAttr = st.k==="core" ? `data-stage="${esc(st.n)}"`
+                   : (st.k==="links" ? `data-sector="${esc(st.sectors[0])}"` : "");
+    const chips=st.sectors.map(sec=>`<button class="ll-sec" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'var(--c1)'}"><span class="dot"></span><span class="ll-nm">${esc(sec)}</span><span class="ll-ct">${secCount(sec)}</span></button>`).join("");
+    return `<div class="ll-group ll-${st.k}"><div class="ll-role" ${roleAttr}>${num}${esc(st.n)}</div><div class="ll-secs">${chips}</div></div>`;
+  }).join("");
+  const legend=`<div class="loop-legend"><div class="ll-h">All 12 mega-sectors — every company is a link in the loop</div><div class="ll-groups">${groups}</div></div>`;
   const flow = `<g class="lp-flow" aria-hidden="true"><circle r="5" cx="${cx}" cy="${(cy-r).toFixed(1)}" class="lp-flow-dot"/></g>`;
   return `<div class="loop">
     <svg viewBox="0 0 ${W} ${H}" class="loopsvg" role="img" aria-label="The battery circular economy loop">
       ${arcs}${arrows}${ret}${flow}${labels}${center}
-    </svg>${strip}</div>`;
+    </svg>${legend}</div>`;
 }
 
 function renderLandscape(){
