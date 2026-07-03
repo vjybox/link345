@@ -25,58 +25,38 @@ OUT_JSON = ROOT / "data" / "directory.json"
 # Mega-sector taxonomy: maps each category id (1-146) to a top-level sector.
 # Any category id not listed falls back to "Other".
 # ---------------------------------------------------------------------------
+# 12 Loop-aligned mega-sectors over the 30 v2 categories (see data/companies.txt).
 MEGA_SECTORS = {
-    "Cell Manufacturing & OEMs": [1, 2, 33, 103, 104, 147, 148, 149],
-    "Materials & Chemicals": [3, 17, 55, 56, 57, 58, 85, 86],
-    "Mining & Raw Materials": [11, 54],
-    "BMS & Power Electronics": [4],
-    "Recycling & Circular Economy": [5, 34, 59, 80, 132, 133],
-    "Energy Storage & Charging": [13, 44, 45, 46],
-    "Manufacturing Equipment": [12, 40, 41, 87, 89, 90, 91, 92, 93, 94, 95,
-                                97, 98, 99, 100, 101, 102],
-    "Process & Facility Systems": [32, 38, 39, 88, 96, 123, 124, 125],
-    "Software, Data & Simulation": [10, 18, 35, 47, 48, 49, 70, 73, 74, 82,
-                                    83, 84, 135],
-    "Testing, Certification & Quality": [9, 27, 63, 68, 78, 105, 110, 111,
-                                         112, 113],
-    "Logistics & Supply Chain": [26, 37, 62, 76, 79, 106, 107, 108, 109,
-                                 114, 140, 141],
-    "Thermal & Safety": [19, 36],
-    "Research & Academia": [6, 16, 52, 77],
-    "Education, Training & Workforce": [22, 30, 50, 67, 117, 118, 121, 122],
-    "Media, Community & Events": [7, 14, 20, 21, 31, 51, 71, 75, 81, 119, 120, 150],
-    "Finance & Investment": [15, 24, 60, 72, 126, 127],
-    "Insurance & Risk": [25, 61, 128, 129],
-    "Consulting & Professional Services": [28, 29, 43, 64, 115, 116, 130,
-                                           131, 134, 136, 144, 145, 146],
-    "Legal, IP & Policy": [23, 42, 65, 137, 138, 139, 142, 143],
-    "Industry Bodies & Standards": [8, 53, 66, 69],
+    "Raw Materials & Mining": [11],
+    "Materials & Components": [3, 16],
+    "Cells & Chemistry": [1, 21, 28, 29, 30],
+    "Manufacturing Equipment & Factory": [12, 17, 18, 23],
+    "Power Electronics & BMS": [4],
+    "Vehicles, ESS & Charging": [2, 13, 22],
+    "Recycling & Circular Economy": [5],
+    "Logistics & Supply Chain": [19],
+    "Software, Data & Testing": [10, 9],
+    "Capital, ESG & Risk": [14, 20],
+    "Research, Standards & Media": [6, 8, 7, 15],
+    "People, Education & Market": [24, 25, 26, 27],
 }
 
 # ---------------------------------------------------------------------------
 # Each mega-sector implies a coarse "entry type" used by the Type filter.
 # ---------------------------------------------------------------------------
 SECTOR_TYPE = {
-    "Cell Manufacturing & OEMs": "Manufacturer / OEM",
-    "Materials & Chemicals": "Materials",
-    "Mining & Raw Materials": "Mining",
-    "BMS & Power Electronics": "Components",
+    "Raw Materials & Mining": "Mining",
+    "Materials & Components": "Materials",
+    "Cells & Chemistry": "Manufacturer / OEM",
+    "Manufacturing Equipment & Factory": "Equipment",
+    "Power Electronics & BMS": "Components",
+    "Vehicles, ESS & Charging": "OEM / Deployment",
     "Recycling & Circular Economy": "Recycling",
-    "Energy Storage & Charging": "ESS / Charging",
-    "Manufacturing Equipment": "Equipment",
-    "Process & Facility Systems": "Equipment",
-    "Software, Data & Simulation": "Software",
-    "Testing, Certification & Quality": "Testing / Certification",
     "Logistics & Supply Chain": "Logistics",
-    "Thermal & Safety": "Equipment",
-    "Research & Academia": "Research",
-    "Education, Training & Workforce": "Education / Talent",
-    "Media, Community & Events": "Media / Events",
-    "Finance & Investment": "Finance",
-    "Insurance & Risk": "Insurance",
-    "Consulting & Professional Services": "Consulting",
-    "Legal, IP & Policy": "Legal / Policy",
-    "Industry Bodies & Standards": "Association / Standards",
+    "Software, Data & Testing": "Software / Testing",
+    "Capital, ESG & Risk": "Finance / Risk",
+    "Research, Standards & Media": "Research / Media",
+    "People, Education & Market": "Talent / Market",
 }
 
 # ---------------------------------------------------------------------------
@@ -188,6 +168,15 @@ KNOWN_COUNTRY = {
     "exide": "India", "rio tinto": "Australia", "bhp": "Australia", "pilbara minerals": "Australia",
     "syrah resources": "Australia", "sqm": "Chile", "vale": "Brazil", "eramet": "France",
     "glencore": "Switzerland", "sungrow": "China", "fluence": "USA",
+    "xiaomi": "China", "leapmotor": "China", "gac": "China", "changan": "China",
+    "great wall": "China", "chery": "China", "dongfeng": "China", "seres": "China",
+    "saic": "China", "geely": "China", "nio": "China", "xpeng": "China", "li auto": "China",
+    "calb": "China", "svolt": "China", "hithium": "China", "narada": "China",
+    "kia": "South Korea", "hyundai": "South Korea", "audi": "Germany", "porsche": "Germany",
+    "volvo cars": "Sweden", "renault": "France", "stellantis": "Netherlands",
+    "tata motors": "India", "mahindra": "India", "amara raja": "India",
+    "sigma lithium": "Brazil", "liontown": "Australia", "novonix": "Australia",
+    "talga": "Australia", "syrah": "Australia", "wärtsilä": "Finland", "verkor": "France",
 }
 
 # ---------------------------------------------------------------------------
@@ -315,12 +304,11 @@ GLOSSARY = {
 # ring; "links" ride the connectors; enablers orbit (every other sector).
 # ---------------------------------------------------------------------------
 LIFECYCLE_STAGES = [
-    ("Extract", ["Mining & Raw Materials"]),
-    ("Refine", ["Materials & Chemicals"]),
-    ("Manufacture", ["Cell Manufacturing & OEMs", "Manufacturing Equipment",
-                     "Process & Facility Systems", "BMS & Power Electronics",
-                     "Thermal & Safety"]),
-    ("Deploy & Use", ["Energy Storage & Charging"]),
+    ("Extract", ["Raw Materials & Mining"]),
+    ("Refine", ["Materials & Components"]),
+    ("Manufacture", ["Cells & Chemistry", "Manufacturing Equipment & Factory",
+                     "Power Electronics & BMS"]),
+    ("Deploy & Use", ["Vehicles, ESS & Charging"]),
     ("Recover ♻", ["Recycling & Circular Economy"]),
 ]
 LINKS_SECTORS = ["Logistics & Supply Chain"]

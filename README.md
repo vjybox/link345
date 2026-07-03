@@ -1,19 +1,19 @@
 # The Lithium Index
 
 A futuristic-minimalist **homepage / directory** of the lithium-ion battery
-industry — **2,129 entries** across **150 categories** grouped into
-**20 color-coded mega-sectors** (incl. **100+ gigafactories** in 25 countries),
+industry — **1,632 curated entries** across **30 categories** grouped into
+**12 Loop-aligned mega-sectors** (incl. **100+ gigafactories** in 27 countries),
 built as a single self-contained `index.html` with no runtime dependencies
 (all data is embedded, zero external API calls).
 
 ## Live features
 
-- **Three views** via a toggle: a **Sector landscape** market-map home (20
-  colored tiles), a **List** of entry cards, and a self-contained **world Map**
+- **Three views** via a toggle: a **Sector landscape** market-map home (12
+  colored tiles + The Loop hero), a **List** of entry cards, and a self-contained **world Map**
   of plants/companies (bubbles by country, no map library).
 - **Full-text search** across name, category and sector — debounced, `/`
   shortcut, match highlighting. Header stats update live with the result set.
-- **Sidebar tree**: 20 mega-sectors → 150 categories with live counts;
+- **Sidebar tree**: 12 mega-sectors → 30 categories with live counts;
   color-coded per sector.
 - **Filters** (all AND-combine, shown as clearable chips): **Type** (18),
   **Technology/chemistry** (12, auto-detected), and **Region/Country**
@@ -22,7 +22,7 @@ built as a single self-contained `index.html` with no runtime dependencies
   research links (Official site · Google · LinkedIn · News · Patents) and
   related companies in the same category.
 - **Logos** on every card (favicon of the verified domain, with a colored
-  monogram fallback). 315 entries link to their official website (✓ badge).
+  monogram fallback). 214 entries link to their official website (✓ badge).
 - **Dark mode** toggle (remembers your choice; follows system by default).
 - **Shareable URLs** — the current view/filters/search are encoded in the
   page hash, so any filtered state can be bookmarked or linked.
@@ -32,9 +32,9 @@ built as a single self-contained `index.html` with no runtime dependencies
 - **Design**: light + dark, 48px grid, per-sector accent colors, gradient
   header strip, JetBrains Mono body + Instrument Serif italic headings.
 
-Verified in-browser: landscape 20 tiles · Recycling sector → 80 · drill-down
-Recycling & Second Life → 20 · "tesla" → 5 · map 215 located entries in 25
-countries · drawer + dark mode + hash deep-links all working.
+Verified in-browser: landscape 12 tiles + The Loop · Recycling sector → 52 ·
+"tesla" → 10 · map 242 located entries in 27 countries · Loop stage filters ·
+drawer + dark mode + hash deep-links all working.
 
 ## Files
 
@@ -77,7 +77,7 @@ For static hosting (GitHub Pages / Netlify / Cloudflare Pages / S3), serve
 
 ## Adding / overriding URLs
 
-269 well-known, unambiguous brands already resolve to verified official
+214 well-known, unambiguous brands already resolve to verified official
 domains via the curated `KNOWN_URLS` map in `build.py`; everything else links
 to a web search. Two ways to add more:
 
