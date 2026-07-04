@@ -552,18 +552,9 @@ def _page_prose(e, payload, rels, about_text=""):
     # Connections sentence from the graph (up to 4 outgoing edges).
     out = [r for r in (rels.get(e["eid"]) or []) if r["d"] == "out"][:4]
     if out:
-        verbs = {
-            "SUPPLIES_TO": "supplies", "SUPPLIES_EQUIPMENT_TO": "supplies equipment to",
-            "EXPORTS_THROUGH": "exports through", "USES_SOFTWARE": "uses software from",
-            "INVESTED_IN": "has invested in", "RECYCLES_FOR": "recycles for",
-            "JV_WITH": "runs a joint venture with", "PARTNER_OF": "partners with",
-            "FOUNDER_OF": "founded", "LEADS": "leads", "MEMBER_OF": "is a member of",
-            "COVERS": "covers", "SUBSIDIARY_OF": "is a subsidiary of",
-            "COMPETES_WITH": "competes with", "FORMER_EMPLOYER": "previously worked at",
-        }
         by_verb = {}
         for r in out:
-            by_verb.setdefault(verbs.get(r["r"], "is linked to"), []).append(r["n"])
+            by_verb.setdefault(REL_PROSE.get(r["r"], "is linked to"), []).append(r["n"])
         clauses = [f"{v} {_and_list(names)}" for v, names in by_verb.items()]
         sents.append(f"{name.split('(')[0].strip()} {'; '.join(clauses)}.")
 
@@ -601,13 +592,33 @@ def _research_links(e):
 # renders internal references as plain text instead of broken links.
 SITE_BASE = ""
 
-REL_VERB = {"SUPPLIES_TO": "supplies", "SUPPLIES_EQUIPMENT_TO": "supplies equipment",
-            "EXPORTS_THROUGH": "exports through", "USES_SOFTWARE": "uses",
-            "INVESTED_IN": "invested in", "SUBSIDIARY_OF": "subsidiary of",
-            "PARTNER_OF": "partner", "JV_WITH": "joint venture",
-            "RECYCLES_FOR": "recycles for", "COMPETES_WITH": "competes with",
-            "FOUNDER_OF": "founder of", "FORMER_EMPLOYER": "formerly at",
-            "LEADS": "leads", "MEMBER_OF": "member of", "COVERS": "covers"}
+# Single source of truth for the relationship taxonomy. Everything derives
+# from here: the short page/drawer labels (REL_VERB, also injected into the
+# app JS via /*__RELS__*/), the prose sentence verbs (REL_PROSE, also imported
+# by tools/enrich_about.py), and the supply-chain grouping (_conn_group).
+# Adding a relation type = adding one row here.
+#   group: flow     = in-edge Upstream / out-edge Downstream
+#          flow_rev = out-edge Upstream / in-edge Downstream (vendor relations)
+#          down / corp / people / eco = fixed bucket
+RELATIONS = {
+    "SUPPLIES_TO":           ("supplies",           "supplies",                  "flow"),
+    "SUPPLIES_EQUIPMENT_TO": ("supplies equipment", "supplies equipment to",     "flow"),
+    "RECYCLES_FOR":          ("recycles for",       "recycles for",              "flow"),
+    "USES_SOFTWARE":         ("uses",               "uses software from",        "flow_rev"),
+    "EXPORTS_THROUGH":       ("exports through",    "exports through",           "down"),
+    "SUBSIDIARY_OF":         ("subsidiary of",      "is a subsidiary of",        "corp"),
+    "JV_WITH":               ("joint venture",      "runs a joint venture with", "corp"),
+    "PARTNER_OF":            ("partner",            "partners with",             "corp"),
+    "INVESTED_IN":           ("invested in",        "has invested in",           "corp"),
+    "COMPETES_WITH":         ("competes with",      "competes with",             "corp"),
+    "FOUNDER_OF":            ("founder of",         "founded",                   "people"),
+    "LEADS":                 ("leads",              "leads",                     "people"),
+    "FORMER_EMPLOYER":       ("formerly at",        "previously worked at",      "people"),
+    "MEMBER_OF":             ("member of",          "is a member of",            "eco"),
+    "COVERS":                ("covers",             "covers",                    "eco"),
+}
+REL_VERB = {k: v[0] for k, v in RELATIONS.items()}
+REL_PROSE = {k: v[1] for k, v in RELATIONS.items()}
 
 CONN_GROUP_ORDER = ["Upstream — suppliers & inputs", "Downstream — customers & routes",
                     "Corporate & investment", "People", "Ecosystem & media"]
@@ -615,17 +626,13 @@ CONN_GROUP_ORDER = ["Upstream — suppliers & inputs", "Downstream — customers
 
 def _conn_group(d, r):
     """Bucket a directed edge into the reader's supply-chain mental model."""
-    if r in ("SUPPLIES_TO", "SUPPLIES_EQUIPMENT_TO", "RECYCLES_FOR"):
+    g = RELATIONS.get(r, ("", "", "eco"))[2]
+    if g == "flow":
         return CONN_GROUP_ORDER[0] if d == "in" else CONN_GROUP_ORDER[1]
-    if r == "USES_SOFTWARE":
+    if g == "flow_rev":
         return CONN_GROUP_ORDER[0] if d == "out" else CONN_GROUP_ORDER[1]
-    if r == "EXPORTS_THROUGH":
-        return CONN_GROUP_ORDER[1]
-    if r in ("SUBSIDIARY_OF", "JV_WITH", "PARTNER_OF", "INVESTED_IN", "COMPETES_WITH"):
-        return CONN_GROUP_ORDER[2]
-    if r in ("FOUNDER_OF", "LEADS", "FORMER_EMPLOYER"):
-        return CONN_GROUP_ORDER[3]
-    return CONN_GROUP_ORDER[4]      # MEMBER_OF, COVERS, unknown
+    return {"down": CONN_GROUP_ORDER[1], "corp": CONN_GROUP_ORDER[2],
+            "people": CONN_GROUP_ORDER[3]}.get(g, CONN_GROUP_ORDER[4])
 
 
 def _a(ctx, path, text, extra=""):
@@ -820,7 +827,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e5e5;font-size:1
 def _page_shell(title, desc, crumb_html, h1, inner, css_href, ld_blocks, prefix="../"):
     """Common shell for entry pages and hub/list pages. `prefix` reaches the
     dist root from this page ("../" one level deep, "" at the root)."""
-    ld = "".join(f'<script type="application/ld+json">{json.dumps(b, ensure_ascii=True)}</script>'
+    ld = "".join(f'<script type="application/ld+json">{_script_json(b)}</script>'
                  for b in ld_blocks)
     return (
         f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
@@ -862,32 +869,36 @@ def _entry_page_html(e, payload, rels, by_eid, by_cat, ctx, css_href, about_text
             ld["parentOrganization"] = {"@type": "Organization", "name": r["n"]}
         elif r["r"] == "MEMBER_OF":
             ld.setdefault("memberOf", []).append({"@type": "Organization", "name": r["n"]})
-    crumb_ld = {"@context": "https://schema.org", "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {"@type": "ListItem", "position": 1, "name": "All sectors",
-                     "item": (SITE_BASE + "/lists.html") if SITE_BASE else "../lists.html"},
-                    {"@type": "ListItem", "position": 2, "name": e["s"],
-                     "item": (SITE_BASE + "/" + hubs["sector"]) if SITE_BASE else "../" + hubs["sector"]},
-                    {"@type": "ListItem", "position": 3, "name": e.get("cn", ""),
-                     "item": (SITE_BASE + "/" + hubs["cat"]) if SITE_BASE else "../" + hubs["cat"]},
-                    {"@type": "ListItem", "position": 4, "name": e["n"]}]}
+    # BreadcrumbList requires absolute item URLs — only emit it when SITE_BASE
+    # provides them (relative items are invalid and ignored by search engines).
+    ld_blocks = [ld]
+    if SITE_BASE:
+        ld_blocks.append(
+            {"@context": "https://schema.org", "@type": "BreadcrumbList",
+             "itemListElement": [
+                 {"@type": "ListItem", "position": 1, "name": "All sectors",
+                  "item": SITE_BASE + "/lists.html"},
+                 {"@type": "ListItem", "position": 2, "name": e["s"],
+                  "item": SITE_BASE + "/" + hubs["sector"]},
+                 {"@type": "ListItem", "position": 3, "name": e.get("cn", ""),
+                  "item": SITE_BASE + "/" + hubs["cat"]},
+                 {"@type": "ListItem", "position": 4, "name": e["n"]}]})
     crumb = (f'{_a(ctx, "lists.html", "All sectors")} &#9656; '
              f'{_a(ctx, hubs["sector"], escape(e["s"]))} &#9656; '
              f'{_a(ctx, hubs["cat"], escape(e.get("cn","")))}')
-    return _page_shell(title, desc, crumb, e["n"], inner, css_href, [ld, crumb_ld])
+    return _page_shell(title, desc, crumb, e["n"], inner, css_href, ld_blocks)
 
 
-def _blogger_import_xml(payload, rels, by_eid, by_cat, about_map):
+def _blogger_import_xml(payload, rels, by_eid, by_cat, about_map, xctx):
     """A Blogger/Atom export: import once to create one post per entry.
     Labels = mega-sector + category, so posts are browsable in Blogger."""
-    from datetime import datetime
-    now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     head = ('<?xml version="1.0" encoding="UTF-8"?>\n'
             '<feed xmlns="http://www.w3.org/2005/Atom" '
             'xmlns:app="http://www.w3.org/2007/app">\n'
             f'  <title type="text">The Lithium Index</title>\n'
             f'  <updated>{now}</updated>\n')
-    xctx = _build_page_ctx(payload, rels, "xml")
     parts = [head]
     for idx, e in enumerate(payload["entries"], 1):
         content = _entry_content_html(e, payload, rels, by_eid, by_cat, xctx,
@@ -1013,6 +1024,12 @@ def write_entry_pages(payload, rels, about_map=None):
     sl, counts = ctx["slugs"], ctx["counts"]
 
     dist = ROOT / "dist"
+    # Clean the generated subtrees first: a renamed entry/category/country
+    # changes its slug, and stale pages from earlier builds would otherwise
+    # ship with the deploy (outdated content, duplicate URLs).
+    import shutil
+    for sub in ("e", "s", "c", "country", "t", "stage", "assets"):
+        shutil.rmtree(dist / sub, ignore_errors=True)
     (dist / "e").mkdir(parents=True, exist_ok=True)
     (dist / "assets").mkdir(parents=True, exist_ok=True)
     (dist / "assets" / "lx-page.css").write_text(PAGE_CSS, encoding="utf-8")
@@ -1088,10 +1105,12 @@ def write_entry_pages(payload, rels, about_map=None):
     for st_obj in payload["stages"]:
         st, slug = st_obj["n"], sl["stage"][st_obj["n"]]
         items = [e for e in entries if e["s"] in st_obj["sectors"]]
+        # A configured sector can be empty in a future dataset; it then has no
+        # slug/hub page, so skip its chip instead of crashing the build.
         seclinks = "".join(
             _a(ctx, f's/{sl["sector"][s]}.html',
                f'{escape(s)} <span class="ct">({counts["sector"].get(s,0)})</span>', ' class="chip"')
-            for s in st_obj["sectors"])
+            for s in st_obj["sectors"] if s in sl["sector"])
         inner = (f'<p class="lead">{len(items)} entries at the {escape(st)} stage of '
                  f'the battery circular economy.</p>'
                  f'<h2>Mega-sectors at this stage</h2><div class="chips">{seclinks}</div>'
@@ -1153,9 +1172,15 @@ def write_entry_pages(payload, rels, about_map=None):
           + '</urlset>\n')
     (dist / "sitemap.xml").write_text(sm, encoding="utf-8")
     print(f"[ok] wrote lists.html + sitemap.xml ({len(paths)} URLs) + index.html copy")
+    if not SITE_BASE:
+        print("[warn] SITE_BASE is not set: sitemap URLs are root-relative "
+              "(the sitemaps spec requires absolute), BreadcrumbList JSON-LD is "
+              "omitted, and Blogger-XML cross-links degrade to plain text. Set "
+              "SITE_BASE in build.py to your deployed URL for full SEO.")
 
     # --- Blogger import XML (absolute links if SITE_BASE, else plain text) ---
-    xml = _blogger_import_xml(payload, rels, by_eid, by_cat, about_map)
+    xml = _blogger_import_xml(payload, rels, by_eid, by_cat, about_map,
+                              dict(ctx, mode="xml"))
     xml_path = dist / "blogger-import.xml"
     xml_path.write_text(xml, encoding="utf-8")
     print(f"[ok] wrote {xml_path} ({xml_path.stat().st_size/1024:.0f} KB)")
@@ -1334,15 +1359,22 @@ def main():
     write_entry_pages(payload, rels, about_map)
 
 
+def _script_json(obj, **kw):
+    """JSON safe to embed inside a <script> block.
+    ensure_ascii=True: Blogger re-encodes literal non-ASCII inside <script>
+    to numeric HTML entities (e.g. ♻ -> &#9851;) which JS cannot decode;
+    \\uXXXX escapes are plain ASCII and survive. The "</" -> "<\\/" rewrite
+    stops a data value containing "</script>" from terminating the script
+    element (defense for crowd-sourced names); "\\/" is a valid JSON escape."""
+    return json.dumps(obj, ensure_ascii=True, **kw).replace("</", "<\\/")
+
+
 def _fill(text, payload):
-    # ensure_ascii=True so every non-ASCII char is emitted as a \uXXXX escape.
-    # Blogger re-encodes literal non-ASCII inside <script> to numeric HTML
-    # entities (e.g. ♻ -> &#9851;) which JS cannot decode, printing them
-    # literally. \uXXXX escapes are plain ASCII, decode correctly, and survive.
-    data_json = json.dumps(payload, ensure_ascii=True, separators=(",", ":"))
+    data_json = _script_json(payload, separators=(",", ":"))
     stats = payload["stats"]
     light, dark = palette_css()
     return text.replace("/*__DATA__*/", data_json) \
+        .replace("/*__RELS__*/", _script_json(REL_VERB)) \
         .replace("/*__PAL__*/", light) \
         .replace("/*__PALD__*/", dark) \
         .replace("__N_ENTRIES__", f'{stats["entries"]:,}') \
@@ -2831,11 +2863,7 @@ function openDetail(e){
   drawer.hidden = false;
   requestAnimationFrame(()=>drawer.classList.add("open"));
 }
-const REL_LABELS = {SUPPLIES_TO:"supplies", SUPPLIES_EQUIPMENT_TO:"supplies equipment",
-  EXPORTS_THROUGH:"exports through", USES_SOFTWARE:"uses", INVESTED_IN:"invested in",
-  SUBSIDIARY_OF:"subsidiary of", PARTNER_OF:"partner", JV_WITH:"joint venture",
-  RECYCLES_FOR:"recycles for", COMPETES_WITH:"competes with", FOUNDER_OF:"founder of",
-  FORMER_EMPLOYER:"formerly at", LEADS:"leads", MEMBER_OF:"member of", COVERS:"covers"};
+const REL_LABELS = /*__RELS__*/;
 const PROFILE_ROWS = [
   ["status","Status"],["ownership","Ownership"],["founded","Founded"],["ticker","Ticker"],
   ["product","Core product / material"],["chemistry","Chemistry"],["form_factor","Form factor"],

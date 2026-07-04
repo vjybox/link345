@@ -786,11 +786,7 @@ function openDetail(e){
   drawer.hidden = false;
   requestAnimationFrame(()=>drawer.classList.add("open"));
 }
-const REL_LABELS = {SUPPLIES_TO:"supplies", SUPPLIES_EQUIPMENT_TO:"supplies equipment",
-  EXPORTS_THROUGH:"exports through", USES_SOFTWARE:"uses", INVESTED_IN:"invested in",
-  SUBSIDIARY_OF:"subsidiary of", PARTNER_OF:"partner", JV_WITH:"joint venture",
-  RECYCLES_FOR:"recycles for", COMPETES_WITH:"competes with", FOUNDER_OF:"founder of",
-  FORMER_EMPLOYER:"formerly at", LEADS:"leads", MEMBER_OF:"member of", COVERS:"covers"};
+const REL_LABELS = {"SUPPLIES_TO": "supplies", "SUPPLIES_EQUIPMENT_TO": "supplies equipment", "RECYCLES_FOR": "recycles for", "USES_SOFTWARE": "uses", "EXPORTS_THROUGH": "exports through", "SUBSIDIARY_OF": "subsidiary of", "JV_WITH": "joint venture", "PARTNER_OF": "partner", "INVESTED_IN": "invested in", "COMPETES_WITH": "competes with", "FOUNDER_OF": "founder of", "LEADS": "leads", "FORMER_EMPLOYER": "formerly at", "MEMBER_OF": "member of", "COVERS": "covers"};
 const PROFILE_ROWS = [
   ["status","Status"],["ownership","Ownership"],["founded","Founded"],["ticker","Ticker"],
   ["product","Core product / material"],["chemistry","Chemistry"],["form_factor","Form factor"],

@@ -33,6 +33,10 @@ ROOT = Path(__file__).resolve().parent.parent
 DIRECTORY = ROOT / "dist" / "directory.json"
 OUT = ROOT / "data" / "about.json"
 
+# Reuse the relation taxonomy from the build (single source of truth).
+sys.path.insert(0, str(ROOT))
+from build import REL_PROSE  # noqa: E402
+
 SYSTEM = (
     "You write short, neutral, factual company/entity profiles for an industry "
     "directory. Given the facts, write 2 to 4 complete sentences. Rules: use "
@@ -43,15 +47,7 @@ SYSTEM = (
     "quotation marks, no bullet points."
 )
 
-VERBS = {
-    "SUPPLIES_TO": "supplies", "SUPPLIES_EQUIPMENT_TO": "supplies equipment to",
-    "EXPORTS_THROUGH": "exports through", "USES_SOFTWARE": "uses software from",
-    "INVESTED_IN": "has invested in", "RECYCLES_FOR": "recycles for",
-    "JV_WITH": "has a joint venture with", "PARTNER_OF": "partners with",
-    "FOUNDER_OF": "founded", "LEADS": "leads", "MEMBER_OF": "is a member of",
-    "COVERS": "covers", "SUBSIDIARY_OF": "is a subsidiary of",
-    "COMPETES_WITH": "competes with", "FORMER_EMPLOYER": "previously worked at",
-}
+VERBS = REL_PROSE
 
 
 def stage_of(payload, sector):
