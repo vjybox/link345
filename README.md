@@ -151,6 +151,12 @@ ways to publish all ~1,632 pages:
 
 (`dist/` is git-ignored — regenerate and deploy it; the repo stays lean.)
 
+## Taking it forward
+
+The full launch / content-ops / growth playbook — hosting, Blogger import,
+Search Console, the weekly enrichment flywheel, and the upgrade roadmap —
+lives in **[`NEXT-STEPS.md`](NEXT-STEPS.md)**.
+
 ## Suggested next steps
 
 - Enrich entries with real URLs, HQ country, and technology tags (NMC / LFP /
