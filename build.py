@@ -477,9 +477,12 @@ def _entry_slug(e):
     return e["eid"].lower()
 
 
-def _page_prose(e, payload, rels):
+def _page_prose(e, payload, rels, about_text=""):
     """Deterministic, grammatical 'About' paragraph composed from the data.
-    An optional curated `about` field (e.g. from a local LLM) overrides it."""
+    An enriched paragraph (from tools/enrich_about.py) or a curated `about`
+    metadata field overrides the composed text."""
+    if about_text:
+        return about_text
     m = e.get("m") or {}
     if m.get("about"):
         return m["about"]
@@ -611,11 +614,11 @@ def _research_links(e):
     return links
 
 
-def _entry_content_html(e, payload, rels, by_eid, by_cat):
+def _entry_content_html(e, payload, rels, by_eid, by_cat, about_text=""):
     """Inner content (no <head>): reused by both the static page and the XML."""
     color = payload["colors"].get(e["s"], "#0a0a0a")
     stage = _stage_of_sector(payload, e["s"])
-    prose = _page_prose(e, payload, rels)
+    prose = _page_prose(e, payload, rels, about_text)
 
     facts = _page_facts_rows(e)
     facts_html = ""
@@ -707,10 +710,10 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e5e5;font-size:1
 """
 
 
-def _entry_page_html(e, payload, rels, by_eid, by_cat, css_href):
+def _entry_page_html(e, payload, rels, by_eid, by_cat, css_href, about_text=""):
     title = f'{e["n"]} — The Lithium Index'
     desc = (e.get("one") or f'{e["n"]} in the {e["s"]} sector.')[:180]
-    inner = _entry_content_html(e, payload, rels, by_eid, by_cat)
+    inner = _entry_content_html(e, payload, rels, by_eid, by_cat, about_text)
     # JSON-LD for SEO (Organization/Person, free structured data).
     ld_type = "Person" if e.get("et") == "People" else "Organization"
     ld = {"@context": "https://schema.org", "@type": ld_type, "name": e["n"]}
@@ -739,7 +742,7 @@ def _entry_page_html(e, payload, rels, by_eid, by_cat, css_href):
         f'</div></body></html>')
 
 
-def _blogger_import_xml(payload, rels, by_eid, by_cat):
+def _blogger_import_xml(payload, rels, by_eid, by_cat, about_map):
     """A Blogger/Atom export: import once to create one post per entry.
     Labels = mega-sector + category, so posts are browsable in Blogger."""
     from datetime import datetime
@@ -751,7 +754,8 @@ def _blogger_import_xml(payload, rels, by_eid, by_cat):
             f'  <updated>{now}</updated>\n')
     parts = [head]
     for idx, e in enumerate(payload["entries"], 1):
-        content = _entry_content_html(e, payload, rels, by_eid, by_cat)
+        content = _entry_content_html(e, payload, rels, by_eid, by_cat,
+                                      about_map.get(e["eid"], ""))
         labels = "".join(
             f'    <category scheme="http://www.blogger.com/atom/ns#" term="{escape(t)}"/>\n'
             for t in (e["s"], e.get("cn", "")) if t)
@@ -772,8 +776,9 @@ def _blogger_import_xml(payload, rels, by_eid, by_cat):
     return "".join(parts)
 
 
-def write_entry_pages(payload, rels):
+def write_entry_pages(payload, rels, about_map=None):
     """Write dist/e/<slug>.html for every entry + dist/blogger-import.xml."""
+    about_map = about_map or {}
     by_eid = {e["eid"]: e for e in payload["entries"]}
     by_cat = {}
     for e in payload["entries"]:
@@ -787,11 +792,12 @@ def write_entry_pages(payload, rels):
 
     css_href = "../assets/lx-page.css"
     for e in payload["entries"]:
-        html = _entry_page_html(e, payload, rels, by_eid, by_cat, css_href)
+        html = _entry_page_html(e, payload, rels, by_eid, by_cat, css_href,
+                                about_map.get(e["eid"], ""))
         (pages_dir / f'{_entry_slug(e)}.html').write_text(html, encoding="utf-8")
     print(f"[ok] wrote {len(payload['entries'])} entry pages -> {pages_dir}")
 
-    xml = _blogger_import_xml(payload, rels, by_eid, by_cat)
+    xml = _blogger_import_xml(payload, rels, by_eid, by_cat, about_map)
     xml_path = ROOT / "dist" / "blogger-import.xml"
     xml_path.write_text(xml, encoding="utf-8")
     print(f"[ok] wrote {xml_path} ({xml_path.stat().st_size/1024:.0f} KB)")
@@ -901,6 +907,17 @@ def main():
     print(f"[ok] metadata: {sum(1 for e in entries if e.get('meta'))} seeded, "
           f"{len(rels)} entities with connections, {len(rels_doc['edges'])} edges")
 
+    # Optional enriched "About" paragraphs (data/about.json, keyed by eid),
+    # produced for free by tools/enrich_about.py against a local Ollama model.
+    about_map = {}
+    about_file = ROOT / "data" / "about.json"
+    if about_file.exists():
+        about_map = {k: v for k, v in json.loads(about_file.read_text("utf-8")).items()
+                     if not k.startswith("_")}
+    if about_map:
+        print(f"[ok] about: {sum(1 for e in entries if about_map.get(e['eid']))} "
+              f"enriched paragraphs")
+
     present_countries = [c for c in COUNTRY_CENTROIDS if any(e["country"] == c for e in entries)]
     payload = {
         "entries": [
@@ -956,7 +973,7 @@ def main():
     OUT_PAGE.write_text(page, encoding="utf-8")
     print(f"[ok] wrote {OUT_PAGE} ({OUT_PAGE.stat().st_size/1024:.0f} KB)")
 
-    write_entry_pages(payload, rels)
+    write_entry_pages(payload, rels, about_map)
 
 
 def _fill(text, payload):

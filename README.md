@@ -113,9 +113,24 @@ category's entries; drop its three output blocks into the files and re-run
 key facts (sector-aware), a written "About" paragraph, the connections graph,
 and research links — with **no API and no cost**: it's pure templating over the
 data you already have. The prose is composed deterministically from the
-metadata; add an optional `about` field (see `ENRICHMENT_PROMPT.md`) to override
-it with richer text — e.g. batch-written for free via a local model (Ollama) or
-a free chat tier. Two zero-cost ways to publish all ~1,632 pages:
+metadata. To upgrade it to genuinely written paragraphs for **free, with no API
+key**, run a **local** model over every entry:
+
+```bash
+# one-time: install Ollama (ollama.com), then
+ollama pull llama3.2
+python3 build.py                        # refresh dist/directory.json
+python3 tools/enrich_about.py --model llama3.2   # writes data/about.json
+python3 build.py                        # rebuild pages with the paragraphs
+```
+
+`tools/enrich_about.py` talks to the local Ollama endpoint (stdlib only, no
+packages), resumes automatically, and saves after every entry. It writes
+`data/about.json` (keyed by entry id), which `build.py` merges into the pages
+and the Blogger XML — overriding the composed text. `--seeded-only`,
+`--sector "…"`, and `--limit N` scope a run. You can also hand-write the same
+`about` field via `ENRICHMENT_PROMPT.md` and a free chat tier. Two zero-cost
+ways to publish all ~1,632 pages:
 
 1. **Static hosting** — `dist/e/<slug>.html` + `dist/assets/lx-page.css` deploy
    as-is to GitHub Pages / Netlify / Cloudflare Pages (all free). Real crawlable
