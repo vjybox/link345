@@ -314,7 +314,7 @@ def infer_one_liner(name):
         if len(txt) > 3 and not txt.lower().startswith(("nyse", "nasdaq",
                                                         "szse", "krx", "etr")):
             return txt
-    parts = re.split(r"\s[-–]\s", name, 1)
+    parts = re.split(r"\s[-–]\s", name, maxsplit=1)
     return parts[1].strip() if len(parts) > 1 else ""
 
 
