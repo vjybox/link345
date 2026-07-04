@@ -51,7 +51,9 @@ drawer + dark mode + hash deep-links all working.
 | `data/relationships.json` | Directed graph edges between entities (the Connections drawer). |
 | `data/ENRICHMENT_PROMPT.md` | Copy-paste AI prompt to populate/enrich the three data files at scale. |
 | `dist/directory.json` | Generated structured data (also embedded in the HTML) — git-ignored build artifact. |
-| `dist/e/<slug>.html` | One generated **content page per entry** (profile, connections, links) — git-ignored. |
+| `dist/e/<slug>.html` | One generated **content page per entry** (profile, supply-chain network, discovery lists) — git-ignored. |
+| `dist/{s,c,country,t,stage}/` | ~90 generated **hub/list pages** (sectors, categories, countries, technologies, loop stages). |
+| `dist/lists.html` + `dist/sitemap.xml` | The "Explore all lists" index and a sitemap of all ~1,720 URLs. |
 | `dist/blogger-import.xml` | Blogger export: **import once** to create one post per entry — git-ignored. |
 | `tools/legacy/` | One-time migration sources (`_source_v2.txt`, `_gigafactories.txt`) for `tools/migrate_v2.py`. |
 
@@ -132,13 +134,20 @@ and the Blogger XML — overriding the composed text. `--seeded-only`,
 `about` field via `ENRICHMENT_PROMPT.md` and a free chat tier. Two zero-cost
 ways to publish all ~1,632 pages:
 
-1. **Static hosting** — `dist/e/<slug>.html` + `dist/assets/lx-page.css` deploy
-   as-is to GitHub Pages / Netlify / Cloudflare Pages (all free). Real crawlable
-   URLs, good SEO (each page ships a meta description + JSON-LD).
+1. **Static hosting** — deploy the whole `dist/` folder as-is to GitHub Pages /
+   Netlify / Cloudflare Pages (all free); it's a complete site: the app as
+   `index.html`, ~1,632 entry pages, ~90 hub/list pages (per sector, category,
+   country, technology and loop stage), an `lists.html` explore index and a
+   `sitemap.xml`. Every fact on an entry page links into a list and every list
+   links back (~40k verified internal links), and each page ships a meta
+   description + JSON-LD (Organization/Person, BreadcrumbList, ItemList).
+   Set `SITE_BASE` in `build.py` to your deployed URL for absolute links in the
+   sitemap and Blogger XML.
 2. **Blogger import** — upload `dist/blogger-import.xml` via Blogger →
    Settings → *Import content*. Creates one post per entry, labeled by
    mega-sector + category, so they're browsable inside your existing blog. No
-   external host.
+   external host. (Internal cross-links become absolute if `SITE_BASE` is set,
+   otherwise they degrade to plain text — never broken links.)
 
 (`dist/` is git-ignored — regenerate and deploy it; the repo stays lean.)
 

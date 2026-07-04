@@ -583,25 +583,6 @@ def _and_list(names):
     return ", ".join(names[:-1]) + f" and {names[-1]}"
 
 
-def _page_facts_rows(e):
-    m = e.get("m") or {}
-    rows = []
-    status = m.get("status") or e.get("stt")
-    if status:
-        rows.append(("Status", status))
-    if e.get("co"):
-        rows.append(("Country", e["co"]))
-    if e.get("cn"):
-        rows.append(("Category", e["cn"]))
-    for k, label in PAGE_FACTS:
-        v = m.get(k)
-        if v not in (None, ""):
-            rows.append((label, str(v)))
-    if e.get("tech"):
-        rows.append(("Tags", ", ".join(e["tech"])))
-    return rows
-
-
 def _research_links(e):
     from urllib.parse import quote_plus
     cn = clean_name(e["n"])
@@ -614,60 +595,177 @@ def _research_links(e):
     return links
 
 
-def _entry_content_html(e, payload, rels, by_eid, by_cat, about_text=""):
+# Base URL of the deployed pages (e.g. "https://<user>.github.io/link345").
+# Used for absolute internal links in the Blogger import XML and sitemap.xml.
+# Leave empty: static pages use relative links (work anywhere); the XML then
+# renders internal references as plain text instead of broken links.
+SITE_BASE = ""
+
+REL_VERB = {"SUPPLIES_TO": "supplies", "SUPPLIES_EQUIPMENT_TO": "supplies equipment",
+            "EXPORTS_THROUGH": "exports through", "USES_SOFTWARE": "uses",
+            "INVESTED_IN": "invested in", "SUBSIDIARY_OF": "subsidiary of",
+            "PARTNER_OF": "partner", "JV_WITH": "joint venture",
+            "RECYCLES_FOR": "recycles for", "COMPETES_WITH": "competes with",
+            "FOUNDER_OF": "founder of", "FORMER_EMPLOYER": "formerly at",
+            "LEADS": "leads", "MEMBER_OF": "member of", "COVERS": "covers"}
+
+CONN_GROUP_ORDER = ["Upstream — suppliers & inputs", "Downstream — customers & routes",
+                    "Corporate & investment", "People", "Ecosystem & media"]
+
+
+def _conn_group(d, r):
+    """Bucket a directed edge into the reader's supply-chain mental model."""
+    if r in ("SUPPLIES_TO", "SUPPLIES_EQUIPMENT_TO", "RECYCLES_FOR"):
+        return CONN_GROUP_ORDER[0] if d == "in" else CONN_GROUP_ORDER[1]
+    if r == "USES_SOFTWARE":
+        return CONN_GROUP_ORDER[0] if d == "out" else CONN_GROUP_ORDER[1]
+    if r == "EXPORTS_THROUGH":
+        return CONN_GROUP_ORDER[1]
+    if r in ("SUBSIDIARY_OF", "JV_WITH", "PARTNER_OF", "INVESTED_IN", "COMPETES_WITH"):
+        return CONN_GROUP_ORDER[2]
+    if r in ("FOUNDER_OF", "LEADS", "FORMER_EMPLOYER"):
+        return CONN_GROUP_ORDER[3]
+    return CONN_GROUP_ORDER[4]      # MEMBER_OF, COVERS, unknown
+
+
+def _a(ctx, path, text, extra=""):
+    """Internal link. `path` is site-relative (e.g. "s/mining.html").
+    Static pages prefix ctx['prefix']; the XML uses SITE_BASE or falls back
+    to plain text so Blogger posts never carry broken relative links."""
+    if ctx["mode"] == "xml":
+        if SITE_BASE:
+            return f'<a href="{SITE_BASE}/{path}"{extra}>{text}</a>'
+        return f'<span>{text}</span>'
+    return f'<a href="{ctx["prefix"]}{path}"{extra}>{text}</a>'
+
+
+def _hub_paths(e, ctx):
+    sl = ctx["slugs"]
+    return {"sector": f's/{sl["sector"][e["s"]]}.html',
+            "cat": f'c/{sl["cat"][e["c"]]}.html',
+            "stage": f'stage/{sl["stage"][_stage_of_sector(ctx["payload"], e["s"])]}.html',
+            "country": f'country/{sl["country"][e["co"]]}.html' if e.get("co") else ""}
+
+
+def _two_hop(e, rels, by_eid):
+    """Entities two steps away in the graph (not self, not direct), with the
+    bridging entity — cheap 'you may also want to see' discovery."""
+    direct = {r["e"] for r in (rels.get(e["eid"]) or [])}
+    sugg = {}
+    for r in (rels.get(e["eid"]) or []):
+        for r2 in (rels.get(r["e"]) or []):
+            k = r2["e"]
+            if k == e["eid"] or k in direct or k not in by_eid:
+                continue
+            sugg.setdefault(k, set()).add(r["n"])
+    ranked = sorted(sugg.items(), key=lambda kv: (-len(kv[1]), by_eid[kv[0]]["n"]))
+    return [(by_eid[k], sorted(via)) for k, via in ranked[:6]]
+
+
+def _entry_content_html(e, payload, rels, by_eid, by_cat, ctx, about_text=""):
     """Inner content (no <head>): reused by both the static page and the XML."""
     color = payload["colors"].get(e["s"], "#0a0a0a")
     stage = _stage_of_sector(payload, e["s"])
     prose = _page_prose(e, payload, rels, about_text)
+    hubs = _hub_paths(e, ctx)
+    counts = ctx["counts"]
 
-    facts = _page_facts_rows(e)
-    facts_html = ""
-    if facts:
-        facts_html = ('<h2>Key facts</h2><table class="facts">'
-                      + "".join(f'<tr><th>{escape(k)}</th><td>{escape(v)}</td></tr>'
-                                for k, v in facts) + "</table>")
+    # --- badges: every one is a way into a list ---
+    badges = (_a(ctx, hubs["sector"], escape(e["s"]),
+                 f' class="badge" style="--sc:{color}"')
+              + _a(ctx, hubs["stage"], f'Loop: {escape(stage)}', ' class="badge loop"'))
+    if e.get("co"):
+        badges += _a(ctx, hubs["country"], escape(e["co"]), ' class="badge"')
 
+    # --- at a glance: facts with linked values + position context ---
+    rows = []
+    m = e.get("m") or {}
+    status = m.get("status") or e.get("stt")
+    if status:
+        rows.append(("Status", escape(status)))
+    if e.get("co"):
+        n = counts["country"].get(e["co"], 0)
+        rows.append(("Country", _a(ctx, hubs["country"],
+                                   f'{escape(e["co"])}') + f' <span class="ct">({n} in the index)</span>'))
+    n_cat = counts["cat"].get(e["c"], 0)
+    rows.append(("Category", _a(ctx, hubs["cat"], escape(e.get("cn", "")))
+                 + f' <span class="ct">({n_cat} entries)</span>'))
+    for k, label in PAGE_FACTS:
+        v = m.get(k)
+        if v not in (None, ""):
+            rows.append((label, escape(str(v))))
+    if e.get("tech"):
+        chips = " ".join(_a(ctx, f't/{ctx["slugs"]["tech"][t]}.html',
+                            escape(t) + f' <span class="ct">({counts["tech"].get(t,0)})</span>')
+                         for t in e["tech"] if t in ctx["slugs"]["tech"])
+        rows.append(("Tags", chips))
     conns = rels.get(e["eid"]) or []
+    if conns:
+        rank, total = ctx["conn_rank"].get(e["eid"], (0, 0))
+        pos = f' — #{rank} of {total} connected in {escape(e["s"])}' if rank else ""
+        rows.append(("Connections", f'{len(conns)}{pos}'))
+    facts_html = ('<h2>At a glance</h2><table class="facts">'
+                  + "".join(f'<tr><th>{escape(k)}</th><td>{v}</td></tr>'
+                            for k, v in rows) + "</table>")
+
+    # --- supply chain: connections grouped by direction/role ---
     conn_html = ""
     if conns:
-        labels = {"SUPPLIES_TO": "supplies", "SUPPLIES_EQUIPMENT_TO": "supplies equipment",
-                  "EXPORTS_THROUGH": "exports through", "USES_SOFTWARE": "uses",
-                  "INVESTED_IN": "invested in", "SUBSIDIARY_OF": "subsidiary of",
-                  "PARTNER_OF": "partner", "JV_WITH": "joint venture",
-                  "RECYCLES_FOR": "recycles for", "COMPETES_WITH": "competes with",
-                  "FOUNDER_OF": "founder of", "FORMER_EMPLOYER": "formerly at",
-                  "LEADS": "leads", "MEMBER_OF": "member of", "COVERS": "covers"}
-        items = []
+        groups = {}
         for r in conns:
-            lbl = labels.get(r["r"], r["r"].lower().replace("_", " "))
-            arrow = "&rarr;" if r["d"] == "out" else "&larr;"
-            tgt = by_eid.get(r["e"])
-            nm = escape(r["n"])
-            if tgt:
-                nm = f'<a href="{_entry_slug(tgt)}.html">{nm}</a>'
-            items.append(f'<li><span class="rel">{arrow} {escape(lbl)}</span> {nm}</li>')
-        conn_html = f'<h2>Connections <span class="n">{len(conns)}</span></h2><ul class="conns">' + "".join(items) + "</ul>"
+            groups.setdefault(_conn_group(r["d"], r["r"]), []).append(r)
+        blocks = []
+        for g in CONN_GROUP_ORDER:
+            if g not in groups:
+                continue
+            items = []
+            for r in groups[g]:
+                lbl = REL_VERB.get(r["r"], r["r"].lower().replace("_", " "))
+                arrow = "&rarr;" if r["d"] == "out" else "&larr;"
+                tgt = by_eid.get(r["e"])
+                nm = _a(ctx, f'e/{_entry_slug(tgt)}.html', escape(r["n"])) if tgt else escape(r["n"])
+                items.append(f'<li><span class="rel">{arrow} {escape(lbl)}</span> {nm}</li>')
+            blocks.append(f'<h3>{escape(g)}</h3><ul class="conns">{"".join(items)}</ul>')
+        conn_html = (f'<h2>Supply chain &amp; network <span class="n">{len(conns)}</span></h2>'
+                     + "".join(blocks))
 
+    # --- discover: auto-generated list chips (sector/stage/country/tech/cat) ---
+    disc = [_a(ctx, hubs["sector"], f'{escape(e["s"])} <span class="ct">({counts["sector"].get(e["s"],0)})</span>', ' class="chip"'),
+            _a(ctx, hubs["cat"], f'{escape(e.get("cn",""))} <span class="ct">({n_cat})</span>', ' class="chip"'),
+            _a(ctx, hubs["stage"], f'{escape(stage)} stage <span class="ct">({counts["stage"].get(stage,0)})</span>', ' class="chip"')]
+    if e.get("co"):
+        disc.append(_a(ctx, hubs["country"],
+                       f'All in {escape(e["co"])} <span class="ct">({counts["country"].get(e["co"],0)})</span>', ' class="chip"'))
+        disc.append(_a(ctx, f'{hubs["country"]}#s-{ctx["slugs"]["sector"][e["s"]]}',
+                       f'{escape(e["s"])} in {escape(e["co"])}', ' class="chip"'))
+    for t in (e.get("tech") or []):
+        if t in ctx["slugs"]["tech"]:
+            disc.append(_a(ctx, f't/{ctx["slugs"]["tech"][t]}.html',
+                           f'{escape(t)} companies <span class="ct">({counts["tech"].get(t,0)})</span>', ' class="chip"'))
+    disc_html = '<h2>Discover lists</h2><div class="chips">' + "".join(disc) + "</div>"
+
+    # --- related + two steps away ---
     related = [x for x in by_cat.get(e["c"], []) if x["eid"] != e["eid"]][:8]
     rel_html = ""
     if related:
         rel_html = ('<h2>Related in this category</h2><ul class="related">'
-                    + "".join(f'<li><a href="{_entry_slug(x)}.html">{escape(x["n"])}</a></li>'
+                    + "".join(f'<li>{_a(ctx, "e/"+_entry_slug(x)+".html", escape(x["n"]))}</li>'
                               for x in related) + "</ul>")
+    hops = _two_hop(e, rels, by_eid)
+    if hops:
+        rel_html += ('<h2>Two steps away in the network</h2><ul class="related">'
+                     + "".join(f'<li>{_a(ctx, "e/"+_entry_slug(x)+".html", escape(x["n"]))}'
+                               f'<span class="via"> via {escape(_and_list(via))}</span></li>'
+                               for x, via in hops) + "</ul>")
 
     rlinks = _research_links(e)
     rlinks_html = ('<div class="links">'
                    + "".join(f'<a href="{escape(u)}" rel="noopener nofollow">{escape(t)} &#8599;</a>'
                              for t, u in rlinks) + "</div>")
 
-    badges = (f'<span class="badge" style="--sc:{color}">{escape(e["s"])}</span>'
-              f'<span class="badge loop">Loop: {escape(stage)}</span>')
-    if e.get("co"):
-        badges += f'<span class="badge">{escape(e["co"])}</span>'
-
     return (f'<div class="badges">{badges}</div>'
             f'<p class="lead">{escape(prose)}</p>'
-            f'{facts_html}{conn_html}{rel_html}'
+            f'{facts_html}{conn_html}{disc_html}{rel_html}'
             f'<h2>Research</h2>{rlinks_html}')
 
 
@@ -692,10 +790,18 @@ h2 .n{color:#999}
 table.facts{width:100%;border-collapse:collapse;font-size:14px}
 table.facts th{text-align:left;width:200px;color:#666;font-weight:600;padding:7px 12px 7px 0;vertical-align:top;border-bottom:1px solid #eee}
 table.facts td{padding:7px 0;border-bottom:1px solid #eee}
-ul.conns,ul.related{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+ul.conns,ul.related{list-style:none;padding:0;margin:0 0 8px;display:flex;flex-direction:column;gap:6px}
 ul.conns .rel{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;color:#888;margin-right:6px}
 ul.related{flex-direction:row;flex-wrap:wrap;gap:8px}
 ul.related li{border:1px solid #e5e5e5;padding:5px 10px;border-radius:2px;font-size:13px}
+h3{font-size:13px;margin:16px 0 8px;color:#444;font-weight:600}
+h3 .n{color:#999;font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-block;border:1px solid #ddd;padding:6px 11px;border-radius:2px;font-size:13px;color:#111}
+.chip:hover{border-color:#1452ff;color:#1452ff;text-decoration:none}
+.ct{color:#999;font-size:12px}
+.via{color:#999;font-size:12px;margin-left:5px}
+a.badge{text-decoration:none}a.badge:hover{border-color:#1452ff;color:#1452ff}
 .links{display:flex;flex-wrap:wrap;gap:8px}
 .links a{border:1px solid #ddd;padding:6px 11px;border-radius:2px;font-size:13px}
 footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e5e5;font-size:12px;color:#888}
@@ -705,22 +811,17 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e5e5;font-size:1
  .badge{border-color:#333;color:#bbb}.badge.loop{background:#2a140f;border-color:#5a2a1e;color:#ff9b82}
  .crumb,.crumb a,h2{color:#8a8a92}
  table.facts th,table.facts td{border-color:#222}table.facts th{color:#9a9aa2}
- ul.related li,.links a{border-color:#2a2a30}
+ ul.related li,.links a,.chip{border-color:#2a2a30}
+ .chip{color:#e7e7ea}h3{color:#c5c5cc}
  footer{border-color:#222;color:#777}.lead{color:#cfcfd6}}
 """
 
 
-def _entry_page_html(e, payload, rels, by_eid, by_cat, css_href, about_text=""):
-    title = f'{e["n"]} — The Lithium Index'
-    desc = (e.get("one") or f'{e["n"]} in the {e["s"]} sector.')[:180]
-    inner = _entry_content_html(e, payload, rels, by_eid, by_cat, about_text)
-    # JSON-LD for SEO (Organization/Person, free structured data).
-    ld_type = "Person" if e.get("et") == "People" else "Organization"
-    ld = {"@context": "https://schema.org", "@type": ld_type, "name": e["n"]}
-    if e.get("u"):
-        ld["url"] = e["u"]
-    if e.get("one"):
-        ld["description"] = e["one"]
+def _page_shell(title, desc, crumb_html, h1, inner, css_href, ld_blocks, prefix="../"):
+    """Common shell for entry pages and hub/list pages. `prefix` reaches the
+    dist root from this page ("../" one level deep, "" at the root)."""
+    ld = "".join(f'<script type="application/ld+json">{json.dumps(b, ensure_ascii=True)}</script>'
+                 for b in ld_blocks)
     return (
         f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
         f'<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -729,17 +830,51 @@ def _entry_page_html(e, payload, rels, by_eid, by_cat, css_href, about_text=""):
         f'<link rel="preconnect" href="https://fonts.googleapis.com">'
         f'<style>@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono&display=swap");</style>'
         f'<link rel="stylesheet" href="{escape(css_href)}">'
-        f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=True)}</script>'
+        f'{ld}'
         f'</head><body>'
         f'<header class="site"><div class="wrap"><span class="brand">link<b>+</b></span>'
         f'<span style="color:#999;font-size:12px">The Lithium Index</span></div></header>'
-        f'<div class="wrap"><nav class="crumb"><a href="../index.html">All sectors</a> &#9656; '
-        f'{escape(e["s"])} &#9656; {escape(e.get("cn",""))}</nav>'
-        f'<h1>{escape(e["n"])}</h1>'
+        f'<div class="wrap"><nav class="crumb">{crumb_html}</nav>'
+        f'<h1>{escape(h1)}</h1>'
         f'{inner}'
         f'<footer>linkplus.in — every company is a link. '
-        f'<a href="../index.html">Browse the full directory &#8599;</a></footer>'
+        f'<a href="{prefix}index.html">Browse the full directory &#8599;</a>'
+        f' · <a href="{prefix}lists.html">Explore all lists</a></footer>'
         f'</div></body></html>')
+
+
+def _entry_page_html(e, payload, rels, by_eid, by_cat, ctx, css_href, about_text=""):
+    title = f'{e["n"]} — The Lithium Index'
+    desc = (e.get("one") or f'{e["n"]} in the {e["s"]} sector.')[:180]
+    inner = _entry_content_html(e, payload, rels, by_eid, by_cat, ctx, about_text)
+    hubs = _hub_paths(e, ctx)
+    # JSON-LD: Organization/Person enriched from the graph, plus BreadcrumbList.
+    ld_type = "Person" if e.get("et") == "People" else "Organization"
+    ld = {"@context": "https://schema.org", "@type": ld_type, "name": e["n"]}
+    if e.get("u"):
+        ld["url"] = e["u"]
+    if e.get("one"):
+        ld["description"] = e["one"]
+    for r in (rels.get(e["eid"]) or []):
+        if r["d"] != "out":
+            continue
+        if r["r"] == "SUBSIDIARY_OF":
+            ld["parentOrganization"] = {"@type": "Organization", "name": r["n"]}
+        elif r["r"] == "MEMBER_OF":
+            ld.setdefault("memberOf", []).append({"@type": "Organization", "name": r["n"]})
+    crumb_ld = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "All sectors",
+                     "item": (SITE_BASE + "/lists.html") if SITE_BASE else "../lists.html"},
+                    {"@type": "ListItem", "position": 2, "name": e["s"],
+                     "item": (SITE_BASE + "/" + hubs["sector"]) if SITE_BASE else "../" + hubs["sector"]},
+                    {"@type": "ListItem", "position": 3, "name": e.get("cn", ""),
+                     "item": (SITE_BASE + "/" + hubs["cat"]) if SITE_BASE else "../" + hubs["cat"]},
+                    {"@type": "ListItem", "position": 4, "name": e["n"]}]}
+    crumb = (f'{_a(ctx, "lists.html", "All sectors")} &#9656; '
+             f'{_a(ctx, hubs["sector"], escape(e["s"]))} &#9656; '
+             f'{_a(ctx, hubs["cat"], escape(e.get("cn","")))}')
+    return _page_shell(title, desc, crumb, e["n"], inner, css_href, [ld, crumb_ld])
 
 
 def _blogger_import_xml(payload, rels, by_eid, by_cat, about_map):
@@ -752,9 +887,10 @@ def _blogger_import_xml(payload, rels, by_eid, by_cat, about_map):
             'xmlns:app="http://www.w3.org/2007/app">\n'
             f'  <title type="text">The Lithium Index</title>\n'
             f'  <updated>{now}</updated>\n')
+    xctx = _build_page_ctx(payload, rels, "xml")
     parts = [head]
     for idx, e in enumerate(payload["entries"], 1):
-        content = _entry_content_html(e, payload, rels, by_eid, by_cat,
+        content = _entry_content_html(e, payload, rels, by_eid, by_cat, xctx,
                                       about_map.get(e["eid"], ""))
         labels = "".join(
             f'    <category scheme="http://www.blogger.com/atom/ns#" term="{escape(t)}"/>\n'
@@ -776,29 +912,251 @@ def _blogger_import_xml(payload, rels, by_eid, by_cat, about_map):
     return "".join(parts)
 
 
+def _build_page_ctx(payload, rels, mode):
+    """Shared context for page generation: hub slugs, list counts, ranks."""
+    entries = payload["entries"]
+    # slug maps (values are unique within their namespace)
+    def uniq(names, keyfn=slugify):
+        out, seen = {}, set()
+        for n in names:
+            s, k = keyfn(n) or "x", 2
+            base = s
+            while s in seen:
+                s = f"{base}-{k}"; k += 1
+            seen.add(s); out[n] = s
+        return out
+    sectors = list(dict.fromkeys(e["s"] for e in entries))
+    cats = {}          # cid -> slug
+    seen = set()
+    for e in entries:
+        if e["c"] in cats:
+            continue
+        s = f'{e["c"]:02d}-{slugify(e.get("cn",""))}'
+        while s in seen:
+            s += "-x"
+        seen.add(s); cats[e["c"]] = s
+    countries = list(dict.fromkeys(e["co"] for e in entries if e.get("co")))
+    techs = sorted({t for e in entries for t in (e.get("tech") or [])})
+    stages = [st["n"] for st in payload["stages"]]
+    slugs = {"sector": uniq(sectors), "cat": cats, "country": uniq(countries),
+             "tech": uniq(techs), "stage": uniq(stages)}
+
+    counts = {"sector": {}, "cat": {}, "country": {}, "tech": {}, "stage": {}}
+    for e in entries:
+        counts["sector"][e["s"]] = counts["sector"].get(e["s"], 0) + 1
+        counts["cat"][e["c"]] = counts["cat"].get(e["c"], 0) + 1
+        if e.get("co"):
+            counts["country"][e["co"]] = counts["country"].get(e["co"], 0) + 1
+        for t in (e.get("tech") or []):
+            counts["tech"][t] = counts["tech"].get(t, 0) + 1
+        st = _stage_of_sector(payload, e["s"])
+        counts["stage"][st] = counts["stage"].get(st, 0) + 1
+
+    # connection rank within each sector (among connected entities only)
+    conn_rank = {}
+    by_sector = {}
+    for e in entries:
+        n = len(rels.get(e["eid"]) or [])
+        if n:
+            by_sector.setdefault(e["s"], []).append((n, e["eid"]))
+    for s, lst in by_sector.items():
+        lst.sort(key=lambda t: (-t[0], t[1]))
+        for i, (n, eid) in enumerate(lst, 1):
+            conn_rank[eid] = (i, len(lst))
+
+    return {"mode": mode, "prefix": "../", "payload": payload,
+            "slugs": slugs, "counts": counts, "conn_rank": conn_rank}
+
+
+def _hub_body(items, ctx, group_by=None, anchor_slugs=None):
+    """Entry-pill list, optionally grouped (group label -> anchor id)."""
+    def pills(rows):
+        return ('<ul class="related">'
+                + "".join(f'<li>{_a(ctx, "e/"+_entry_slug(x)+".html", escape(x["n"]))}</li>'
+                          for x in rows) + "</ul>")
+    if not group_by:
+        return pills(items)
+    groups = {}
+    for x in items:
+        groups.setdefault(group_by(x), []).append(x)
+    out = ""
+    for g, rows in sorted(groups.items(), key=lambda kv: -len(kv[1])):
+        aid = f' id="s-{anchor_slugs[g]}"' if anchor_slugs and g in anchor_slugs else ""
+        out += (f'<h3{aid}>{escape(g)} <span class="n">{len(rows)}</span></h3>'
+                + pills(rows))
+    return out
+
+
+def _write_hub(path, title, desc, crumb, inner, items):
+    ld = {"@context": "https://schema.org", "@type": "ItemList", "name": title,
+          "numberOfItems": len(items),
+          "itemListElement": [
+              {"@type": "ListItem", "position": i + 1, "name": x["n"]}
+              for i, x in enumerate(items[:50])]}
+    html = _page_shell(f"{title} — The Lithium Index", desc, crumb, title, inner,
+                       "../assets/lx-page.css", [ld], prefix="../")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(html, encoding="utf-8")
+
+
 def write_entry_pages(payload, rels, about_map=None):
-    """Write dist/e/<slug>.html for every entry + dist/blogger-import.xml."""
+    """Write dist/: e/<slug>.html per entry, ~100 hub/list pages, lists.html,
+    sitemap.xml, blogger-import.xml, and a copy of the app as index.html —
+    so dist/ deploys as a complete site."""
     about_map = about_map or {}
-    by_eid = {e["eid"]: e for e in payload["entries"]}
+    entries = payload["entries"]
+    by_eid = {e["eid"]: e for e in entries}
     by_cat = {}
-    for e in payload["entries"]:
+    for e in entries:
         by_cat.setdefault(e["c"], []).append(e)
+    ctx = _build_page_ctx(payload, rels, "page")
+    sl, counts = ctx["slugs"], ctx["counts"]
 
-    pages_dir = ROOT / "dist" / "e"
-    assets_dir = ROOT / "dist" / "assets"
-    pages_dir.mkdir(parents=True, exist_ok=True)
-    assets_dir.mkdir(parents=True, exist_ok=True)
-    (assets_dir / "lx-page.css").write_text(PAGE_CSS, encoding="utf-8")
+    dist = ROOT / "dist"
+    (dist / "e").mkdir(parents=True, exist_ok=True)
+    (dist / "assets").mkdir(parents=True, exist_ok=True)
+    (dist / "assets" / "lx-page.css").write_text(PAGE_CSS, encoding="utf-8")
 
-    css_href = "../assets/lx-page.css"
-    for e in payload["entries"]:
-        html = _entry_page_html(e, payload, rels, by_eid, by_cat, css_href,
-                                about_map.get(e["eid"], ""))
-        (pages_dir / f'{_entry_slug(e)}.html').write_text(html, encoding="utf-8")
-    print(f"[ok] wrote {len(payload['entries'])} entry pages -> {pages_dir}")
+    # --- entry pages ---
+    for e in entries:
+        html = _entry_page_html(e, payload, rels, by_eid, by_cat, ctx,
+                                "../assets/lx-page.css", about_map.get(e["eid"], ""))
+        (dist / "e" / f'{_entry_slug(e)}.html').write_text(html, encoding="utf-8")
+    print(f"[ok] wrote {len(entries)} entry pages -> {dist/'e'}")
 
+    # --- hub pages: sector / category / country / tech / stage ---
+    crumb_root = _a(ctx, "lists.html", "All lists") + " &#9656; "
+    n_hubs = 0
+    for s, slug in sl["sector"].items():
+        items = [e for e in entries if e["s"] == s]
+        cats_in = sorted({e["c"] for e in items})
+        catlinks = "".join(
+            _a(ctx, f'c/{sl["cat"][c]}.html',
+               f'{escape(next(x.get("cn","") for x in items if x["c"]==c))} '
+               f'<span class="ct">({counts["cat"].get(c,0)})</span>', ' class="chip"')
+            for c in cats_in)
+        stage = _stage_of_sector(payload, s)
+        inner = (f'<div class="badges">'
+                 + _a(ctx, f'stage/{sl["stage"][stage]}.html', f'Loop: {escape(stage)}', ' class="badge loop"')
+                 + f'</div><p class="lead">{len(items)} entries across {len(cats_in)} '
+                 f'categories in the {escape(s)} mega-sector of the battery industry.</p>'
+                 f'<h2>Categories</h2><div class="chips">{catlinks}</div>'
+                 f'<h2>All entries</h2>'
+                 + _hub_body(items, ctx, group_by=lambda x: x.get("cn", ""),
+                             anchor_slugs=None))
+        _write_hub(dist / "s" / f"{slug}.html", s,
+                   f"{len(items)} {s} companies and organisations in the lithium-battery industry.",
+                   crumb_root + f"<b>{escape(s)}</b>", inner, items)
+        n_hubs += 1
+    for c, slug in sl["cat"].items():
+        items = by_cat.get(c, [])
+        if not items:
+            continue
+        cn, s = items[0].get("cn", ""), items[0]["s"]
+        inner = (f'<div class="badges">'
+                 + _a(ctx, f's/{sl["sector"][s]}.html', escape(s), ' class="badge"')
+                 + f'</div><p class="lead">{len(items)} entries in the {escape(cn)} '
+                 f'category ({escape(s)}).</p><h2>All entries</h2>'
+                 + _hub_body(items, ctx))
+        _write_hub(dist / "c" / f"{slug}.html", cn,
+                   f"{len(items)} {cn} companies in the lithium-battery industry.",
+                   crumb_root + _a(ctx, f's/{sl["sector"][s]}.html', escape(s))
+                   + f" &#9656; <b>{escape(cn)}</b>", inner, items)
+        n_hubs += 1
+    for co, slug in sl["country"].items():
+        items = [e for e in entries if e.get("co") == co]
+        inner = (f'<p class="lead">{len(items)} battery-industry entries based in '
+                 f'{escape(co)}, grouped by mega-sector.</p>'
+                 + _hub_body(items, ctx, group_by=lambda x: x["s"],
+                             anchor_slugs=sl["sector"]))
+        _write_hub(dist / "country" / f"{slug}.html", f"Battery industry in {co}",
+                   f"{len(items)} battery companies, plants and organisations in {co}.",
+                   crumb_root + f"<b>{escape(co)}</b>", inner, items)
+        n_hubs += 1
+    for t, slug in sl["tech"].items():
+        items = [e for e in entries if t in (e.get("tech") or [])]
+        gl = payload.get("gloss", {}).get(t, "")
+        inner = ((f'<p class="lead">{escape(gl)}</p>' if gl else "")
+                 + f'<p class="lead">{len(items)} entries tagged {escape(t)}, '
+                 f'grouped by mega-sector.</p>'
+                 + _hub_body(items, ctx, group_by=lambda x: x["s"],
+                             anchor_slugs=sl["sector"]))
+        _write_hub(dist / "t" / f"{slug}.html", f"{t} companies",
+                   f"{len(items)} {t} companies in the lithium-battery index.",
+                   crumb_root + f"<b>{escape(t)}</b>", inner, items)
+        n_hubs += 1
+    for st_obj in payload["stages"]:
+        st, slug = st_obj["n"], sl["stage"][st_obj["n"]]
+        items = [e for e in entries if e["s"] in st_obj["sectors"]]
+        seclinks = "".join(
+            _a(ctx, f's/{sl["sector"][s]}.html',
+               f'{escape(s)} <span class="ct">({counts["sector"].get(s,0)})</span>', ' class="chip"')
+            for s in st_obj["sectors"])
+        inner = (f'<p class="lead">{len(items)} entries at the {escape(st)} stage of '
+                 f'the battery circular economy.</p>'
+                 f'<h2>Mega-sectors at this stage</h2><div class="chips">{seclinks}</div>'
+                 f'<h2>All entries</h2>'
+                 + _hub_body(items, ctx, group_by=lambda x: x["s"],
+                             anchor_slugs=sl["sector"]))
+        _write_hub(dist / "stage" / f"{slug}.html", f"{st} — battery loop stage",
+                   f"{len(items)} companies at the {st} stage of the battery circular economy.",
+                   crumb_root + f"<b>{escape(st)}</b>", inner, items)
+        n_hubs += 1
+    print(f"[ok] wrote {n_hubs} hub pages -> {dist}/(s|c|country|t|stage)")
+
+    # --- lists.html: the explore index ---
+    lctx = dict(ctx, prefix="")
+    def chip_list(title, pairs):
+        chips = "".join(_a(lctx, p, f'{escape(n)} <span class="ct">({c})</span>', ' class="chip"')
+                        for n, p, c in pairs)
+        return f'<h2>{escape(title)}</h2><div class="chips">{chips}</div>'
+    cat_name = {c: (by_cat[c][0].get("cn", "") if by_cat.get(c) else "") for c in sl["cat"]}
+    lists_inner = (
+        f'<p class="lead">Every list in the index — {len(entries)} entries sliced by '
+        f'sector, category, country, technology and loop stage.</p>'
+        + chip_list("Loop stages", [(st, f'stage/{sl["stage"][st]}.html', counts["stage"].get(st, 0))
+                                    for st in sl["stage"]])
+        + chip_list("Mega-sectors", [(s, f's/{p}.html', counts["sector"].get(s, 0))
+                                     for s, p in sl["sector"].items()])
+        + chip_list("Technologies", [(t, f't/{p}.html', counts["tech"].get(t, 0))
+                                     for t, p in sl["tech"].items()])
+        + chip_list("Countries", sorted(((co, f'country/{p}.html', counts["country"].get(co, 0))
+                                         for co, p in sl["country"].items()),
+                                        key=lambda x: -x[2]))
+        + chip_list("Categories", sorted(((cat_name[c], f'c/{p}.html', counts["cat"].get(c, 0))
+                                          for c, p in sl["cat"].items()),
+                                         key=lambda x: -x[2])))
+    lists_html = _page_shell("Explore all lists — The Lithium Index",
+                             "Every sector, category, country, technology and loop-stage "
+                             "list in the lithium-battery index.",
+                             "<b>All lists</b>", "Explore the index", lists_inner,
+                             "assets/lx-page.css", [], prefix="")
+    (dist / "lists.html").write_text(lists_html, encoding="utf-8")
+
+    # --- copy the app in as the site root, so dist/ deploys standalone ---
+    app = ROOT / "index.html"
+    if app.exists():
+        (dist / "index.html").write_text(app.read_text("utf-8"), encoding="utf-8")
+
+    # --- sitemap.xml (set SITE_BASE for absolute URLs) ---
+    paths = (["index.html", "lists.html"]
+             + [f'e/{_entry_slug(e)}.html' for e in entries]
+             + [f's/{p}.html' for p in sl["sector"].values()]
+             + [f'c/{p}.html' for p in sl["cat"].values()]
+             + [f'country/{p}.html' for p in sl["country"].values()]
+             + [f't/{p}.html' for p in sl["tech"].values()]
+             + [f'stage/{p}.html' for p in sl["stage"].values()])
+    base = SITE_BASE.rstrip("/") + "/" if SITE_BASE else "/"
+    sm = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+          + "".join(f'  <url><loc>{escape(base + p)}</loc></url>\n' for p in paths)
+          + '</urlset>\n')
+    (dist / "sitemap.xml").write_text(sm, encoding="utf-8")
+    print(f"[ok] wrote lists.html + sitemap.xml ({len(paths)} URLs) + index.html copy")
+
+    # --- Blogger import XML (absolute links if SITE_BASE, else plain text) ---
     xml = _blogger_import_xml(payload, rels, by_eid, by_cat, about_map)
-    xml_path = ROOT / "dist" / "blogger-import.xml"
+    xml_path = dist / "blogger-import.xml"
     xml_path.write_text(xml, encoding="utf-8")
     print(f"[ok] wrote {xml_path} ({xml_path.stat().st_size/1024:.0f} KB)")
 
