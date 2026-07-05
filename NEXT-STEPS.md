@@ -5,12 +5,27 @@ pages + 88 hub pages + `lists.html` + `sitemap.xml` (all generated into
 `dist/`), and the free enrichment pipeline. This is the playbook for
 launching it, growing the content, and what to build next.
 
-> **Windows users:** the shell snippets below are bash. Run them in **Git
-> Bash** (installed alongside Git for Windows — right-click a folder →
-> "Git Bash Here") or WSL, not plain PowerShell — commands like `rm -rf`,
-> `cp -r`, and `&&` chaining don't work the same way there. `python3
+> **Windows users:** the shell snippets below are bash. Easiest fix: run them
+> in **Git Bash** (installed alongside Git for Windows — right-click a
+> folder → "Git Bash Here") or WSL, where they work as written. `python3
 > build.py` and `python3 tools/enrich_about.py` work fine directly in
-> PowerShell; it's only the multi-command deploy scripts that need bash.
+> PowerShell either way — it's only the multi-command lines that need bash.
+>
+> If you're staying in plain **Windows PowerShell** (the blue one, version
+> 5.1 — not `pwsh`/PowerShell 7), translate as you go:
+>
+> | This guide writes (bash) | Windows PowerShell 5.1 |
+> | --- | --- |
+> | `cmd1 && cmd2` | `cmd1; cmd2` — or just put each on its own line/Enter |
+> | `open file.html` | `ii file.html` (or `start file.html`) |
+> | `rm -rf dir` | `Remove-Item -Recurse -Force dir` |
+> | `cp -r src dst` | `Copy-Item -Recurse src dst` |
+> | `grep -c pattern file` | `python3 -c "import json; print(len(json.load(open('file'))) - 1)"` for JSON key counts |
+>
+> Note `;` in PowerShell always runs the next command even if the first
+> failed (unlike bash's `&&`), so for anything that must stop on error
+> (like `git commit && git push`), run each command on its own line and
+> check the output before continuing.
 
 **Two constants to set in `build.py` before launch** (both currently
 placeholders):
