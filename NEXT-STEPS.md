@@ -5,6 +5,13 @@ pages + 88 hub pages + `lists.html` + `sitemap.xml` (all generated into
 `dist/`), and the free enrichment pipeline. This is the playbook for
 launching it, growing the content, and what to build next.
 
+> **Windows users:** the shell snippets below are bash. Run them in **Git
+> Bash** (installed alongside Git for Windows — right-click a folder →
+> "Git Bash Here") or WSL, not plain PowerShell — commands like `rm -rf`,
+> `cp -r`, and `&&` chaining don't work the same way there. `python3
+> build.py` and `python3 tools/enrich_about.py` work fine directly in
+> PowerShell; it's only the multi-command deploy scripts that need bash.
+
 **Two constants to set in `build.py` before launch** (both currently
 placeholders):
 
