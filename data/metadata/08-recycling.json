@@ -33,5 +33,92 @@
     "ownership": "Subsidiary",
     "parent": "catl",
     "one_liner": "CATL's recycling subsidiary; closed-loop cathode metals."
+  },
+  "duesenfeld": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "German Li-ion battery recycler using a mechanical (dry) process."
+  },
+  "neometals": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ASX: NMT",
+    "one_liner": "Australian company recycling batteries via the Primobius joint venture with SMS group."
+  },
+  "aqua metals": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: AQMS",
+    "one_liner": "US battery recycler using its AquaRefining electrochemical process."
+  },
+  "gem": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Large Chinese battery-materials recycler."
+  },
+  "sungeel": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Korean battery recycling company."
+  },
+  "zhejiang huayou": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cobalt and nickel refiner with a battery-recycling division."
+  },
+  "lithion recycling": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Canadian hydrometallurgical battery recycler."
+  },
+  "green li-ion": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Direct-recycling technology licensor for lithium-ion battery materials."
+  },
+  "onto technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US developer of direct cathode-recycling (relithiation) technology."
+  },
+  "bangpu": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Chinese battery-recycling company."
+  },
+  "posco hy clean": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "Korean battery-recycling joint venture affiliated with POSCO Holdings."
+  },
+  "american battery technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: ABAT",
+    "one_liner": "US battery recycler and materials producer (formerly ABTC)."
+  },
+  "fortum": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Finnish energy company with a battery-recycling business."
+  },
+  "ecobat": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US-headquartered battery recycler, historically the world's largest lead-acid recycler, expanding into lithium-ion."
   }
 }

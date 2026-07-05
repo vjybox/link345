@@ -18,5 +18,179 @@
     "status": "Active",
     "ownership": "Public",
     "one_liner": "Large North American EV charging network operator."
+  },
+  "ge renewable": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "US renewables and grid-technology business; spun off (with GE's power businesses) into GE Vernova in 2024."
+  },
+  "sma solar": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ETR: S92",
+    "one_liner": "German solar inverter maker, also supplying battery-storage inverters."
+  },
+  "delta electronics": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Taiwanese power-electronics group; EV charging and energy-storage systems."
+  },
+  "abb": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "SIX: ABBN",
+    "one_liner": "Swiss-Swedish industrial-technology group; e-mobility and energy-storage systems."
+  },
+  "pylontech": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese maker of residential and commercial battery-storage systems."
+  },
+  "kokam": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "Korean NMC pouch-cell and energy-storage systems maker, part of SolarEdge."
+  },
+  "leclanché": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Swiss battery-systems maker for marine and stationary storage applications."
+  },
+  "enersys": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: ENS",
+    "one_liner": "US industrial-battery maker; motive power, standby power and energy-storage systems."
+  },
+  "sonnen": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "German home battery-storage maker, acquired by Shell in 2019."
+  },
+  "powin": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US integrator of utility-scale battery-storage systems."
+  },
+  "hithium": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Chinese energy-storage cell maker, one of the fastest-growing ESS suppliers."
+  },
+  "bp pulse": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "EV charging network operated by BP."
+  },
+  "evgo": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: EVGO",
+    "one_liner": "US DC fast-charging network operator."
+  },
+  "fastned": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Dutch fast-charging network operator across Europe."
+  },
+  "enel x": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "EV charging arm (JuiceBox) of Italian utility Enel."
+  },
+  "schneider electric": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "EPA: SU",
+    "one_liner": "French energy-management group; acquired EV Connect for charging-network software."
+  },
+  "aulton": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Chinese battery-swapping operator, an early partner of NIO's swap network."
+  },
+  "sun mobility": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Indian battery-swapping provider for two- and three-wheelers."
+  },
+  "xcharge": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Chinese maker of high-power DC fast chargers."
+  },
+  "teld": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "One of China's largest EV charging network operators (Qingdao Teld New Energy)."
+  },
+  "gogoro": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Taiwanese battery-swapping platform for electric scooters."
+  },
+  "ample": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US developer of modular battery-swapping technology for EVs."
+  },
+  "wärtsilä": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Finnish technology group; grid-scale energy-storage systems alongside marine and energy solutions."
+  },
+  "electrify america": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "US DC fast-charging network, established by Volkswagen Group."
+  },
+  "ionity": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "European high-power charging network backed by several major automakers."
+  },
+  "shell recharge solutions": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "Shell's EV charging arm, formed from the Volta, Greenlots and NewMotion acquisitions."
+  },
+  "blink charging": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: BLNK",
+    "one_liner": "US EV charging network and hardware maker, which acquired SemaConnect."
+  },
+  "star charge": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Chinese EV charging network and hardware maker."
   }
 }

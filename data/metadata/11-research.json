@@ -21,5 +21,43 @@
     "one_liner": "UK's flagship battery research programme & talent pipeline.",
     "institution_type": "Research consortium",
     "funding_source": "UKRI"
+  },
+  "lawrence berkeley": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "US DOE national laboratory; part of the Battery500 consortium researching next-gen Li-metal cells.",
+    "institution_type": "National laboratory",
+    "funding_source": "US DOE"
+  },
+  "oak ridge": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "US DOE national laboratory researching battery materials and manufacturing.",
+    "institution_type": "National laboratory",
+    "funding_source": "US DOE"
+  },
+  "fraunhofer": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "German applied-research organization; battery-relevant institutes include ISI (innovation research) and IKTS (ceramics/materials).",
+    "institution_type": "Applied research organization"
+  },
+  "karlsruhe institute": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "German university and research institute; affiliated with the Helmholtz Institute Ulm for battery research.",
+    "institution_type": "University & research institute"
+  },
+  "university of warwick": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "UK university; WMG (Warwick Manufacturing Group) is a major battery and automotive research center.",
+    "institution_type": "University"
+  },
+  "tsinghua university": {
+    "type": "Research",
+    "status": "Active",
+    "one_liner": "Leading Chinese university with battery-materials research programs.",
+    "institution_type": "University"
   }
 }

@@ -7,29 +7,29 @@
 6. SK On
 7. Tesla (Battery Division / Gigafactory)
 8. Northvolt
-9. Farasis Energy
+9. Farasis Energy | country=China
 10. EVE Energy Co., Ltd.
-11. SVOLT Energy Technology
-12. AESC (Envision AESC)
-13. CALB (China Aviation Lithium Battery)
+11. SVOLT Energy Technology | country=China
+12. AESC (Envision AESC) | country=Japan
+13. CALB (China Aviation Lithium Battery) | country=China
 14. Gotion High-tech (Guoxuan High-tech)
 15. Sunwoda Electronic
 16. China BAK Battery (Shenzhen BAK)
 17. Lishen (Tianjin Lishen Battery)
-18. Microvast
-19. ProLogium Technology (Solid-state)
+18. Microvast | https://microvast.com | country=United States
+19. ProLogium Technology (Solid-state) | country=Taiwan
 20. QuantumScape (Solid-state)
-21. Solid Power (Solid-state)
-22. 24M Technologies (Semi-solid)
-23. ONE (Our Next Energy)
-24. FREYR Battery
-25. Verkor
+21. Solid Power (Solid-state) | https://solidpowerbattery.com | country=United States
+22. 24M Technologies (Semi-solid) | country=United States
+23. ONE (Our Next Energy) | country=United States
+24. FREYR Battery | https://freyrbattery.com | country=United States
+25. Verkor | https://verkor.com | country=France
 26. Recharge Industries (formerly Britishvolt)
-27. ACC (Automotive Cells Company)
-28. InoBat Auto
-29. Morrow Batteries
-30. StoreDot
-31. Enovix (Silicon-anode 3D structure)
+27. ACC (Automotive Cells Company) | country=France
+28. InoBat Auto | country=Slovakia
+29. Morrow Batteries | https://morrowbatteries.com | country=Norway
+30. StoreDot | https://store-dot.com | country=Israel
+31. Enovix (Silicon-anode 3D structure) | https://enovix.com | country=United States
 32. REPT BATTERO (RuiPU Lanjun)
 33. Wanxiang (A123 Systems)
 34. Funeng Technology
@@ -45,42 +45,42 @@
 
 ## 2 | Automotive OEMs — EV Focus
 44. Tesla
-45. Rivian
-46. Lucid Motors
+45. Rivian | https://rivian.com | country=United States
+46. Lucid Motors | https://lucidmotors.com | country=United States
 47. NIO
-48. XPeng
-49. Li Auto
+48. XPeng | https://xpeng.com | country=China
+49. Li Auto | country=China
 50. Ford (EV Division)
 51. General Motors (Ultium Platform)
 52. Volkswagen Group (PowerCo)
-53. Stellantis
-54. Mercedes-Benz Group AG (EQ Division)
-55. BMW Group
-56. Hyundai Motor Group (including Ioniq)
-57. Kia (Distinct EV product strategy)
-58. Toyota Motor Corporation (bZ series)
-59. Honda Motor Co.
-60. Nissan Motor Co. (Ariya)
-61. Polestar
-62. Fisker Inc.
+53. Stellantis | https://stellantis.com | country=Netherlands
+54. Mercedes-Benz Group AG (EQ Division) | country=Germany
+55. BMW Group | https://bmwgroup.com | country=Germany
+56. Hyundai Motor Group (including Ioniq) | https://hyundai.com | country=South Korea
+57. Kia (Distinct EV product strategy) | https://kia.com | country=South Korea
+58. Toyota Motor Corporation (bZ series) | https://global.toyota | country=Japan
+59. Honda Motor Co. | https://global.honda | country=Japan
+60. Nissan Motor Co. (Ariya) | https://nissan-global.com | country=Japan
+61. Polestar | https://polestar.com | country=Sweden
+62. Fisker Inc. | country=United States
 63. Canoo
 64. Arrival
 65. Lordstown Motors
-66. Faraday Future
+66. Faraday Future | https://ff.com | country=United States
 67. BYD Auto
-68. SAIC Motor
-69. Geely Auto Group (Zeekr, Polestar)
-70. VinFast
+68. SAIC Motor | country=China
+69. Geely Auto Group (Zeekr, Polestar) | country=China
+70. VinFast | https://vinfastauto.com | country=Vietnam
 71. GAC Group (Aion)
 72. Changan Automobile (Deepal, Avatr)
-73. Great Wall Motor (ORA, Haval EV)
+73. Great Wall Motor (ORA, Haval EV) | country=China
 74. Chery Automobile (iCAR, Exeed)
 75. Dongfeng Motor (Voyah, Nammi)
 76. Leapmotor
 77. Xiaomi (SU7)
 78. BAIC Motor (Arcfox, Beijing EV)
 79. Seres Group (AITO)
-80. Renault Group (Megane E-Tech, Ampere)
+80. Renault Group (Megane E-Tech, Ampere) | https://renaultgroup.com | country=France
 81. Audi (e-tron series, PPE platform)
 82. Porsche (Taycan, Macan EV)
 83. Volvo Cars (EX30, EX90)
@@ -97,38 +97,38 @@
 ## 3 | Cell Materials — Cathode, Anode, Electrolyte & Separator
 93. Umicore (Cathode materials)
 94. BASF (Battery Materials & Performance Plastics)
-95. Johnson Matthey (Battery Materials)
+95. Johnson Matthey (Battery Materials) | country=United Kingdom
 96. POSCO Future M (formerly POSCO Chemical)
 97. EcoPro BM / EcoPro (Cathode materials)
-98. L&F (Cathode materials)
-99. Sumitomo Metal Mining (Cathode materials)
-100. Toda Kogyo Corp. (Cathode materials)
+98. L&F (Cathode materials) | country=South Korea
+99. Sumitomo Metal Mining (Cathode materials) | country=Japan
+100. Toda Kogyo Corp. (Cathode materials) | country=Japan
 101. Tanaka Chemical Corporation (Cathode materials)
-102. BTR New Material Group (Anode & Cathode)
-103. Shanshan Technology (Anode & Cathode & Electrolyte)
+102. BTR New Material Group (Anode & Cathode) | country=China
+103. Shanshan Technology (Anode & Cathode & Electrolyte) | country=China
 104. Jiangxi Zichen Technology (Anode)
-105. Resonac Holdings (formerly Showa Denko / Hitachi Chemical)
-106. Mitsubishi Chemical (Carbon materials)
-107. SGL Carbon (Graphite materials)
+105. Resonac Holdings (formerly Showa Denko / Hitachi Chemical) | country=Japan
+106. Mitsubishi Chemical (Carbon materials) | country=Japan
+107. SGL Carbon (Graphite materials) | country=Germany
 108. Graphite India Ltd.
 109. HEG Ltd.
 110. Kureha Corporation (Graphite anode & PVDF binders)
-111. Nippon Carbon Co., Ltd.
+111. Nippon Carbon Co., Ltd. | country=Japan
 112. Pyrotek (Graphite)
-113. Asahi Kasei (Separators - Hipore)
-114. Toray Industries (Separators)
-115. SK IE Technology (Separators)
+113. Asahi Kasei (Separators - Hipore) | country=Japan
+114. Toray Industries (Separators) | country=Japan
+115. SK IE Technology (Separators) | country=South Korea
 116. Entek International (Separators)
-117. UBE Corporation (Separators & Electrolyte)
-118. Sumitomo Chemical (Separators)
+117. UBE Corporation (Separators & Electrolyte) | country=Japan
+118. Sumitomo Chemical (Separators) | country=Japan
 119. Mitsui Chemicals (Separators)
-120. Celgard (Separators - part of Asahi Kasei)
+120. Celgard (Separators - part of Asahi Kasei) | country=United States
 121. Dreamweaver International (Separators)
 122. Shenzhen Senior Technology (Separators)
 123. Cangzhou Mingzhu Plastic (Separators)
 124. Shanghai Energy New Materials Technology (Separators)
 125. Soulbrain (Electrolyte)
-126. Shenzhen Capchem Technology Co., Ltd. (CAPCHEM)
+126. Shenzhen Capchem Technology Co., Ltd. (CAPCHEM) | country=China
 127. Guangzhou Tinci Materials Technology (Electrolyte)
 128. Do-Fluoride New Materials (Electrolyte)
 129. Jiangsu Guotai International Group (Electrolyte)
@@ -188,12 +188,12 @@
 183. Freudenberg Performance Materials (Separators/Nonwovens)
 
 ## 4 | BMS & Power Electronics
-184. Texas Instruments (BMS ICs)
+184. Texas Instruments (BMS ICs) | https://ti.com | country=United States
 185. Analog Devices, Inc. (ADI) (BMS - incl. former Maxim Integrated)
-186. NXP Semiconductors (BMS)
+186. NXP Semiconductors (BMS) | https://nxp.com | country=Netherlands
 187. Infineon Technologies (BMS & Power)
-188. Renesas Electronics (BMS)
-189. STMicroelectronics (BMS)
+188. Renesas Electronics (BMS) | country=Japan
+189. STMicroelectronics (BMS) | https://st.com | country=Switzerland
 190. Lithium Balance (BMS)
 191. Ewert Energy Systems (BMS)
 192. Elithion Inc. (BMS)
@@ -204,7 +204,7 @@
 197. Mentech Electronic & Technology (BMS)
 198. BMS PowerSafe
 199. Dana Incorporated (TM4 Electric Drivetrain)
-200. Vitesco Technologies (Power Electronics)
+200. Vitesco Technologies (Power Electronics) | country=Germany
 201. Aptiv (Power Electronics)
 202. Bosch (Power Electronics)
 203. Wolfspeed (Silicon Carbide - SiC)
@@ -220,32 +220,32 @@
 211. Li-Cycle
 212. Redwood Materials
 213. Ascend Elements (formerly Battery Resourcers)
-214. Ecobat
+214. Ecobat | country=United States
 215. Umicore (Recycling)
-216. Duesenfeld GmbH
+216. Duesenfeld GmbH | country=Germany
 217. Cirba Solutions (formerly Retriev Technologies)
-218. Neometals Ltd.
-219. American Battery Technology Company (ABtc)
-220. Aqua Metals
+218. Neometals Ltd. | country=Australia
+219. American Battery Technology Company (ABtc) | https://americanbatterytechnology.com | country=United States
+220. Aqua Metals | https://aquametals.com | country=United States
 221. Batrec Industrie AG
-222. GEM Co., Ltd. (Recycling)
+222. GEM Co., Ltd. (Recycling) | country=China
 223. Brunp Recycling (CATL subsidiary)
-224. SungEel HiTech
+224. SungEel HiTech | country=South Korea
 225. TES (Recycling division)
 226. Glencore (Recycling)
-227. Fortum (Battery recycling)
+227. Fortum (Battery recycling) | country=Finland
 228. Northvolt (Revolt recycling)
-229. Lithion Recycling Inc.
-230. Zhejiang Huayou Cobalt (Recycling Division)
+229. Lithion Recycling Inc. | country=Canada
+230. Zhejiang Huayou Cobalt (Recycling Division) | country=China
 231. Ganfeng Lithium (Recycling Division)
-232. Bangpu Recycling Technology
-233. POSCO Hy Clean Metal
+232. Bangpu Recycling Technology | country=China
+233. POSCO Hy Clean Metal | country=South Korea
 234. Toyota Chemical Engineering
 235. Tanzi Environmental Technology
 236. ACE Green Recycling
-237. OnTo Technology (Direct recycling)
+237. OnTo Technology (Direct recycling) | country=United States
 238. Cyclus Materials (Cyclus Envirosystems)
-239. Green Li-ion
+239. Green Li-ion | country=Singapore
 240. Lithium Australia (VSPC)
 241. ACE Group (Aleees)
 242. ReJoule (Battery diagnostics for second life)
@@ -273,13 +273,13 @@
 ## 6 | Research Institutes, Labs & University Centers
 263. Argonne National Laboratory (CAMP Facility)
 264. National Renewable Energy Laboratory (NREL)
-265. Lawrence Berkeley National Laboratory (LBNL)
-266. Oak Ridge National Laboratory (ORNL)
+265. Lawrence Berkeley National Laboratory (LBNL) | country=United States
+266. Oak Ridge National Laboratory (ORNL) | country=United States
 267. Pacific Northwest National Laboratory (PNNL)
 268. Sandia National Laboratories
 269. NASA JPL (Battery research)
-270. Fraunhofer Institute (ISI & IKTS)
-271. Karlsruhe Institute of Technology (KIT)
+270. Fraunhofer Institute (ISI & IKTS) | country=Germany
+271. Karlsruhe Institute of Technology (KIT) | country=Germany
 272. Helmholtz Institute Ulm (HIU)
 273. MEET Battery Research Center (Münster)
 274. CIC energiGUNE (Spain)
@@ -289,10 +289,10 @@
 278. MIT (Materials Science & Engineering)
 279. Stanford University (Precourt Institute)
 280. University of Cambridge (The Faraday Institution)
-281. University of Warwick (WMG)
+281. University of Warwick (WMG) | country=United Kingdom
 282. Tohoku University (Japan)
 283. Kyoto University (Japan)
-284. Tsinghua University (China)
+284. Tsinghua University (China) | country=China
 285. Chinese Academy of Sciences (CAS)
 286. KAIST (Korea)
 287. Idaho National Laboratory (INL)
@@ -328,22 +328,22 @@
 
 ## 7 | Industry News, Analysis & Regional Portals
 317. BloombergNEF (BNEF)
-318. Reuters (Energy/EV section)
+318. Reuters (Energy/EV section) | country=United Kingdom
 319. The Financial Times (Energy/EV section)
 320. The Wall Street Journal (Energy/EV section)
-321. Electrek
-322. InsideEVs
+321. Electrek | https://electrek.co | country=United States
+322. InsideEVs | https://insideevs.com | country=United States
 323. Green Car Reports
 324. CleanTechnica
 325. S&P Global Commodity Insights (Platts)
 326. Benchmark Mineral Intelligence
-327. Fastmarkets
+327. Fastmarkets | country=United Kingdom
 328. Argus Media
 329. IHS Markit (now part of S&P Global)
-330. Wood Mackenzie
+330. Wood Mackenzie | https://woodmac.com | country=United Kingdom
 331. Rho Motion
 332. Adamas Intelligence
-333. IDTechEx
+333. IDTechEx | https://idtechex.com | country=United Kingdom
 334. ABI Research
 335. Guidehouse Insights
 336. Lux Research
@@ -374,23 +374,23 @@
 361. Smart Electric Power Alliance (SEPA)
 
 ## 8 | Associations, Government & Standards
-362. International Electrotechnical Commission (IEC)
+362. International Electrotechnical Commission (IEC) | country=Switzerland
 363. International Organization for Standardization (ISO)
-364. Underwriters Laboratories (UL)
-365. Society of Automotive Engineers (SAE International)
+364. Underwriters Laboratories (UL) | https://ul.com | country=United States
+365. Society of Automotive Engineers (SAE International) | country=United States
 366. The Battery Association of Japan (BAJ)
 367. China Industrial Association of Power Sources (CIAPS)
 368. Korea Battery Industry Association (KBIA)
-369. EUROBAT
+369. EUROBAT | country=Belgium
 370. Recharge (The Rechargeable Battery Association)
 371. NAATBatt International
 372. Advanced Battery Consortium (USABC)
 373. California Air Resources Board (CARB)
-374. U.S. Department of Energy (DOE) - Vehicle Technologies Office (VTO)
+374. U.S. Department of Energy (DOE) - Vehicle Technologies Office (VTO) | country=United States
 375. U.S. Department of Energy - Office of Electricity (OE)
-376. European Battery Alliance (EBA)
+376. European Battery Alliance (EBA) | country=Belgium
 377. European Commission - DG ENER
-378. International Energy Agency (IEA)
+378. International Energy Agency (IEA) | https://iea.org | country=France
 379. Clean Energy Ministerial (CEM)
 380. China Automotive Battery Research Institute (CABR)
 381. Global Battery Alliance (GBA)
@@ -474,31 +474,31 @@
 453. Albemarle Corporation (Lithium)
 454. SQM (Sociedad Química y Minera de Chile) (Lithium)
 455. Ganfeng Lithium Co., Ltd.
-456. Tianqi Lithium Industries Inc.
+456. Tianqi Lithium Industries Inc. | country=China
 457. Arcadium Lithium plc (merger of Livent, Allkem, Orocobre)
-458. Mineral Resources Limited (Lithium)
+458. Mineral Resources Limited (Lithium) | country=Australia
 459. Pilbara Minerals (Lithium)
-460. IGO Limited (Lithium & Nickel)
+460. IGO Limited (Lithium & Nickel) | country=Australia
 461. Glencore (Cobalt & Nickel)
-462. China Molybdenum Co., Ltd. (CMOC) (Cobalt)
+462. China Molybdenum Co., Ltd. (CMOC) (Cobalt) | country=China
 463. Eurasian Resources Group (ERG) (Cobalt)
-464. Sherritt International (Cobalt & Nickel)
-465. Norilsk Nickel (Nickel)
+464. Sherritt International (Cobalt & Nickel) | country=Canada
+465. Norilsk Nickel (Nickel) | country=Russia
 466. BHP (Nickel)
 467. Vale S.A. (Nickel)
 468. Sumitomo Metal Mining (Nickel)
-469. Anglo American (Nickel)
+469. Anglo American (Nickel) | https://angloamerican.com | country=United Kingdom
 470. Talon Metals (Nickel)
 471. Syrah Resources (Graphite)
 472. Magnis Energy Technologies (Graphite)
-473. Nouveau Monde Graphite
+473. Nouveau Monde Graphite | country=Canada
 474. NextSource Materials (Graphite)
 475. Mason Graphite Inc.
 476. Leading Edge Materials Corp. (Graphite)
-477. Sigma Lithium Corporation
-478. Liontown Resources Limited
+477. Sigma Lithium Corporation | country=Canada
+478. Liontown Resources Limited | country=Australia
 479. POSCO Holdings
-480. Eramet
+480. Eramet | https://eramet.com | country=France
 481. Energy Exploration Technologies (EnergyX)
 482. Lilac Solutions
 483. Qinghai Salt Lake Industry Co., Ltd.
@@ -519,20 +519,20 @@
 496. PNT (Productivity & Quality)
 497. CKD Corporation
 498. Kaido Manufacturing Co., Ltd.
-499. Hitachi High-Tech Corporation
+499. Hitachi High-Tech Corporation | country=Japan
 500. Toray Engineering Co., Ltd.
 501. Fuji Corp
 502. CIS (Coating & calendering)
-503. Bühler Group (Coating)
-504. Durr Group (Cleaning & Coating)
-505. Schuler Group (Forming & Stamping)
-506. ATS Automation Tooling Systems Inc.
-507. Rockwell Automation
-508. Siemens AG (Factory Automation)
+503. Bühler Group (Coating) | country=Switzerland
+504. Durr Group (Cleaning & Coating) | country=Germany
+505. Schuler Group (Forming & Stamping) | country=Germany
+506. ATS Automation Tooling Systems Inc. | country=Canada
+507. Rockwell Automation | https://rockwellautomation.com | country=United States
+508. Siemens AG (Factory Automation) | https://siemens.com | country=Germany
 509. ABB Ltd. (Robotics & Automation)
-510. KUKA AG (Robotics)
-511. Yaskawa Electric Corporation (Robotics)
-512. FANUC Corporation (Robotics)
+510. KUKA AG (Robotics) | country=Germany
+511. Yaskawa Electric Corporation (Robotics) | country=Japan
+512. FANUC Corporation (Robotics) | country=Japan
 513. Manz AG
 514. Hirata Corporation
 515. Comau (Stellantis Group)
@@ -560,32 +560,32 @@
 ## 13 | Energy Storage Systems (ESS)
 536. Fluence
 537. Tesla Energy (Megapack, Powerwall)
-538. Wärtsilä
-539. GE Renewable Energy
+538. Wärtsilä | https://wartsila.com | country=Finland
+539. GE Renewable Energy | country=United States
 540. Sungrow Power Supply Co., Ltd.
-541. SMA Solar Technology AG
-542. Delta Electronics, Inc.
-543. ABB (ESS)
+541. SMA Solar Technology AG | https://sma.de | country=Germany
+542. Delta Electronics, Inc. | country=Taiwan
+543. ABB (ESS) | https://abb.com | country=Switzerland
 544. NEC Energy Solutions (now part of LG Energy Solution)
 545. LG Energy Solution (ESS)
 546. Samsung SDI (ESS)
 547. BYD (ESS)
 548. CATL (ESS)
-549. Pylontech
-550. Kokam Co., Ltd.
-551. Leclanché SA
-552. Saft (TotalEnergies)
-553. EnerSys
+549. Pylontech | country=China
+550. Kokam Co., Ltd. | country=South Korea
+551. Leclanché SA | country=Switzerland
+552. Saft (TotalEnergies) | country=France
+553. EnerSys | https://enersys.com | country=United States
 554. Rolls-Royce (mtu Energy Solutions)
 555. Aggreko (now part of DCC Energy)
 556. JLM Energy
 557. Briggs & Stratton (formerly SimpliPhi Power)
-558. sonnen GmbH (Shell)
-559. Powin LLC
+558. sonnen GmbH (Shell) | country=Germany
+559. Powin LLC | country=United States
 560. Plus Power
 561. Key Capture Energy (KCE)
 562. GridStor
-563. Hithium Energy Storage
+563. Hithium Energy Storage | country=China
 564. Narada Power Source
 565. Chint (Astronergy)
 566. Shanghai Electric (SESEP)
@@ -599,17 +599,17 @@
 572. Cleantech Group
 573. Mercom Capital Group
 574. Lazard
-575. Goldman Sachs
-576. Morgan Stanley
+575. Goldman Sachs | https://goldmansachs.com | country=United States
+576. Morgan Stanley | https://morganstanley.com | country=United States
 577. UBS Group (incl. former Credit Suisse)
 578. Citi
 579. Bloomberg Terminal
 580. Breakthrough Energy Ventures
 581. Energy Impact Partners
-582. Volta Energy Technologies
+582. Volta Energy Technologies | country=United States
 583. Prime Movers Lab
 584. Khosla Ventures
-585. SoftBank Vision Fund
+585. SoftBank Vision Fund | country=Japan
 586. Temasek Holdings
 587. GIC Private Limited
 588. Qatar Investment Authority
@@ -1223,14 +1223,14 @@
 1184. Kroll (IP & Trade Secret Practice)
 
 ## 21 | Startups & Next-Gen Chemistry
-1185. Skeleton Technologies (Supercapacitor/Ultracapacitor)
+1185. Skeleton Technologies (Supercapacitor/Ultracapacitor) | country=Estonia
 1186. Nanotech Energy (Graphene batteries)
 1187. Graphenano (Graphene batteries)
 1188. Ionic Materials (Polymer electrolyte)
 1189. Pellion Technologies (Magnesium batteries)
 1190. PolyPlus Battery Company (Lithium-air, lithium-water)
 1191. Ambri (Liquid metal battery)
-1192. Form Energy (Iron-air battery)
+1192. Form Energy (Iron-air battery) | https://formenergy.com | country=United States
 1193. ESS Inc. (Iron flow battery)
 1194. VoltStorage (Iron salt battery)
 1195. Zinc8 Energy Solutions (Zinc-air)
@@ -1239,9 +1239,9 @@
 1198. Ampcera Inc. (Solid-state electrolyte)
 1199. ION Storage Systems (Solid-state)
 1200. Blue Solutions (Solid-state polymer - Bolloré)
-1201. Factorial Energy (Solid-state)
+1201. Factorial Energy (Solid-state) | country=United States
 1202. Cuberg (Lithium metal - acquired by Northvolt)
-1203. SES AI (Hybrid Li-metal)
+1203. SES AI (Hybrid Li-metal) | https://ses.ai | country=United States
 1204. GMG Graphene (Graphene-aluminum battery)
 1205. Lyten (3D Graphene)
 1206. Natron Energy (Sodium-ion)
@@ -1278,28 +1278,28 @@
 
 ## 22 | Charging, BaaS, Swapping & Cybersecurity
 1237. Octopus Energy (Electric Juice - BaaS)
-1238. Shell Recharge Solutions (incl. Volta, Greenlots, NewMotion)
-1239. BP Pulse
-1240. EVgo (Charging network)
+1238. Shell Recharge Solutions (incl. Volta, Greenlots, NewMotion) | country=Netherlands
+1239. BP Pulse | country=United Kingdom
+1240. EVgo (Charging network) | https://evgo.com | country=United States
 1241. ChargePoint (Charging network)
-1242. Electrify America
-1243. Ionity (European charging network)
-1244. Fastned (European charging)
-1245. Enel X (JuiceBox)
-1246. Blink Charging (incl. SemaConnect)
-1247. Schneider Electric (EV Connect)
-1248. Star Charge (StarCharge) (Chinese network/hardware)
-1249. TELD (Qingdao Teld New Energy) (Chinese network)
-1250. XCharge (Global high-power charging)
+1242. Electrify America | https://electrifyamerica.com | country=United States
+1243. Ionity (European charging network) | country=Germany
+1244. Fastned (European charging) | https://fastnedcharging.com | country=Netherlands
+1245. Enel X (JuiceBox) | country=Italy
+1246. Blink Charging (incl. SemaConnect) | https://blinkcharging.com | country=United States
+1247. Schneider Electric (EV Connect) | https://se.com | country=France
+1248. Star Charge (StarCharge) (Chinese network/hardware) | country=China
+1249. TELD (Qingdao Teld New Energy) (Chinese network) | country=China
+1250. XCharge (Global high-power charging) | country=China
 1251. ev.energy (Smart charging and V2G software)
 1252. Driivz (White-label CPMS software)
 1253. NIO (Battery swapping stations)
-1254. Aulton (Chinese battery swapping)
-1255. Ample (Modular battery swapping)
-1256. Gogoro (Battery swapping for scooters)
+1254. Aulton (Chinese battery swapping) | country=China
+1255. Ample (Modular battery swapping) | country=United States
+1256. Gogoro (Battery swapping for scooters) | https://gogoro.com | country=Taiwan
 1257. BattSwap (Battery swapping technology)
 1258. PowerSwap (Sweden)
-1259. SUN Mobility (Indian battery swapping)
+1259. SUN Mobility (Indian battery swapping) | country=India
 1260. BattRE (Indian EV swapping)
 1261. Lithion Power (Indian swapping)
 1262. Charge+ (Singapore swapping)

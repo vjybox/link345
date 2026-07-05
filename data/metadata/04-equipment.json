@@ -17,5 +17,68 @@
     "status": "Active",
     "ownership": "Private",
     "one_liner": "German laser leader; welding/cutting for cell & pack assembly."
+  },
+  "siemens": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ETR: SIE",
+    "one_liner": "German industrial technology group; factory automation for battery manufacturing lines."
+  },
+  "bühler group": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Swiss group supplying wet- and dry-coating equipment for electrode production."
+  },
+  "schuler group": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "German press-forming and stamping equipment maker used in cell-casing manufacture."
+  },
+  "hitachi high-tech": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "Japanese maker of battery-manufacturing and inspection equipment; part of Hitachi."
+  },
+  "rockwell automation": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: ROK",
+    "one_liner": "US industrial automation and control systems supplier to battery gigafactories."
+  },
+  "kuka": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "German industrial robotics maker used in cell/pack assembly lines; majority-owned by China's Midea Group."
+  },
+  "yaskawa": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese robotics and motion-control maker used in battery manufacturing."
+  },
+  "fanuc": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "TYO: 6954",
+    "one_liner": "Japanese factory-automation and robotics maker used in battery production lines."
+  },
+  "ats automation": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Canadian automation systems integrator, including battery-manufacturing lines."
+  },
+  "durr group": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "German group supplying coating, cleaning and battery-production equipment."
   }
 }

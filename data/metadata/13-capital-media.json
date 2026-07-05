@@ -23,5 +23,110 @@
     "status": "Active",
     "one_liner": "WEF-hosted alliance behind the Battery Passport standard.",
     "institution_type": "Industry alliance"
+  },
+  "international electrotechnical": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "Geneva-based international body setting electrical/electronic standards, including battery safety (IEC 62133).",
+    "institution_type": "International standards body"
+  },
+  "underwriters laboratories": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "US safety-certification organization; battery standards include UL 2580 (EV) and UL 1973 (stationary storage).",
+    "institution_type": "Safety certification body"
+  },
+  "society of automotive": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "US standards body (SAE International) publishing automotive and EV engineering standards.",
+    "institution_type": "Standards body"
+  },
+  "eurobat": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "Brussels-based association representing European automotive and industrial battery manufacturers.",
+    "institution_type": "Industry association"
+  },
+  "european battery alliance": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "EU-backed industrial initiative to build a competitive European battery supply chain.",
+    "institution_type": "EU industrial initiative"
+  },
+  "international energy agency": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "Paris-based intergovernmental organization; publishes the annual Global EV Outlook.",
+    "institution_type": "Intergovernmental organization"
+  },
+  "u.s. department of energy": {
+    "type": "Institution",
+    "status": "Active",
+    "one_liner": "US government agency; funds battery R&D including the ReCell Center and Battery500 consortium.",
+    "institution_type": "Government agency",
+    "funding_source": "US federal government"
+  },
+  "goldman sachs": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: GS",
+    "one_liner": "US investment bank active in battery and EV sector financing and research."
+  },
+  "morgan stanley": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: MS",
+    "one_liner": "US investment bank publishing widely-cited EV/battery sector research."
+  },
+  "softbank vision fund": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "Technology investment fund of Japan's SoftBank Group; has backed various EV/mobility startups."
+  },
+  "volta energy": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (Fund)",
+    "one_liner": "US venture fund investing specifically in battery and energy-storage technology."
+  },
+  "reuters": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "International news wire (part of Thomson Reuters) with dedicated energy/EV coverage.",
+    "media_type": "News wire"
+  },
+  "electrek": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "US news site focused on electric vehicles and clean energy.",
+    "media_type": "Online news"
+  },
+  "insideevs": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "US EV-focused news and reviews site.",
+    "media_type": "Online news"
+  },
+  "wood mackenzie": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "UK energy research and consulting firm (part of Verisk).",
+    "media_type": "Research & consulting"
+  },
+  "fastmarkets": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "UK price-reporting agency covering battery raw materials.",
+    "media_type": "Price reporting"
+  },
+  "idtechex": {
+    "type": "Media",
+    "status": "Active",
+    "one_liner": "UK market-research firm covering emerging technologies including batteries and EVs.",
+    "media_type": "Market research"
   }
 }
