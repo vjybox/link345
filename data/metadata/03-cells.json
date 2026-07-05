@@ -103,12 +103,6 @@
     "chemistry": "LFP",
     "form_factor": "Prismatic, Cylindrical (46)"
   },
-  "sunwoda": {
-    "type": "Corporate",
-    "status": "Active",
-    "ownership": "Public",
-    "one_liner": "Chinese cell manufacturer spanning consumer electronics and EV batteries."
-  },
   "china bak": {
     "type": "Corporate",
     "status": "Active",
@@ -120,12 +114,6 @@
     "status": "Active",
     "ownership": "Public",
     "one_liner": "Chinese battery maker (Tianjin Lishen); early consumer-electronics cell supplier, now also EV cells."
-  },
-  "prologium": {
-    "type": "Corporate",
-    "status": "Active",
-    "ownership": "Private",
-    "one_liner": "Taiwanese solid-state battery developer."
   },
   "solid power": {
     "type": "Corporate",
@@ -252,13 +240,6 @@
     "ownership": "Public",
     "one_liner": "Chinese-founded pouch-cell manufacturer with operations in China, the US and Germany."
   },
-  "svolt": {
-    "type": "Corporate",
-    "status": "Active",
-    "ownership": "Public",
-    "one_liner": "Chinese cell manufacturer spun out of Great Wall Motor.",
-    "parent": "great wall motor"
-  },
   "microvast": {
     "type": "Corporate",
     "status": "Active",
@@ -271,5 +252,24 @@
     "status": "Active",
     "ownership": "Subsidiary",
     "one_liner": "French battery-cell maker (industrial, defense, backup power); part of TotalEnergies. Co-owns the ACC cell joint venture."
+  },
+  "sunwoda electronic": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell manufacturer spanning consumer electronics and EV batteries."
+  },
+  "prologium technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Taiwanese solid-state battery developer."
+  },
+  "svolt energy technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell manufacturer spun out of Great Wall Motor.",
+    "parent": "great wall motor"
   }
 }

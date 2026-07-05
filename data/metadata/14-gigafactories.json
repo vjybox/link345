@@ -1,0 +1,732 @@
+{
+  "_doc": "Facility-level profiles for gigafactories & cell plants (categories 28-30). Keyed by the exact cleaned plant name so each plant gets its own profile distinct from its parent company's Corporate entry. Capacity/investment figures are deliberately omitted (too many contested/revised numbers); scale is described qualitatively. See ENRICHMENT_PROMPT.md.",
+  "tesla gigafactory nevada": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell & pack gigafactory",
+    "chemistry": "NCA",
+    "city": "Storey County, Nevada",
+    "strategic_role": "Tesla-Panasonic cell JV; one of the original Tesla gigafactories, supplying Model 3/Y and energy-storage products."
+  },
+  "tesla gigafactory texas austin": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell & vehicle gigafactory",
+    "chemistry": "NCA (4680)",
+    "city": "Austin, Texas",
+    "strategic_role": "Tesla's in-house 4680 cell production alongside Model Y assembly."
+  },
+  "panasonic energy de soto kansas": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "De Soto, Kansas",
+    "strategic_role": "Panasonic's second US cell plant, expanding capacity for EV customers including Tesla."
+  },
+  "ultium cells warren ohio": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory (JV)",
+    "chemistry": "NMC",
+    "city": "Warren, Ohio",
+    "strategic_role": "General Motors-LG Energy Solution joint venture supplying GM's Ultium EV platform."
+  },
+  "ultium cells spring hill tennessee": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory (JV)",
+    "chemistry": "NMC",
+    "city": "Spring Hill, Tennessee",
+    "strategic_role": "Second Ultium Cells JV plant supplying GM's Ultium EV platform."
+  },
+  "blueoval sk glendale kentucky": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Glendale, Kentucky",
+    "strategic_role": "Ford-SK On joint venture supplying Ford EVs."
+  },
+  "blueoval city stanton tennessee": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory (JV) + vehicle campus",
+    "city": "Stanton, Tennessee",
+    "strategic_role": "Part of Ford's BlueOval City EV campus; battery cells via the SK On joint venture."
+  },
+  "sk on commerce georgia": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Commerce, Georgia",
+    "strategic_role": "SK On's own US plant, supplying Ford and Volkswagen."
+  },
+  "lg energy solution holland michigan": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Holland, Michigan",
+    "strategic_role": "LG Energy Solution's original US plant (formerly LG Chem)."
+  },
+  "lg energy solution queen creek arizona": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "Cylindrical",
+    "city": "Queen Creek, Arizona",
+    "strategic_role": "New LGES plant for cylindrical cells serving multiple customers."
+  },
+  "starplus energy kokomo indiana": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Kokomo, Indiana",
+    "strategic_role": "Stellantis-Samsung SDI joint venture supplying Stellantis EVs."
+  },
+  "toyota battery manufacturing liberty north carolina": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Liberty, North Carolina",
+    "strategic_role": "Toyota's own US battery plant supporting its North American EV/hybrid lineup."
+  },
+  "envision aesc bowling green kentucky": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Bowling Green, Kentucky",
+    "strategic_role": "Envision AESC US expansion supplying multiple automakers."
+  },
+  "envision aesc florence south carolina": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Florence, South Carolina",
+    "strategic_role": "Supplies BMW's US EV production."
+  },
+  "aesc smyrna tennessee": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Smyrna, Tennessee",
+    "strategic_role": "Originally Nissan's US plant supporting Leaf production; now operated by Envision AESC."
+  },
+  "redwood materials storey county nevada": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Recycling & materials campus (not cell production)",
+    "city": "Storey County, Nevada",
+    "strategic_role": "Recycles Li-ion batteries into recycled cathode and copper-foil materials, supplying Panasonic and others."
+  },
+  "kore power koreplex buckeye arizona": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Buckeye, Arizona",
+    "strategic_role": "Planned US cell plant that has faced funding delays."
+  },
+  "our next energy van buren michigan": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Van Buren, Michigan",
+    "strategic_role": "ONE's Michigan plant for its dual-chemistry Gemini pack and LFP cells."
+  },
+  "microvast clarksville tennessee": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Clarksville, Tennessee",
+    "strategic_role": "Microvast's US cell plant for commercial-vehicle and industrial batteries."
+  },
+  "natron energy holland michigan": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "Sodium-ion",
+    "city": "Holland, Michigan",
+    "strategic_role": "Planned sodium-ion battery plant."
+  },
+  "l h battery jeffersonville ohio": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Jeffersonville, Ohio",
+    "strategic_role": "LG Energy Solution-Honda joint venture supplying Honda EVs."
+  },
+  "gotion manteno illinois": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Manteno, Illinois",
+    "strategic_role": "Planned Gotion cell plant in the US."
+  },
+  "gotion big rapids michigan": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell/materials gigafactory",
+    "city": "Big Rapids, Michigan",
+    "strategic_role": "Planned Gotion cathode/anode materials and cell plant; drew local political controversy."
+  },
+  "statevolt imperial valley california": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Imperial Valley, California",
+    "strategic_role": "Planned plant tied to nearby Salton Sea lithium extraction projects."
+  },
+  "freyr battery coweta county georgia": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Coweta County, Georgia",
+    "strategic_role": "FREYR's US project, part of its shift in focus from Norway to the US."
+  },
+  "amprius technologies brighton colorado": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "Silicon anode",
+    "city": "Brighton, Colorado",
+    "strategic_role": "Amprius's silicon-anode cell production for aviation and other high-energy-density applications."
+  },
+  "nextstar energy windsor ontario": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Windsor, Ontario",
+    "strategic_role": "LG Energy Solution-Stellantis joint venture; Canada's first large-scale EV battery gigafactory."
+  },
+  "volkswagen powerco st thomas ontario": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "St. Thomas, Ontario",
+    "strategic_role": "Volkswagen's first North American in-house cell plant."
+  },
+  "northvolt six montreal quebec": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Montreal, Quebec",
+    "strategic_role": "Planned Canadian plant; timeline uncertain amid Northvolt's 2024 financial restructuring (Chapter 11 in the US)."
+  },
+  "ultium cam b cancour quebec": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cathode active material (CAM) plant (not cells)",
+    "city": "Bécancour, Quebec",
+    "strategic_role": "General Motors-POSCO joint venture producing cathode active material for Ultium Cells plants."
+  },
+  "lion electric mirabel quebec": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "EV manufacturing & battery-pack assembly (not cell production)",
+    "city": "Mirabel, Quebec",
+    "strategic_role": "Lion Electric's electric truck/bus plant, including battery-pack assembly."
+  },
+  "northvolt ett skellefte": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "NMC",
+    "city": "Skellefteå, Sweden",
+    "strategic_role": "Northvolt's first and most established plant, though the parent company has faced serious financial restructuring since 2024."
+  },
+  "northvolt drei heide": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Heide, Germany",
+    "strategic_role": "Planned German Northvolt plant; construction has faced delays amid the parent's financial difficulties."
+  },
+  "tesla gigafactory berlin brandenburg": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell (pilot) & vehicle gigafactory",
+    "city": "Grünheide, Germany",
+    "strategic_role": "Tesla's European vehicle-assembly plant with 4680 cell pilot production."
+  },
+  "catl arnstadt thuringia": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Arnstadt, Thuringia, Germany",
+    "strategic_role": "CATL's first European cell plant."
+  },
+  "volkswagen powerco salzgitter": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Salzgitter, Germany",
+    "strategic_role": "Volkswagen's first European in-house ('unified') cell plant."
+  },
+  "microvast ludwigsfelde": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Ludwigsfelde, Germany",
+    "strategic_role": "Microvast's European cell plant."
+  },
+  "mercedes benz kamenz": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Battery-pack plant",
+    "city": "Kamenz, Germany",
+    "strategic_role": "Mercedes-Benz's long-standing pack-assembly plant, operated by its ACCUMOTIVE subsidiary."
+  },
+  "customcells itzehoe": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Specialty cell plant",
+    "city": "Itzehoe, Germany",
+    "strategic_role": "German niche cell maker for aerospace, motorsport and high-performance applications."
+  },
+  "cellforce group kirchentellinsfurt": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "High-performance cell plant",
+    "city": "Kirchentellinsfurt, Germany",
+    "strategic_role": "Porsche-backed venture producing high-performance cells for motorsport and low-volume applications."
+  },
+  "leclanch willst tt": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell/pack plant",
+    "city": "Willstätt, Germany",
+    "strategic_role": "Leclanché's German plant supplying marine and stationary battery systems."
+  },
+  "automotive cells company douvrin": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Douvrin, France",
+    "strategic_role": "ACC's first plant, supplying Stellantis."
+  },
+  "automotive cells company kaiserslautern": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Kaiserslautern, Germany",
+    "strategic_role": "Second ACC plant; timeline has been adjusted amid slower European EV demand."
+  },
+  "automotive cells company termoli": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Termoli, Italy",
+    "strategic_role": "Third ACC plant; timeline has been adjusted amid slower European EV demand."
+  },
+  "verkor dunkirk": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Dunkirk, France",
+    "strategic_role": "Verkor's flagship French gigafactory, backed by Renault."
+  },
+  "envision aesc douai": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Douai, France",
+    "strategic_role": "Supplies Renault's EV production."
+  },
+  "prologium dunkirk": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "Solid-state",
+    "city": "Dunkirk, France",
+    "strategic_role": "Planned French solid-state cell plant; the project has faced funding delays."
+  },
+  "volkswagen powerco sagunto valencia": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Sagunto, Valencia, Spain",
+    "strategic_role": "Volkswagen's Spanish cell plant, part of a broader Spanish EV/battery investment with SEAT."
+  },
+  "basquevolt vitoria gasteiz": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Vitoria-Gasteiz, Spain",
+    "strategic_role": "Early-stage Spanish battery project."
+  },
+  "italvolt scarmagno": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Scarmagno, Italy",
+    "strategic_role": "Planned Italian gigafactory that has faced significant funding difficulties."
+  },
+  "lg energy solution wroc aw": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Wrocław, Poland",
+    "strategic_role": "One of Europe's largest established battery plants, supplying many European automakers."
+  },
+  "sk on kom rom": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Komárom, Hungary",
+    "strategic_role": "SK On's established Hungarian plant."
+  },
+  "sk on iv ncsa": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Iváncsa, Hungary",
+    "strategic_role": "Newer SK On Hungarian plant."
+  },
+  "samsung sdi g d": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Göd, Hungary",
+    "strategic_role": "Samsung SDI's established Hungarian plant."
+  },
+  "catl debrecen": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Debrecen, Hungary",
+    "strategic_role": "Major CATL European expansion project."
+  },
+  "eve energy debrecen": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Debrecen, Hungary",
+    "strategic_role": "Supplies BMW's European EV production."
+  },
+  "inobat voderady": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Voderady, Slovakia",
+    "strategic_role": "InoBat's Slovak plant."
+  },
+  "morrow batteries arendal": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "LFP",
+    "city": "Arendal, Norway",
+    "strategic_role": "Morrow's first-phase Norwegian LFP plant."
+  },
+  "freyr mo i rana": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Mo i Rana, Norway",
+    "strategic_role": "FREYR's original Norwegian project; paused as the company shifted its primary focus to the US."
+  },
+  "beyonder sandnes": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Sandnes, Norway",
+    "strategic_role": "Early-stage Norwegian battery-plant plans."
+  },
+  "aesc sunderland": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Sunderland, UK",
+    "strategic_role": "Long-standing UK plant supporting Nissan Leaf production, undergoing expansion."
+  },
+  "agratas bridgwater somerset": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Bridgwater, Somerset, UK",
+    "strategic_role": "Tata's dedicated battery subsidiary building the UK's largest planned gigafactory."
+  },
+  "britishvolt blyth": {
+    "type": "Facility",
+    "status": "Defunct",
+    "facility_type": "Cell gigafactory",
+    "city": "Blyth, UK",
+    "strategic_role": "UK gigafactory project that collapsed into administration in January 2023; assets acquired by Recharge Industries."
+  },
+  "amte power dundee": {
+    "type": "Facility",
+    "status": "Defunct",
+    "facility_type": "Cell gigafactory",
+    "city": "Dundee, UK",
+    "strategic_role": "UK cell-plant project; AMTE Power entered administration in 2024."
+  },
+  "catl ningde fujian": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Ningde, Fujian, China",
+    "strategic_role": "CATL's original flagship plant and headquarters campus."
+  },
+  "catl yibin sichuan": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Yibin, Sichuan, China",
+    "strategic_role": "Major CATL plant noted for running on renewable (hydro) power."
+  },
+  "catl liyang jiangsu": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Liyang, Jiangsu, China",
+    "strategic_role": "Major CATL production base."
+  },
+  "byd shenzhen": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "LFP (Blade Battery)",
+    "city": "Shenzhen, China",
+    "strategic_role": "Home base of BYD's battery arm, FinDreams Battery, maker of the Blade Battery."
+  },
+  "byd changzhou": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "LFP (Blade Battery)",
+    "city": "Changzhou, China",
+    "strategic_role": "Major Blade Battery production base."
+  },
+  "calb changzhou": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Changzhou, China",
+    "strategic_role": "CALB production base."
+  },
+  "eve energy jingmen": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Jingmen, China",
+    "strategic_role": "EVE Energy's major production base."
+  },
+  "gotion high tech hefei": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Hefei, China",
+    "strategic_role": "Gotion's headquarters and main production base."
+  },
+  "svolt changzhou": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Changzhou, China",
+    "strategic_role": "SVOLT's main production base."
+  },
+  "sunwoda shenzhen": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Shenzhen, China",
+    "strategic_role": "Sunwoda's main production base."
+  },
+  "farasis energy ganzhou": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Ganzhou, China",
+    "strategic_role": "Farasis's main Chinese production base."
+  },
+  "rept wenzhou": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Wenzhou, China",
+    "strategic_role": "REPT BATTERO's main production base."
+  },
+  "lg energy solution nanjing": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Nanjing, China",
+    "strategic_role": "One of LG Energy Solution's largest plants globally."
+  },
+  "panasonic energy dalian": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Dalian, China",
+    "strategic_role": "Panasonic's Chinese cell plant."
+  },
+  "samsung sdi xi an": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Xi'an, China",
+    "strategic_role": "Samsung SDI's Chinese cell plant."
+  },
+  "sk on yancheng": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Yancheng, China",
+    "strategic_role": "SK On's Chinese cell plant."
+  },
+  "tesla megafactory shanghai": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Megapack (stationary storage) factory",
+    "city": "Shanghai, China",
+    "strategic_role": "Produces Tesla Megapack grid-storage units, distinct from the separate Gigafactory Shanghai vehicle plant."
+  },
+  "lg energy solution ochang": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Ochang, South Korea",
+    "strategic_role": "One of LG Energy Solution's original, major Korean plants."
+  },
+  "samsung sdi cheonan": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Cheonan, South Korea",
+    "strategic_role": "Major Samsung SDI Korean production base."
+  },
+  "samsung sdi ulsan": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Ulsan, South Korea",
+    "strategic_role": "Samsung SDI Korean production base."
+  },
+  "sk on seosan": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Seosan, South Korea",
+    "strategic_role": "SK On's major Korean production base."
+  },
+  "panasonic energy kaizuka osaka": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Kaizuka, Osaka, Japan",
+    "strategic_role": "Established Panasonic Japanese plant."
+  },
+  "panasonic energy wakayama": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Wakayama, Japan",
+    "strategic_role": "Established Panasonic Japanese plant."
+  },
+  "prime planet energy himeji": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Himeji, Japan",
+    "strategic_role": "Toyota-Panasonic joint venture (PPES) plant."
+  },
+  "envision aesc ibaraki": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Ibaraki, Japan",
+    "strategic_role": "Envision AESC's original Japanese plant, formerly a Nissan/AESC site."
+  },
+  "gs yuasa kyoto": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Kyoto, Japan",
+    "strategic_role": "GS Yuasa's established Japanese plant, spanning automotive and industrial batteries."
+  },
+  "toshiba scib yokohama": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "Lithium titanate (LTO)",
+    "city": "Yokohama, Japan",
+    "strategic_role": "Produces Toshiba's SCiB fast-charging lithium-titanate cells."
+  },
+  "ola electric gigafactory krishnagiri tamil nadu": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Krishnagiri, Tamil Nadu, India",
+    "strategic_role": "Ola Electric's Indian cell plant, initially focused on two-wheelers."
+  },
+  "reliance new energy jamnagar gujarat": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Jamnagar, Gujarat, India",
+    "strategic_role": "Part of Reliance Industries' broader green-energy investment plans."
+  },
+  "amara raja giga telangana": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Telangana, India",
+    "strategic_role": "Amara Raja's planned Indian cell plant."
+  },
+  "exide energy bengaluru karnataka": {
+    "type": "Facility",
+    "status": "Under-Construction",
+    "facility_type": "Cell gigafactory",
+    "city": "Bengaluru, Karnataka, India",
+    "strategic_role": "Exide's Indian cell plant."
+  },
+  "agratas sanand gujarat": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Sanand, Gujarat, India",
+    "strategic_role": "Tata's planned Indian gigafactory."
+  },
+  "vinfast ha tinh": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell/pack gigafactory",
+    "city": "Ha Tinh, Vietnam",
+    "strategic_role": "VinFast's battery subsidiary VinES, supplying VinFast's EVs."
+  },
+  "prologium taoyuan": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "chemistry": "Solid-state",
+    "city": "Taoyuan, Taiwan",
+    "strategic_role": "ProLogium's home plant in Taiwan."
+  },
+  "hli green power karawang": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory (JV)",
+    "city": "Karawang, Indonesia",
+    "strategic_role": "Hyundai-LG Energy Solution joint venture; Indonesia's first large-scale EV battery cell plant."
+  },
+  "energy absolute chachoengsao": {
+    "type": "Facility",
+    "status": "Active",
+    "facility_type": "Cell gigafactory",
+    "city": "Chachoengsao, Thailand",
+    "strategic_role": "Thai battery plant operated via Energy Absolute's Amita Technology venture."
+  },
+  "recharge industries geelong": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell gigafactory",
+    "city": "Geelong, Australia",
+    "strategic_role": "Australian project by the company that also acquired Britishvolt's assets."
+  },
+  "energy renaissance tomago": {
+    "type": "Facility",
+    "status": "Announced",
+    "facility_type": "Cell/pack assembly",
+    "chemistry": "LFP",
+    "city": "Tomago, Australia",
+    "strategic_role": "Planned Australian LFP battery assembly plant."
+  }
+}
