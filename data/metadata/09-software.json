@@ -1,0 +1,27 @@
+{
+  "_doc": "Software, Data & Testing — battery analytics/intelligence SaaS. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "twaice": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "founded": 2018,
+    "one_liner": "Battery analytics software for EV fleets, grid ESS and R&D.",
+    "product": "Battery analytics software",
+    "deployment": "SaaS (Cloud)",
+    "target": "EV fleets, grid ESS, cell R&D"
+  },
+  "voltaiq": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "one_liner": "Enterprise battery-intelligence platform for manufacturers & OEMs.",
+    "deployment": "SaaS (Cloud)"
+  },
+  "accure": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "one_liner": "Cloud battery analytics for safety & performance of ESS/EV fleets.",
+    "deployment": "SaaS (Cloud)"
+  }
+}

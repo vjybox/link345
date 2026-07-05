@@ -1,0 +1,172 @@
+{
+  "_doc": "Materials & Components — cathode/anode active materials, chemicals. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "umicore": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "EBR: UMI",
+    "founded": 1989,
+    "one_liner": "Belgian cathode-materials and battery-recycling leader.",
+    "product": "NMC cathode materials; recycling",
+    "chemistry": "NMC",
+    "esg": "Closed-loop recycling"
+  },
+  "posco future m": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean cathode & anode materials arm of POSCO (formerly POSCO Chemical).",
+    "product": "Cathode & anode active materials"
+  },
+  "ecopro": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean high-nickel NCA/NMC cathode specialist.",
+    "product": "NCA/NMC cathode",
+    "chemistry": "NCA, NMC"
+  },
+  "basf": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ETR: BAS",
+    "one_liner": "Chemicals major supplying cathode active materials and battery chemicals."
+  },
+  "novonix": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Synthetic graphite anode + battery test-equipment maker.",
+    "product": "Synthetic graphite anode"
+  },
+  "sila": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "founded": 2011,
+    "one_liner": "Silicon anode material; founded by ex-Tesla engineer Gene Berdichevsky.",
+    "product": "Silicon anode",
+    "chemistry": "Silicon anode",
+    "target": "EV cell makers, consumer electronics"
+  },
+  "group14": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "one_liner": "Silicon-carbon anode (SCC55); JV with SK and Porsche.",
+    "product": "Silicon-carbon anode",
+    "chemistry": "Silicon anode"
+  },
+  "sumitomo metal mining": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese mining & smelting group; also a major cathode-materials producer (JV with Panasonic).",
+    "product": "Nickel; NCA cathode materials"
+  },
+  "l&f": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean cathode-materials maker; NCM/NCA supplier to LG Energy Solution and others.",
+    "product": "NCM/NCA cathode materials",
+    "chemistry": "NMC, NCA"
+  },
+  "btr new material": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese anode and cathode materials maker; major supplier to CATL and other Chinese cell makers."
+  },
+  "resonac": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "founded": 2023,
+    "one_liner": "Japanese materials group formed from the merger of Showa Denko and Hitachi Chemical; carbon/graphite battery materials."
+  },
+  "mitsubishi chemical": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese chemicals group; carbon anode materials for Li-ion cells."
+  },
+  "johnson matthey": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "UK chemicals/catalysis group; explored cathode active materials (eLNO) before scaling back the battery-materials business in 2023."
+  },
+  "asahi kasei": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese chemicals group; Hipore wet-process separators, and owns US separator maker Celgard.",
+    "product": "Wet-process separators"
+  },
+  "toray industries": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese materials group; Li-ion battery separators alongside carbon-fiber materials.",
+    "product": "Battery separators"
+  },
+  "sk ie technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean separator maker, spun off from SK Innovation's materials business in 2019.",
+    "product": "Wet-process separators"
+  },
+  "sgl carbon": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "German carbon and graphite materials group."
+  },
+  "toda kogyo": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese chemicals maker; cathode active materials for Li-ion cells."
+  },
+  "shanshan technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese materials group supplying cathode, anode and electrolyte materials to major cell makers."
+  },
+  "celgard": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "parent": "asahi kasei",
+    "one_liner": "US dry-process battery separator maker; subsidiary of Asahi Kasei."
+  },
+  "ube corporation": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese chemicals group; battery electrolytes and separators."
+  },
+  "sumitomo chemical": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese chemicals group; aramid-coated battery separators."
+  },
+  "shenzhen capchem": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese electrolyte maker and a major supplier to CATL and BYD.",
+    "product": "Battery electrolyte"
+  },
+  "nippon carbon": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese graphite and carbon-materials maker."
+  }
+}

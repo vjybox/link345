@@ -1,0 +1,54 @@
+{
+  "_doc": "Power Electronics & BMS — BMS ICs, SiC, power semis. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "analog devices": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: ADI",
+    "one_liner": "BMS ICs incl. wireless BMS (absorbed Maxim, Linear)."
+  },
+  "infineon": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Power semis + BMS; SiC for EV inverters."
+  },
+  "wolfspeed": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Silicon-carbide (SiC) pure-play for EV power electronics."
+  },
+  "texas instruments": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "US chipmaker; battery-management-system ICs."
+  },
+  "nxp semiconductors": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: NXPI",
+    "one_liner": "Dutch semiconductor maker; BMS chips and automotive power electronics."
+  },
+  "renesas electronics": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Japanese semiconductor maker; automotive BMS and power ICs."
+  },
+  "stmicroelectronics": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: STM",
+    "one_liner": "Swiss-headquartered semiconductor maker; BMS ICs and SiC power devices for EVs."
+  },
+  "vitesco technologies": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "German automotive power-electronics and electrification supplier, spun off from Continental."
+  }
+}

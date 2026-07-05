@@ -1,0 +1,275 @@
+{
+  "_doc": "Cells & Chemistry — cell manufacturers and battery OEM cell units. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "catl": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "SZSE: 300750",
+    "founded": 2011,
+    "one_liner": "World's largest EV & ESS battery maker.",
+    "product": "Li-ion cells, EV packs, ESS containers",
+    "chemistry": "LFP, NMC, M3P, Na-ion",
+    "form_factor": "Prismatic, Pouch",
+    "key_ip": "Cell-to-Pack (CTP), Shenxing fast-charge",
+    "deployment": "Mass production (gigafactory)"
+  },
+  "byd": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "founded": 1995,
+    "one_liner": "Chinese EV + battery maker; the LFP Blade Battery.",
+    "product": "LFP Blade cells, EVs",
+    "chemistry": "LFP",
+    "form_factor": "Prismatic (Blade)",
+    "key_ip": "Blade Battery (cell-to-body)"
+  },
+  "lg energy solution": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "KRX: 373220",
+    "founded": 2020,
+    "one_liner": "Korean cell major; NMC pouch/cylindrical for global OEMs.",
+    "chemistry": "NMC, LFP",
+    "form_factor": "Pouch, Cylindrical (46-series)",
+    "deployment": "Mass production"
+  },
+  "panasonic": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Tesla's long-time cylindrical-cell partner (2170, 4680).",
+    "chemistry": "NCA",
+    "form_factor": "Cylindrical (2170, 4680)"
+  },
+  "samsung sdi": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean cell maker; prismatic & cylindrical, premium NMC.",
+    "chemistry": "NMC",
+    "form_factor": "Prismatic, Cylindrical"
+  },
+  "sk on": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Korean pouch-cell maker; Ford BlueOval SK JV.",
+    "chemistry": "NMC",
+    "form_factor": "Pouch"
+  },
+  "northvolt": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "founded": 2016,
+    "one_liner": "European cell maker founded by ex-Tesla exec Peter Carlsson; Revolt recycling.",
+    "chemistry": "NMC",
+    "form_factor": "Prismatic, Cylindrical"
+  },
+  "tesla": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: TSLA",
+    "founded": 2003,
+    "one_liner": "EV & energy pioneer; in-house 4680 cell + Megapack ESS.",
+    "chemistry": "NCA, LFP",
+    "form_factor": "Cylindrical (4680)",
+    "key_ip": "4680 dry-electrode, structural pack"
+  },
+  "quantumscape": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: QS",
+    "one_liner": "Solid-state (ceramic separator, anode-free) developer; VW-backed.",
+    "chemistry": "Solid-state",
+    "form_factor": "Pouch"
+  },
+  "gotion": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese LFP cell maker; VW is a major shareholder.",
+    "chemistry": "LFP"
+  },
+  "eve energy": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell maker; large-format LFP + 46-series cylindrical.",
+    "chemistry": "LFP",
+    "form_factor": "Prismatic, Cylindrical (46)"
+  },
+  "china bak": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cylindrical Li-ion cell manufacturer (formerly Nasdaq-listed as CBAK Energy Technology)."
+  },
+  "lishen": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese battery maker (Tianjin Lishen); early consumer-electronics cell supplier, now also EV cells."
+  },
+  "solid power": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: SLDP",
+    "one_liner": "US solid-state battery developer; partnered with BMW and Ford.",
+    "chemistry": "Solid-state"
+  },
+  "24m technologies": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US developer of SemiSolid electrode technology, licensed to cell makers including FREYR Battery.",
+    "chemistry": "Semi-solid"
+  },
+  "one": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US battery maker (Our Next Energy); dual-chemistry \"Gemini\" pack and LFP cells, backed by BMW."
+  },
+  "freyr battery": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: FREY",
+    "one_liner": "US/Norwegian battery company building gigafactories; licenses 24M Technologies' SemiSolid process."
+  },
+  "verkor": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "French battery maker building a gigafactory in Dunkirk; backed by Renault."
+  },
+  "acc": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "European cell-manufacturing joint venture (Automotive Cells Company) between Stellantis, Mercedes-Benz and TotalEnergies (Saft), with gigafactories in France, Germany and Italy."
+  },
+  "inobat": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Slovak EV battery developer and gigafactory builder."
+  },
+  "morrow batteries": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Norwegian LFP cell maker building a gigafactory in Arendal, Norway.",
+    "chemistry": "LFP"
+  },
+  "storedot": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Israeli developer of extreme fast-charging (XFC) battery technology."
+  },
+  "enovix": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: ENVX",
+    "one_liner": "US maker of silicon-anode 3D cell architecture, initially for consumer electronics.",
+    "chemistry": "Silicon anode"
+  },
+  "factorial energy": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "US solid-state battery developer (FEST technology); partnered with Mercedes-Benz and Stellantis.",
+    "chemistry": "Solid-state"
+  },
+  "ses ai": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: SES",
+    "one_liner": "US developer of hybrid lithium-metal batteries; backed by GM and Hyundai.",
+    "chemistry": "Lithium-metal"
+  },
+  "rept battero": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell manufacturer (RuiPu Lanjun / REPT BATTERO)."
+  },
+  "wanxiang": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Chinese industrial conglomerate; owns US battery maker A123 Systems, acquired out of bankruptcy in 2013."
+  },
+  "skeleton technologies": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Estonian supercapacitor maker using graphene-based \"Curved Graphene\" electrodes."
+  },
+  "form energy": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private (VC)",
+    "one_liner": "US developer of iron-air batteries for multi-day grid energy storage.",
+    "chemistry": "Iron-air"
+  },
+  "aesc": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "Cell manufacturer originally Nissan's in-house battery arm; majority-owned by China's Envision Group since 2019 (Envision AESC)."
+  },
+  "calb": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell manufacturer (China Aviation Lithium Battery), a major LFP and NMC cell supplier."
+  },
+  "farasis energy": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese-founded pouch-cell manufacturer with operations in China, the US and Germany."
+  },
+  "microvast": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: MVST",
+    "one_liner": "US-headquartered, China-founded battery maker focused on commercial-vehicle and industrial cells."
+  },
+  "saft": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Subsidiary",
+    "one_liner": "French battery-cell maker (industrial, defense, backup power); part of TotalEnergies. Co-owns the ACC cell joint venture."
+  },
+  "sunwoda electronic": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell manufacturer spanning consumer electronics and EV batteries."
+  },
+  "prologium technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Taiwanese solid-state battery developer."
+  },
+  "svolt energy technology": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese cell manufacturer spun out of Great Wall Motor.",
+    "parent": "great wall motor"
+  }
+}

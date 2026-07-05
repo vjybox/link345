@@ -1,0 +1,194 @@
+{
+  "_doc": "Vehicles / OEMs — automakers and EV makers. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "ford": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: F",
+    "one_liner": "US OEM; BlueOval SK (with SK On) and BlueOval City."
+  },
+  "general motors": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: GM",
+    "one_liner": "US OEM; Ultium platform & Ultium Cells JV with LGES."
+  },
+  "volkswagen": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "OEM group; PowerCo cell unit and unified prismatic cell."
+  },
+  "nio": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese premium EV maker; pioneer of battery swapping (Power Swap)."
+  },
+  "xiaomi": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Consumer-tech giant turned EV maker (SU7)."
+  },
+  "rivian": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: RIVN",
+    "founded": 2009,
+    "one_liner": "US EV maker of pickup trucks and delivery vans; Amazon is an early investor and customer.",
+    "target": "Consumer EVs, commercial delivery vans"
+  },
+  "lucid motors": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: LCID",
+    "one_liner": "US luxury EV maker, majority-owned by Saudi Arabia's Public Investment Fund."
+  },
+  "stellantis": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: STLA",
+    "founded": 2021,
+    "one_liner": "Automaker group formed from the merger of Fiat Chrysler and PSA (Jeep, Ram, Peugeot, Fiat, Citroën, Opel).",
+    "product": "Multi-brand EV & ICE vehicles"
+  },
+  "bmw group": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ETR: BMW",
+    "one_liner": "German automaker; investor/partner in Solid Power and Our Next Energy for future cell technology."
+  },
+  "toyota motor": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: TM",
+    "one_liner": "Japanese automaker; Prime Planet Energy & Solutions cell JV with Panasonic, also developing solid-state batteries."
+  },
+  "hyundai motor": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "KRX: 005380",
+    "one_liner": "Korean automaker group (incl. Kia); invested in SES AI and Factorial Energy for next-gen cells."
+  },
+  "nissan motor": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "TYO: 7201",
+    "one_liner": "Japanese automaker, part of the Renault-Nissan-Mitsubishi Alliance; its former battery arm became Envision AESC."
+  },
+  "kia": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "KRX: 000270",
+    "one_liner": "Korean automaker, part of Hyundai Motor Group, pursuing a distinct EV product strategy."
+  },
+  "honda motor": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: HMC",
+    "one_liner": "Japanese automaker; battery joint venture with LG Energy Solution in Ohio, USA."
+  },
+  "mercedes-benz group": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ETR: MBG",
+    "one_liner": "German automaker; co-owner of the ACC cell joint venture and a Factorial Energy solid-state partner."
+  },
+  "saic motor": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese state-owned automaker; joint ventures with Volkswagen and General Motors in China."
+  },
+  "geely auto": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese automaker group; owns Volvo, Polestar and the Zeekr EV brand."
+  },
+  "polestar": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: PSNY",
+    "one_liner": "Swedish EV brand spun out of Volvo, majority-owned by Geely."
+  },
+  "fisker": {
+    "type": "Corporate",
+    "status": "Defunct",
+    "ownership": "Public",
+    "one_liner": "US EV startup that filed for Chapter 11 bankruptcy in June 2024 after production and demand problems."
+  },
+  "vinfast": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: VFS",
+    "one_liner": "Vietnamese EV maker owned by conglomerate Vingroup."
+  },
+  "great wall motor": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese automaker; ORA and Haval EV brands."
+  },
+  "renault group": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "EPA: RNO",
+    "one_liner": "French automaker, part of the Renault-Nissan-Mitsubishi Alliance; Ampere is its EV division, backer of Verkor."
+  },
+  "xpeng": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: XPEV",
+    "one_liner": "Chinese EV maker known for advanced driver-assistance technology."
+  },
+  "li auto": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: LI",
+    "one_liner": "Chinese EV maker specializing in extended-range electric vehicles (EREVs)."
+  },
+  "faraday future": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: FFIE",
+    "one_liner": "US EV startup that has faced persistent production and funding struggles."
+  },
+  "canoo": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: GOEV",
+    "one_liner": "US EV startup building commercial and lifestyle vehicles, with ongoing financial struggles."
+  },
+  "arrival": {
+    "type": "Corporate",
+    "status": "Defunct",
+    "ownership": "Public",
+    "one_liner": "UK/US EV van startup that delisted and filed for bankruptcy in 2024."
+  },
+  "lordstown motors": {
+    "type": "Corporate",
+    "status": "Defunct",
+    "ownership": "Public",
+    "one_liner": "US EV truck startup (Endurance pickup) that filed for Chapter 11 bankruptcy in 2023."
+  }
+}

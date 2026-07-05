@@ -1,0 +1,177 @@
+{
+  "_doc": "Raw Materials & Mining — lithium, nickel, cobalt, graphite producers. Keyed by cleaned-name token; see ENRICHMENT_PROMPT.md.",
+  "albemarle": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: ALB",
+    "founded": 1994,
+    "one_liner": "World's largest lithium producer; brine + hard-rock, plus bromine.",
+    "product": "Lithium carbonate & hydroxide, bromine",
+    "extraction": "Hard rock (Greenbushes) + brine (Atacama)",
+    "esg": "Global Battery Alliance member"
+  },
+  "sqm": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: SQM",
+    "one_liner": "Chilean lithium & specialty-chemicals major mining the Atacama salar.",
+    "product": "Lithium carbonate & hydroxide",
+    "extraction": "Brine (Salar de Atacama)"
+  },
+  "ganfeng lithium": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "SZSE: 002460",
+    "one_liner": "Vertically integrated Chinese lithium giant, mine-to-battery.",
+    "product": "Lithium compounds & metal, cells",
+    "extraction": "Brine + hard rock + recycling"
+  },
+  "arcadium lithium": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: ALTM",
+    "founded": 2024,
+    "one_liner": "Formed by the Livent + Allkem merger; acquired by Rio Tinto (2025).",
+    "product": "Lithium hydroxide & carbonate"
+  },
+  "pilbara minerals": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Australian hard-rock spodumene producer (Pilgangoora).",
+    "product": "Spodumene concentrate",
+    "extraction": "Hard rock"
+  },
+  "glencore": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Diversified miner & trader; major cobalt/nickel plus Li-ion recycling.",
+    "product": "Cobalt, nickel, copper; recycling"
+  },
+  "vale": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NYSE: VALE",
+    "one_liner": "Brazilian mining major and one of the world's largest nickel producers."
+  },
+  "bhp": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Global resources major; nickel for battery cathodes (Nickel West)."
+  },
+  "syrah resources": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Graphite miner (Balama, Mozambique) + US anode plant (Vidalia).",
+    "product": "Natural & active anode graphite"
+  },
+  "tianqi lithium": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese lithium major; large equity stakes in Greenbushes (Australia) and SQM.",
+    "product": "Lithium concentrate & compounds",
+    "extraction": "Hard rock (Greenbushes stake) + brine (SQM stake)"
+  },
+  "mineral resources": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ASX: MIN",
+    "one_liner": "Australian mining-services company; lithium (Mt Marion, Wodgina) alongside iron ore.",
+    "product": "Spodumene concentrate",
+    "extraction": "Hard rock"
+  },
+  "norilsk nickel": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "MCX: GMKN",
+    "one_liner": "Russian mining major; one of the world's largest refined nickel and palladium producers."
+  },
+  "china molybdenum": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Chinese diversified miner; major cobalt and copper producer via DRC operations (incl. Tenke Fungurume, Kisanfu)."
+  },
+  "igo": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ASX: IGO",
+    "one_liner": "Australian miner; stake in the Greenbushes lithium mine plus nickel operations.",
+    "extraction": "Hard rock (Greenbushes JV)"
+  },
+  "eurasian resources group": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Private",
+    "one_liner": "Luxembourg-headquartered diversified miner with major cobalt operations in the DRC."
+  },
+  "sherritt international": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "TSX: S",
+    "one_liner": "Canadian miner; cobalt and nickel refining, notably the Moa Joint Venture in Cuba."
+  },
+  "anglo american": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "LSE: AAL",
+    "one_liner": "British-South African diversified miner; nickel operations feed battery cathode supply."
+  },
+  "talon metals": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "TSX: TLO",
+    "one_liner": "Canadian explorer/developer of the Tamarack nickel project in Minnesota, USA."
+  },
+  "magnis energy": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ASX: MNS",
+    "one_liner": "Australian graphite developer (Nachu project, Tanzania) with battery-manufacturing ambitions."
+  },
+  "nouveau monde graphite": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "one_liner": "Canadian graphite developer (Matawinie project, Quebec) targeting battery anode material."
+  },
+  "sigma lithium": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "NASDAQ: SGML",
+    "one_liner": "Spodumene concentrate producer at Grota do Cirilo, Brazil.",
+    "extraction": "Hard rock"
+  },
+  "liontown resources": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ASX: LTR",
+    "one_liner": "Australian hard-rock lithium developer (Kathleen Valley).",
+    "extraction": "Hard rock"
+  },
+  "eramet": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "EPA: ERA",
+    "one_liner": "French mining group; manganese and nickel (New Caledonia, Indonesia) plus a lithium project in Argentina."
+  }
+}

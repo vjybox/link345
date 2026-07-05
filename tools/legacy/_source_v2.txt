@@ -1,0 +1,1577 @@
+## 1. Major Cell Manufacturers & Gigafactories
+1. CATL (Contemporary Amperex Technology Co., Limited)
+2. BYD Company Limited (Blade Battery)
+3. LG Energy Solution
+4. Panasonic (Panasonic Energy)
+5. Samsung SDI
+6. SK On
+7. Tesla (Battery Division / Gigafactory)
+8. Northvolt
+9. Farasis Energy
+10. EVE Energy Co., Ltd.
+11. SVOLT Energy Technology
+12. AESC (Envision AESC)
+13. CALB (China Aviation Lithium Battery)
+14. Gotion High-tech (Guoxuan High-tech)
+15. Sunwoda Electronic
+16. China BAK Battery (Shenzhen BAK)
+17. Lishen (Tianjin Lishen Battery)
+18. Microvast
+19. ProLogium Technology (Solid-state)
+20. QuantumScape (Solid-state)
+21. Solid Power (Solid-state)
+22. 24M Technologies (Semi-solid)
+23. ONE (Our Next Energy)
+24. FREYR Battery
+25. Verkor
+26. Recharge Industries (formerly Britishvolt)
+27. ACC (Automotive Cells Company)
+28. InoBat Auto
+29. Morrow Batteries
+30. StoreDot
+31. Enovix (Silicon-anode 3D structure)
+32. REPT BATTERO (RuiPU Lanjun)
+33. Wanxiang (A123 Systems)
+34. Funeng Technology
+35. Tafel New Energy
+36. Zhongchuang Xinli (Sinowatt)
+37. Exide Energy Solutions
+38. Amara Raja Batteries (Amara Raja Giga)
+39. Reliance Industries (Reliance New Energy)
+40. Ola Electric (Cell Tech)
+41. E-One Moli Energy
+42. Toyota (Prime Planet Energy & Solutions - PPES)
+43. SGMW (Wuling)
+
+## 2. Major Automotive OEMs with EV Focus
+1. Tesla
+2. Rivian
+3. Lucid Motors
+4. NIO
+5. XPeng
+6. Li Auto
+7. Ford (EV Division)
+8. General Motors (Ultium Platform)
+9. Volkswagen Group (PowerCo)
+10. Stellantis
+11. Mercedes-Benz Group AG (EQ Division)
+12. BMW Group
+13. Hyundai Motor Group (including Ioniq)
+14. Kia (Distinct EV product strategy)
+15. Toyota Motor Corporation (bZ series)
+16. Honda Motor Co.
+17. Nissan Motor Co. (Ariya)
+18. Polestar
+19. Fisker Inc.
+20. Canoo
+21. Arrival
+22. Lordstown Motors
+23. Faraday Future
+24. BYD Auto
+25. SAIC Motor
+26. Geely Auto Group (Zeekr, Polestar)
+27. VinFast
+28. GAC Group (Aion)
+29. Changan Automobile (Deepal, Avatr)
+30. Great Wall Motor (ORA, Haval EV)
+31. Chery Automobile (iCAR, Exeed)
+32. Dongfeng Motor (Voyah, Nammi)
+33. Leapmotor
+34. Xiaomi (SU7)
+35. BAIC Motor (Arcfox, Beijing EV)
+36. Seres Group (AITO)
+37. Renault Group (Megane E-Tech, Ampere)
+38. Audi (e-tron series, PPE platform)
+39. Porsche (Taycan, Macan EV)
+40. Volvo Cars (EX30, EX90)
+41. Jaguar Land Rover (JLR)
+42. Subaru (Solterra)
+43. Mazda (MX-30)
+44. Mitsubishi Motors
+45. Tata Motors
+46. Mahindra Electric
+47. Ola Electric (Scooters/Cars)
+48. Bollinger Motors
+49. Mullen Automotive
+
+## 3. Material Suppliers (Cathode, Anode, Electrolyte, Separator)
+1. Umicore (Cathode materials)
+2. BASF (Battery Materials & Performance Plastics)
+3. Johnson Matthey (Battery Materials)
+4. POSCO Future M (formerly POSCO Chemical)
+5. EcoPro BM / EcoPro (Cathode materials)
+6. L&F (Cathode materials)
+7. Sumitomo Metal Mining (Cathode materials)
+8. Toda Kogyo Corp. (Cathode materials)
+9. Tanaka Chemical Corporation (Cathode materials)
+10. BTR New Material Group (Anode & Cathode)
+11. Shanshan Technology (Anode & Cathode & Electrolyte)
+12. Jiangxi Zichen Technology (Anode)
+13. Resonac Holdings (formerly Showa Denko / Hitachi Chemical)
+14. Mitsubishi Chemical (Carbon materials)
+15. SGL Carbon (Graphite materials)
+16. Graphite India Ltd.
+17. HEG Ltd.
+18. Kureha Corporation (Graphite anode & PVDF binders)
+19. Nippon Carbon Co., Ltd.
+20. Pyrotek (Graphite)
+21. Asahi Kasei (Separators - Hipore)
+22. Toray Industries (Separators)
+23. SK IE Technology (Separators)
+24. Entek International (Separators)
+25. UBE Corporation (Separators & Electrolyte)
+26. Sumitomo Chemical (Separators)
+27. Mitsui Chemicals (Separators)
+28. Celgard (Separators - part of Asahi Kasei)
+29. Dreamweaver International (Separators)
+30. Shenzhen Senior Technology (Separators)
+31. Cangzhou Mingzhu Plastic (Separators)
+32. Shanghai Energy New Materials Technology (Separators)
+33. Soulbrain (Electrolyte)
+34. Shenzhen Capchem Technology Co., Ltd. (CAPCHEM)
+35. Guangzhou Tinci Materials Technology (Electrolyte)
+36. Do-Fluoride New Materials (Electrolyte)
+37. Jiangsu Guotai International Group (Electrolyte)
+38. Central Glass (Electrolyte additives)
+39. Nippon Shokubai (Electrolyte additives)
+40. LG Chem (Cathode production)
+41. Nichia Corporation (Cathode)
+42. Beijing Easpring Material Technology (Cathode)
+43. Ronbay Technology (Cathode)
+44. Xiamen Tungsten (XTC New Energy) (Cathode)
+45. CNGR Advanced Material Co., Ltd. (pCAM)
+46. Zhejiang Huayou Cobalt Co., Ltd. (pCAM)
+47. Shenzhen Dynanonic Co., Ltd. (LFP)
+48. Hunan Yuneng Technology Co., Ltd. (LFP)
+49. Cosmo Advanced Materials & Chemicals (Cathode)
+50. Tianjin B&M Science & Technology Co., Ltd. (Cathode)
+51. Nano One Materials Corp. (Cathode process)
+52. Haldor Topsoe (LFP Cathode)
+53. Envia Systems (Cathode/Silicon)
+54. Tokai Carbon Co., Ltd. (Anode)
+55. Shanghai Putailai New Energy Technology (Anode)
+56. Hunan Zhongke Shinzoom Co., Ltd. (Anode)
+57. JFE Chemical Corporation (Anode)
+58. Nippon Steel Chemical & Material Co., Ltd. (Anode)
+59. Talga Group Ltd. (Graphite Anode)
+60. Novonix Limited (Synthetic Graphite)
+61. OneD Battery Sciences (Silicon nanowires)
+62. Amprius Technologies (Silicon nanowire)
+63. NanoGraf Corporation (Silicon-graphene)
+64. Advano (Silicon additive)
+65. LeydenJar Technologies (Pure silicon anode)
+66. XNRGI (Silicon architecture)
+67. Paraclete Energy (Silicon anode)
+68. Nanomakers (Silicon nanowires)
+69. Sila Nanotechnologies (Silicon anode)
+70. Group14 Technologies (Silicon-carbon)
+71. Enevate Corporation (Silicon-dominant)
+72. Nexeon (Silicon anode)
+73. Graphit Kropfmühl (AMG Critical Materials) (Graphite)
+74. Superior Graphite Co. (Graphite)
+75. Asbury Carbons (Graphite)
+76. Nacional de Grafite (Brazilian graphite)
+77. Triton Minerals (Graphite mining)
+78. Dongwha Electrolyte Solution
+79. Morita Chemical Industries Co., Ltd. (LiPF6)
+80. Kanto Denka Kogyo Co., Ltd. (LiPF6)
+81. Stella Chemifa Corporation (Hydrofluoric acid)
+82. Shandong Shida Shenghua Chemical Co., Ltd. (Solvents)
+83. Liaoning Oxiranchem, Inc. (Solvents)
+84. Chunbo Corporation (CBC) (Additives)
+85. Lotte Energy Materials (Electrolyte/Copper foil)
+86. Yunnan Energy New Materials (SEMCORP) (Separators)
+87. Sinoma Science & Technology Co., Ltd. (Separators)
+88. W-Scope Corporation (Separators)
+89. Foshan Plastics Group (FSPG) (Separators)
+90. Hefei Bravery Digital Technology Co., Ltd. (Separators)
+91. Freudenberg Performance Materials (Separators/Nonwovens)
+
+## 4. Battery Management Systems (BMS) & Power Electronics
+1. Texas Instruments (BMS ICs)
+2. Analog Devices, Inc. (ADI) (BMS - incl. former Maxim Integrated)
+3. NXP Semiconductors (BMS)
+4. Infineon Technologies (BMS & Power)
+5. Renesas Electronics (BMS)
+6. STMicroelectronics (BMS)
+7. Lithium Balance (BMS)
+8. Ewert Energy Systems (BMS)
+9. Elithion Inc. (BMS)
+10. Nuvation Engineering (BMS)
+11. Orion BMS (BMS)
+12. Navitas Systems (BMS)
+13. Leclanché (BMS)
+14. Mentech Electronic & Technology (BMS)
+15. BMS PowerSafe
+16. Dana Incorporated (TM4 Electric Drivetrain)
+17. Vitesco Technologies (Power Electronics)
+18. Aptiv (Power Electronics)
+19. Bosch (Power Electronics)
+20. Wolfspeed (Silicon Carbide - SiC)
+21. onsemi (EV power modules/SiC)
+22. ROHM Semiconductor (SiC power modules)
+23. Microchip Technology (MCUs/analog for BMS)
+24. Mitsubishi Electric (High-power semiconductors)
+25. BorgWarner (Inverters/e-motors)
+26. Marelli (HV EV power electronics/BMS)
+27. Injoinic Technology (Chinese fabless BMS ICs)
+
+## 5. Recycling & Second Life
+1. Li-Cycle
+2. Redwood Materials
+3. Ascend Elements (formerly Battery Resourcers)
+4. Ecobat
+5. Umicore (Recycling)
+6. Duesenfeld GmbH
+7. Cirba Solutions (formerly Retriev Technologies)
+8. Neometals Ltd.
+9. American Battery Technology Company (ABtc)
+10. Aqua Metals
+11. Batrec Industrie AG
+12. GEM Co., Ltd. (Recycling)
+13. Brunp Recycling (CATL subsidiary)
+14. SungEel HiTech
+15. TES (Recycling division)
+16. Glencore (Recycling)
+17. Fortum (Battery recycling)
+18. Northvolt (Revolt recycling)
+19. Lithion Recycling Inc.
+20. Zhejiang Huayou Cobalt (Recycling Division)
+21. Ganfeng Lithium (Recycling Division)
+22. Bangpu Recycling Technology
+23. POSCO Hy Clean Metal
+24. Toyota Chemical Engineering
+25. Tanzi Environmental Technology
+26. ACE Green Recycling
+27. OnTo Technology (Direct recycling)
+28. Cyclus Materials (Cyclus Envirosystems)
+29. Green Li-ion
+30. Lithium Australia (VSPC)
+31. ACE Group (Aleees)
+32. ReJoule (Battery diagnostics for second life)
+33. Connected Energy (Second-life ESS)
+34. B2U Storage Solutions (Second-life ESS)
+35. Nissan (xStorage)
+36. Mercedes-Benz Group (Mercedes-Benz Energy)
+37. BMW (Second-life energy storage)
+38. Renault (Advanced Battery Storage)
+39. Toyota (Used battery projects)
+40. General Motors (Second-life initiatives)
+41. Spiers New Technologies (SNT - Battery lifecycle management)
+42. BeePlanet Factory (Second-life ESS)
+43. Moment Energy (Second-life ESS, Canada)
+44. Smartville Inc. (Second-life ESS)
+45. Element Energy (Battery analytics for reuse)
+46. Volkswagen Group (Salzgitter repurposing)
+47. Hyundai Motor Group (Second-life ESS)
+48. Stellantis (Circular Economy repurposing)
+49. Fenecon GmbH (Second-life BMW i3 modules)
+50. ECO STOR AS (Second-life BESS)
+51. Powervault (UK home ESS)
+52. Betteries (Upcycling mobile power)
+
+## 6. Research Institutes, National Labs & University Centers
+1. Argonne National Laboratory (CAMP Facility)
+2. National Renewable Energy Laboratory (NREL)
+3. Lawrence Berkeley National Laboratory (LBNL)
+4. Oak Ridge National Laboratory (ORNL)
+5. Pacific Northwest National Laboratory (PNNL)
+6. Sandia National Laboratories
+7. NASA JPL (Battery research)
+8. Fraunhofer Institute (ISI & IKTS)
+9. Karlsruhe Institute of Technology (KIT)
+10. Helmholtz Institute Ulm (HIU)
+11. MEET Battery Research Center (Münster)
+12. CIC energiGUNE (Spain)
+13. ALISTORE-ERI European Research Institute
+14. French National Centre for Scientific Research (CNRS)
+15. The University of Texas at Austin (Texas Materials Institute)
+16. MIT (Materials Science & Engineering)
+17. Stanford University (Precourt Institute)
+18. University of Cambridge (The Faraday Institution)
+19. University of Warwick (WMG)
+20. Tohoku University (Japan)
+21. Kyoto University (Japan)
+22. Tsinghua University (China)
+23. Chinese Academy of Sciences (CAS)
+24. KAIST (Korea)
+25. Idaho National Laboratory (INL)
+26. SLAC National Accelerator Laboratory (Stanford)
+27. CEA (French Alternative Energies and Atomic Energy Commission)
+28. Max Planck Institute for Solid State Research
+29. VITO (Flemish Institute for Technological Research)
+30. AIST (Japan)
+31. KIST (Korea)
+32. NIMTE (China)
+33. RWTH Aachen University (ISEA)
+34. Chalmers University of Technology
+35. KU Leuven
+36. Penn State University (BEST Center)
+37. Northwestern University (CEES)
+38. University of California, San Diego (Sustainable Power and Energy Center)
+39. University of Michigan (Battery Lab)
+40. Georgia Institute of Technology
+41. Carnegie Mellon University
+42. University of Waterloo (Canada)
+43. University of Oxford
+44. Imperial College London
+45. Technical University of Munich (TUM)
+46. Swiss Federal Institute of Technology (ETH Zurich)
+47. National University of Singapore (NUS)
+48. Tokyo Institute of Technology
+49. Seoul National University (SNU)
+50. Indian Institute of Technology (IIT) Madras
+51. University of New South Wales (UNSW)
+52. Battery500 Consortium (US DoE)
+53. European Battery Alliance Research & Innovation
+54. UK Battery Industrialisation Centre (UKBIC)
+
+## 7. Industry News, Analysis & Regional Portals
+1. BloombergNEF (BNEF)
+2. Reuters (Energy/EV section)
+3. The Financial Times (Energy/EV section)
+4. The Wall Street Journal (Energy/EV section)
+5. Electrek
+6. InsideEVs
+7. Green Car Reports
+8. CleanTechnica
+9. S&P Global Commodity Insights (Platts)
+10. Benchmark Mineral Intelligence
+11. Fastmarkets
+12. Argus Media
+13. IHS Markit (now part of S&P Global)
+14. Wood Mackenzie
+15. Rho Motion
+16. Adamas Intelligence
+17. IDTechEx
+18. ABI Research
+19. Guidehouse Insights
+20. Lux Research
+21. BatteryBits (by Twaice)
+22. Batteries News
+23. Batteries International Magazine
+24. Charged EVs
+25. PV Magazine (Energy Storage section)
+26. Energy Storage News
+27. Utility Dive (Energy Storage)
+28. IEEE Spectrum
+29. Chemical & Engineering News (C&EN)
+30. Rystad Energy
+31. CRU Group
+32. EV-Volumes
+33. Canary Media
+34. Electrive.com
+35. CnEVPost
+36. Gasgoo (Gasgoo Auto News)
+37. EETimes (EV & Power Section)
+38. Saur Energy International
+39. Battery Industry (China)
+40. GG-LB.com (Chinese battery industry portal)
+41. EnergyTrend (Taiwan)
+42. InfoLink (Taiwan)
+43. Energy Storage Journal (UK)
+44. American Clean Power Association (ACP) (formerly US ESA)
+45. Smart Electric Power Alliance (SEPA)
+
+## 8. Industry Associations, Government Bodies & Standards
+1. International Electrotechnical Commission (IEC)
+2. International Organization for Standardization (ISO)
+3. Underwriters Laboratories (UL)
+4. Society of Automotive Engineers (SAE International)
+5. The Battery Association of Japan (BAJ)
+6. China Industrial Association of Power Sources (CIAPS)
+7. Korea Battery Industry Association (KBIA)
+8. EUROBAT
+9. Recharge (The Rechargeable Battery Association)
+10. NAATBatt International
+11. Advanced Battery Consortium (USABC)
+12. California Air Resources Board (CARB)
+13. U.S. Department of Energy (DOE) - Vehicle Technologies Office (VTO)
+14. U.S. Department of Energy - Office of Electricity (OE)
+15. European Battery Alliance (EBA)
+16. European Commission - DG ENER
+17. International Energy Agency (IEA)
+18. Clean Energy Ministerial (CEM)
+19. China Automotive Battery Research Institute (CABR)
+20. Global Battery Alliance (GBA)
+21. U.S. Environmental Protection Agency (EPA)
+22. U.S. Department of Transportation (DOT / PHMSA)
+23. Forth (formerly Drive Oregon)
+24. ASTM International
+25. ASME (American Society of Mechanical Engineers)
+26. IEEE PES (Power & Energy Society)
+27. China Electricity Council (CEC)
+28. BattInfo (Battery Data Interface)
+29. China EV100
+
+## 9. Testing, Certification, Consulting & Market Research
+1. TÜV SÜD
+2. TÜV Rheinland
+3. DNV
+4. UL Solutions
+5. Intertek
+6. Bureau Veritas
+7. SGS Group
+8. Element Materials Technology
+9. CSA Group
+10. Eurofins Scientific
+11. Aethercomm (Battery Testing)
+12. Mobile Power Solutions (Testing)
+13. Key Power Electronics (Testing)
+14. NH Research (now Astrodyne TDI) (Test Equipment)
+15. Arbin Instruments (Test Equipment)
+16. Chroma ATE Inc. (Test Equipment)
+17. Digatron Power Electronics (Test Equipment)
+18. AVL List GmbH (Testing & Simulation)
+19. Ricardo (Engineering Consultancy)
+20. FEV Group
+21. Exponent (Failure Analysis)
+22. TÜV Nord
+23. DEKRA
+24. NSF International
+25. EAG Laboratories (Eurofins)
+26. RTI Laboratories
+27. Smithers (Testing services)
+28. Maccor Inc. (Test Equipment)
+29. Bio-Logic (Electrochemical testing)
+30. Instron (Mechanical/abuse testing)
+31. HORIBA (Analytical measurement)
+32. AlixPartners (Turnaround consulting)
+33. Roland Berger (Strategy consultancy)
+34. GreyB (IP research/patent landscaping)
+35. SNE Research (Market Research)
+36. Avicenne Energy (Market Research)
+37. MarkLines (Market Research)
+38. Counterpoint Research (Market Research)
+39. Canalys (Market Research)
+
+## 10. Data, Software, AI & Cloud for Batteries
+1. Voltaiq (Battery Intelligence Platform)
+2. Twaice (Battery Analytics Software)
+3. Accure Battery Intelligence
+4. Clarios (Smart Battery Management)
+5. Eatron Technologies (AI-powered BMS)
+6. LG Energy Solution (Battery Big Data Platform)
+7. Siemens (Battery Simulation - Simcenter)
+8. Dassault Systèmes (SIMULIA for Batteries)
+9. Ansys (Battery Simulation)
+10. COMSOL Multiphysics (Battery Modeling)
+11. MATLAB/Simulink (MathWorks)
+12. OpenFOAM (Open-source CFD, incl. Porous Flow modules)
+13. Gamma Technologies (GT-AutoLion / EC Power)
+14. Geotab (Telematics & Battery Analytics)
+15. Altair (Simulation & Data Analytics)
+16. Amazon Web Services (AWS) for Automotive
+17. Microsoft Azure (High-Performance Computing)
+18. Rescale (Cloud HPC platform)
+19. IBM Research (Battery AI)
+20. Citrine Informatics (AI for materials discovery)
+21. Samsara (Cloud telematics for EV fleets)
+22. Sibros (Deep telematics and OTA platform)
+23. Kasapr (Gigafactory data platform)
+
+## 11. Mining & Raw Materials (Lithium, Cobalt, Nickel, Graphite)
+1. Albemarle Corporation (Lithium)
+2. SQM (Sociedad Química y Minera de Chile) (Lithium)
+3. Ganfeng Lithium Co., Ltd.
+4. Tianqi Lithium Industries Inc.
+5. Arcadium Lithium plc (merger of Livent, Allkem, Orocobre)
+6. Mineral Resources Limited (Lithium)
+7. Pilbara Minerals (Lithium)
+8. IGO Limited (Lithium & Nickel)
+9. Glencore (Cobalt & Nickel)
+10. China Molybdenum Co., Ltd. (CMOC) (Cobalt)
+11. Eurasian Resources Group (ERG) (Cobalt)
+12. Sherritt International (Cobalt & Nickel)
+13. Norilsk Nickel (Nickel)
+14. BHP (Nickel)
+15. Vale S.A. (Nickel)
+16. Sumitomo Metal Mining (Nickel)
+17. Anglo American (Nickel)
+18. Talon Metals (Nickel)
+19. Syrah Resources (Graphite)
+20. Magnis Energy Technologies (Graphite)
+21. Nouveau Monde Graphite
+22. NextSource Materials (Graphite)
+23. Mason Graphite Inc.
+24. Leading Edge Materials Corp. (Graphite)
+25. Sigma Lithium Corporation
+26. Liontown Resources Limited
+27. POSCO Holdings
+28. Eramet
+29. Energy Exploration Technologies (EnergyX)
+30. Lilac Solutions
+31. Qinghai Salt Lake Industry Co., Ltd.
+32. Jinchuan Group
+33. South32 Limited
+34. Manganese X Energy
+35. Tasmania Railway (Bell Bay Nickel)
+36. Terrafame
+37. Tirupati Graphite PLC
+38. Toyota Tsusho
+39. Rio Tinto
+40. Fortescue Metals Group
+41. Freeport-McMoRan
+
+## 12. Equipment, Machinery & Front-End Manufacturing
+1. Wuxi Lead Intelligent Equipment Co., Ltd.
+2. Shenzhen Yinghe Technology Co., Ltd.
+3. PNT (Productivity & Quality)
+4. CKD Corporation
+5. Kaido Manufacturing Co., Ltd.
+6. Hitachi High-Tech Corporation
+7. Toray Engineering Co., Ltd.
+8. Fuji Corp
+9. CIS (Coating & calendering)
+10. Bühler Group (Coating)
+11. Durr Group (Cleaning & Coating)
+12. Schuler Group (Forming & Stamping)
+13. ATS Automation Tooling Systems Inc.
+14. Rockwell Automation
+15. Siemens AG (Factory Automation)
+16. ABB Ltd. (Robotics & Automation)
+17. KUKA AG (Robotics)
+18. Yaskawa Electric Corporation (Robotics)
+19. FANUC Corporation (Robotics)
+20. Manz AG
+21. Hirata Corporation
+22. Comau (Stellantis Group)
+23. Shenzhen Golden Milky Way Intelligent Tech
+24. Tech-Long Packaging Machinery
+25. PNE Solution (acquired by Doosan)
+26. Techno SemiChem Co., Ltd.
+27. Korea Moistech Co., Ltd.
+28. Nagano Automation Co., Ltd.
+29. HEIWA PRESS INDUSTRIES, LTD.
+30. Shenzhen Haoneng Technology
+31. Wuxi Grotech (Grotech Co., Ltd.)
+32. IKA Works (Slurry mixing)
+33. Charles Ross & Son Company (Slurry mixing)
+34. Mitsui Mining & Smelting (Mitsui Kinzoku) (Coating)
+35. Herbert Meyer GmbH (Calendering)
+36. Catbridge Machinery (Slitting)
+37. Netzsch Grinding & Dispersing (Bead mills)
+38. Hosokawa Micron Corporation (Powder processing)
+39. Loesche GmbH (Grinding technology)
+40. Kampf Schneid- und Wickeltechnik (Slitting)
+41. Nishimura Mfg. Co., Ltd. (Stacking/Cutting)
+42. Yasui Seiki Co., Ltd. (Coating/Winding)
+
+## 13. Energy Storage System (ESS) Integrators & Providers
+1. Fluence
+2. Tesla Energy (Megapack, Powerwall)
+3. Wärtsilä
+4. GE Renewable Energy
+5. Sungrow Power Supply Co., Ltd.
+6. SMA Solar Technology AG
+7. Delta Electronics, Inc.
+8. ABB (ESS)
+9. NEC Energy Solutions (now part of LG Energy Solution)
+10. LG Energy Solution (ESS)
+11. Samsung SDI (ESS)
+12. BYD (ESS)
+13. CATL (ESS)
+14. Pylontech
+15. Kokam Co., Ltd.
+16. Leclanché SA
+17. Saft (TotalEnergies)
+18. EnerSys
+19. Rolls-Royce (mtu Energy Solutions)
+20. Aggreko (now part of DCC Energy)
+21. JLM Energy
+22. Briggs & Stratton (formerly SimpliPhi Power)
+23. sonnen GmbH (Shell)
+24. Powin LLC
+25. Plus Power
+26. Key Capture Energy (KCE)
+27. GridStor
+28. Hithium Energy Storage
+29. Narada Power Source
+30. Chint (Astronergy)
+31. Shanghai Electric (SESEP)
+32. Alfen Group
+33. Tesvolt AG
+34. Pixii
+
+## 14. Investment, Finance, Carbon, ESG & IP Valuation
+1. PitchBook
+2. Crunchbase
+3. Cleantech Group
+4. Mercom Capital Group
+5. Lazard
+6. Goldman Sachs
+7. Morgan Stanley
+8. UBS Group (incl. former Credit Suisse)
+9. Citi
+10. Bloomberg Terminal
+11. Breakthrough Energy Ventures
+12. Energy Impact Partners
+13. Volta Energy Technologies
+14. Prime Movers Lab
+15. Khosla Ventures
+16. SoftBank Vision Fund
+17. Temasek Holdings
+18. GIC Private Limited
+19. Qatar Investment Authority
+20. Baillie Gifford
+21. T. Rowe Price
+22. Fidelity Investments
+23. BlackRock
+24. Vanguard (ESG funds)
+25. State Street Global Advisors
+26. TPG Rise Climate
+27. Generation Investment Management
+28. Activate Capital
+29. Brookfield Global Transition Fund
+30. Maniv Mobility
+31. Capricorn Investment Group
+32. Quantum Energy Partners
+33. G2 Venture Partners
+34. Sustainalytics (Morningstar)
+35. MSCI ESG Research
+36. S&P Global ESG Scores (incl. Trucost)
+37. Bloomberg ESG Data
+38. Refinitiv ESG Data
+39. FTSE Russell ESG Ratings
+40. ISS ESG
+41. CDP (Carbon Disclosure Project)
+42. Global Reporting Initiative (GRI)
+43. Sustainability Accounting Standards Board (SASB)
+44. Task Force on Climate-related Financial Disclosures (TCFD)
+45. UN Global Compact
+46. EcoVadis
+47. Carbon Trust
+48. Ecochain (LCA/Carbon)
+49. Diligent (ESG Business)
+50. Climatiq (Carbon intelligence)
+51. Minviro (Battery LCA)
+52. Sphera (Supply Chain ESG & LCA)
+53. RCS Global Group (Upstream auditing)
+54. RepRisk ESG Business Intelligence
+55. Kroll (formerly Duff & Phelps & American Appraisal) (IP Valuation)
+56. Houlihan Lokey (IP valuation)
+57. Stout Risius Ross (IP valuation)
+58. Willamette Management Associates (IP valuation)
+59. iP2Biz (IP commercialization)
+
+## 15. Academic Journals & Trade Publications
+1. Journal of The Electrochemical Society (JES)
+2. Journal of Power Sources
+3. Electrochimica Acta
+4. ACS Applied Energy Materials
+5. Nature Energy
+6. Science
+7. Advanced Energy Materials
+8. Energy & Environmental Science
+9. Nano Energy
+10. Materials Today Energy
+11. Energy Storage Materials
+12. International Journal of Energy Research
+13. IEEE Transactions on Transportation Electrification
+14. SAE International Journal of Electrified Vehicles
+15. Batteries & Supercaps (Wiley)
+16. Journal of Energy Storage
+17. Journal of Materials Chemistry A
+18. Journal of The American Chemical Society (JACS)
+19. Angewandte Chemie
+20. Advanced Materials
+21. Materials Today
+22. MRS Bulletin
+23. Progress in Materials Science
+24. Chemical Reviews
+25. Chemical Society Reviews
+26. ACS Energy Letters
+27. Cell Reports Physical Science
+28. Joule
+29. iScience (Cell Press)
+30. ACS Sustainable Chemistry & Engineering
+31. Green Chemistry
+32. Waste Management
+33. Resources, Conservation & Recycling
+34. IEEE Access
+35. Energies (MDPI)
+36. Science Advances
+37. Nature Communications
+38. Chemistry of Materials (ACS)
+39. Advanced Functional Materials
+40. Journal of Energy Chemistry
+41. npj Computational Materials (Nature)
+42. Automotive News (EV & Battery section)
+43. Battery Technology Magazine
+44. Electrochemical Society Interface
+45. Renewable Energy Focus
+46. Energy Storage
+47. Batteries & Energy Storage Technology (BEST)
+
+## 16. Specialized Components, Enclosures & Fastening
+1. Heraeus (Conductive pastes, current collectors)
+2. Toyo Aluminum K.K. (Aluminum foil)
+3. UACJ Corporation (incl. Nippon Foil Manufacturing)
+4. Fukuda Metal Foil & Powder Co., Ltd.
+5. Circuit Foil (Copper foil)
+6. Iljin Materials (Copper foil)
+7. Doosan Corporation (Copper foil)
+8. JX Nippon Mining & Metals (Copper foil)
+9. LS Mtron Ltd. (Copper foil)
+10. KCF Technologies (Copper foil)
+11. Solvay (PVDF binders, specialty polymers)
+12. Arkema (PVDF binders)
+13. Zeon Corporation (Binders, specialty chemicals)
+14. Ashland (Water-soluble binders)
+15. Trinseo (Latex binders)
+16. Cabot Corporation (Conductive carbon additives)
+17. Imerys Graphite & Carbon (Conductive additives)
+18. Denka Company Limited (Conductive additives)
+19. Lion Specialty Chemicals Co., Ltd. (Conductive additives)
+20. Orion Engineered Carbons (Conductive carbon black)
+21. Boron Specialties LLC (Boron additives)
+22. 3M (Adhesives, thermal interface materials)
+23. Henkel (Thermal interface materials, adhesives)
+24. Parker Hannifin (Sealing & Thermal solutions)
+25. Freudenberg Sealing Technologies (incl. Simrit)
+26. Saint-Gobain (High-performance seals)
+27. Wacker Chemie AG (Silicone for battery packs)
+28. Elkem Silicones (Silicone materials)
+29. Shin-Etsu Chemical Co., Ltd. (Silicone)
+30. Dymax Corporation (Curing adhesives)
+31. Master Bond Inc. (Adhesives, sealants)
+32. Guangdong Jiana Energy Technology (Copper foil)
+33. Nan Ya Plastics Corporation (Formosa Plastics) (Copper foil)
+34. Hitachi Metals (now Proterial) (Copper foil/Metals)
+35. Daikin Industries (PVDF binders)
+36. JSR Corporation (SBR binders)
+37. Nippon Paper Industries (CMC binders)
+38. Cnano Technology (Carbon nanotubes)
+39. Dexmet (now Mitsubishi Chemical) (Metal foils/meshes)
+40. SAMA Battery Components (SAMA Italia) (Tabs/Terminals)
+41. Panasonic (Pyrolytic Graphite Sheets for TIMs)
+42. ITW Performance Polymers (Thermally conductive adhesives)
+43. SABIC (Thermoplastics for enclosures)
+44. BASF (Performance Materials) (Engineering plastics)
+45. Arconic (Advanced aluminum for enclosures)
+46. Novelis (Aluminum for enclosures)
+47. Constellium (Aluminum solutions)
+48. Kaiser Aluminum
+49. Alcoa Corporation
+50. Norsk Hydro (Aluminum)
+51. SGL Carbon (Carbon fiber enclosures)
+52. Teijin Carbon (Carbon fiber)
+53. Toray Industries (Carbon fiber)
+54. Mitsubishi Chemical Carbon Fiber & Composites
+55. Stanley Black & Decker (Fastening tools)
+56. Atlas Copco (incl. Henrob SPR) (Industrial tools/riveting)
+57. Ingersoll Rand Inc. (Assembly tools)
+58. Bosch Rexroth (Assembly systems)
+59. Weber Screwdriving Systems
+60. DEPRAG SCHULZ (Assembly systems)
+61. AIMCO (Assembly technology)
+62. SCAIME (Force/torque sensors)
+63. Kistler Group (Process monitoring)
+64. Nordson Corporation (Adhesive dispensing)
+65. SFS Group (Precision fastening systems)
+
+## 17. Gigafactory Software, MES, CAD & Factory IT
+1. Rockwell Automation (FactoryTalk / Plant-wide integration)
+2. Siemens (MindSphere/Insights Hub, Opcenter, Simcenter, Capital, Xpedition)
+3. ABB (Ability Manufacturing Operations Management)
+4. Dassault Systèmes (DELMIA, SIMULIA, CATIA)
+5. PTC (ThingWorx, Creo)
+6. GE Vernova (formerly GE Digital / Proficy / Predix)
+7. AVEVA (incl. OSIsoft PI System)
+8. SAP (Manufacturing Execution / Extended Warehouse Mgmt)
+9. Oracle (Manufacturing Cloud / Warehouse Mgmt)
+10. Critical Manufacturing MES
+11. Cognex Corporation (Machine Vision)
+12. Keyence Corporation (Sensors, vision systems)
+13. Omron Corporation (Sensors, inspection, vision)
+14. ISRA VISION (Surface inspection)
+15. Atlas Copco (incl. Perceptron) (3D inspection/Metrology)
+16. Hexagon Manufacturing Intelligence (incl. MSC Software)
+17. Carl Zeiss Industrial Metrology
+18. Mitutoyo Corporation
+19. Nikon Metrology (X-Ray / CT)
+20. FARO Technologies
+21. Creaform (3D measurement)
+22. GOM (Optical measuring - now ZEISS)
+23. Renishaw plc (Measurement & inspection)
+24. Zebra Technologies (incl. Fetch Robotics) (Labeling/WMS/AMRs)
+25. SATO Holdings Corporation (Labeling)
+26. Brady Corporation (Labeling solutions)
+27. Honeywell Scanning & Mobility
+28. Datalogic S.p.A. (Auto-ID solutions)
+29. SICK AG (Sensors & identification)
+30. Leuze electronic (Sensor solutions)
+31. ifm electronic gmbh (Sensors)
+32. Balluff GmbH (Sensors & identification)
+33. Basler AG (Industrial cameras)
+34. Teledyne DALSA (Machine vision)
+35. Matrox Imaging
+36. LMI Technologies (3D scanning)
+37. National Instruments (now Emerson) (DAQ/Vision software)
+38. Keysight Technologies (Data acquisition)
+39. Dewesoft (Data acquisition)
+40. HBM Test and Measurement
+41. Yokogawa Electric Corporation (DAQ)
+42. ADLINK Technology Inc.
+43. Advantech Co., Ltd.
+44. Spectris plc (Measurement & control)
+45. Campbell Scientific, Inc.
+46. DATAQ Instruments
+47. Sepasoft (Inductive Automation) (MES/Traceability)
+48. Tulip Interfaces (Frontline operations)
+49. InfinityQS (ProFicient) (SPC software)
+50. Telit Cinterion (IoT modules)
+51. Litmus Automation (Loop) (Edge computing)
+52. Battery Design LLC (Battery Design Studio) (Pack sizing)
+53. nTopology (nTop) (Generative design for cooling plates)
+54. Arena PLM (Arena Solutions) (Cloud BOM management)
+55. IBM Engineering (IBM ELM) (MBSE)
+56. Manhattan Associates (Warehouse Management)
+57. Blue Yonder (formerly JDA Software) (WMS)
+58. HighJump (now Körber Supply Chain) (WMS)
+59. Infor Warehouse Management
+60. Tecsys Inc. (WMS)
+61. Epicor (WMS)
+62. Dematic (Material handling)
+63. Daifuku Co., Ltd. (Material handling)
+64. Murata Machinery, Ltd. (Automation)
+65. SSI SCHAEFER (Intralogistics)
+66. Kardex Group (Storage systems)
+67. Knapp AG (Logistics automation)
+68. Swisslog Holding AG (Warehouse automation)
+69. TGW Logistics Group
+70. Vanderlande Industries
+71. BEUMER Group
+72. Seegrid Corporation (AMRs)
+73. Locus Robotics (AMRs)
+74. 6 River Systems (now part of Shopify) (AMRs)
+75. AutoGuide Mobile Robots (AMRs)
+76. Omron Adept Technologies (AMRs)
+77. Vecna Robotics (AMRs)
+78. GreyOrange (AMRs)
+79. Geek+ (Chinese robotics/AMRs)
+80. Pepperl+Fuchs (Industrial sensors/RFID)
+81. Turck (Fluid sensors/RFID)
+82. Teledyne FLIR (Thermal imaging for line inspection)
+83. KION Group (Linde MH, Baoli) (Forklifts/AGVs)
+
+## 18. Thermal Management, Welding, Finishing & Utilities
+1. Boyd Corporation (incl. Aavid Thermalloy & Laird Thermal Systems)
+2. European Thermodynamics Ltd
+3. CoolIT Systems (Liquid cooling)
+4. Modine Manufacturing Company
+5. Mahle GmbH (Thermal management)
+6. Valeo (Thermal systems)
+7. DANA Incorporated (Thermal products)
+8. Gentherm (Thermal management)
+9. Hanon Systems
+10. VOSS Automotive (Fluid line systems)
+11. SANHUA (Valves, heat exchangers)
+12. Dunham-Bush (Cooling solutions)
+13. Engineered Fluids (Dielectric coolants)
+14. MIVolt (Dielectric fluids)
+15. Submer (Immersion cooling)
+16. Yinlun Machinery (Chilling plates)
+17. Sanden Holdings (EV heat pumps)
+18. technotrans AG (Gigafactory cooling)
+19. Trumpf GmbH + Co. KG (Laser welding/cutting)
+20. Coherent, Inc. (incl. Rofin-Sinar) (High-power lasers)
+21. IPG Photonics Corporation (Fiber lasers)
+22. Amada Weld Tech (formerly Miyachi Unitek) (Laser/Resistance welding)
+23. Han's Laser Technology Industry Group
+24. Jenoptik AG (Laser systems)
+25. Newport Corporation (Lasers & photonics)
+26. NKT Photonics (Fiber lasers)
+27. Lumentum Holdings Inc. (Laser solutions)
+28. Orthodyne Electronics (Besi) (Heavy wire bonding)
+29. Hesse Mechatronics (Heavy wire bonders)
+30. Laserline GmbH (Diode lasers)
+31. nLight (Fiber lasers)
+32. EO Technics (Korean laser supplier)
+33. Branson Ultrasonics (Emerson) (Ultrasonic welding)
+34. Herrmann Ultrasonics
+35. Rinco Ultrasonics
+36. Sonics & Materials, Inc.
+37. Telsonic Ultrasonics
+38. Dukane Corporation (Ultrasonic assembly)
+39. Schunk Sonosystems (Ultrasonic welding)
+40. Stapla Ultrasonics
+41. Mecasonic (Ultrasonic welding)
+42. Ultrasonic Engineering Co., Ltd.
+43. Resistance Welding Manufacturing Alliance (RWMA)
+44. CenterLine (Windsor) Limited (Resistance welding)
+45. Nippon Steel Welding & Engineering
+46. Obara Corporation (Resistance welding)
+47. ARO Technologies (Welding equipment)
+48. CEA (Welding technology)
+49. Fronius International (Welding technology)
+50. Kemppi Oy (Welding equipment)
+51. Bitrode Corporation (Formation/Aging test systems)
+52. PEC (Precision Equipment Company) (Aging systems)
+53. Kikusui Electronics Corporation (Test equipment)
+54. Matsusada Precision (Power supplies for formation)
+55. EA Elektro-Automatik (Power supplies)
+56. TDK-Lambda Corporation (Power supplies)
+57. Takamisawa Kouki Mfg. Co. (Vacuum electrolyte filling)
+58. Hibar Systems (now Xylem) (Precision dispensing/filling)
+59. INFICON (Helium leak detection)
+60. Pfeiffer Vacuum (Vacuum pumps/leak detection)
+61. ElringKlinger (Gaskets/cell housings)
+62. Ingevity (Filling equipment)
+63. Putzmeister (High-viscosity filling)
+64. ViscoTec Pumpen- u. Dosiertechnik GmbH (Precision dispensing)
+65. Fluid Metering, Inc. (Precision pumps)
+66. IWAKI CO., LTD. (Chemical pumps)
+67. Saint-Gobain Performance Plastics (Fluid handling)
+68. Swagelok Company (Fluid system components)
+69. Graco Inc. (Fluid handling equipment)
+70. Nordson EFD (Precision fluid dispensing)
+71. Musashi Engineering, Inc. (Precision dispensing)
+72. Trelleborg Sealing Solutions
+73. Greene Tweed & Co. (High-performance seals)
+74. James Walker & Co. (Sealing solutions)
+75. Bal Seal Engineering (Spring-energized seals)
+76. Precision Metric (formerly Minnesota Rubber & Plastics)
+77. Apple Rubber Products
+78. Saint-Gobain Seals (now part of Technetics Group)
+79. WITT Gasetechnik (Gas analysis & safety)
+80. Dräger (Gas detection)
+81. Honeywell Analytics (Gas detection)
+82. MSA Safety Incorporated
+83. RKI Instruments (Gas detection)
+84. Crowcon Detection Instruments
+85. Industrial Scientific (Gas detection)
+86. Sensidyne (Gas detection)
+87. Testo SE & Co. KGaA (Gas analyzers)
+88. Vaisala (Humidity & gas measurement)
+89. Cubic-Ruiyi Instrument (Gas analysis for thermal runaway)
+90. Sensirion (Digital gas/humidity sensors for packs)
+91. Nederman Group (Gasmet) (FTIR gas analyzers)
+92. Linde plc (incl. formerly Praxair)
+93. Air Liquide (incl. Airgas)
+94. Air Products and Chemicals, Inc.
+95. Messer Group
+96. Taiyo Nippon Sanso Corporation (incl. Matheson Tri-Gas)
+97. Yingde Gases Group
+98. Gulf Cryo
+99. SOL Group
+100. Iwatani Corporation
+101. nexAir
+102. Southern Industrial Gas
+103. Chart Industries (Cryogenic equipment)
+104. Guangdong Huate Gas Co., Ltd. (Specialty gases)
+105. Veolia Water Technologies
+106. SUEZ Water Technologies & Solutions (incl. Degremont)
+107. Xylem Inc. (incl. Evoqua Water Technologies)
+108. Pentair plc
+109. Kurita Water Industries
+110. Nalco Water (Ecolab)
+111. ChemTreat (Danaher)
+112. Aquatech International Corporation
+113. IDE Technologies
+114. Pall Corporation (Filtration)
+115. Donaldson Company (Filtration)
+116. MANN+HUMMEL (Filtration)
+117. Munters (incl. Cargocaire) (Dehumidification)
+118. Bry-Air (Dehumidification)
+119. DST (Dry Room Technology)
+120. Park Air Systems (Dry air systems)
+121. Atlas Copco (Air dryers)
+122. Ingersoll Rand (Air dryers)
+123. Kaeser Compressors (Air treatment)
+124. ZEKS Compressed Air Solutions (Desiccant dryers)
+125. Pneumatech (Air treatment)
+126. FläktGroup (Air handling for dry rooms)
+127. Shijiazhuang Tianfeng Environmental Protection (Chinese dehumidification)
+128. Woongjin Chemical (RO membranes for UPW)
+129. Graver Technologies (Ion exchange resins)
+130. Samyang Corporation (Zero Liquid Discharge systems)
+
+## 19. Logistics, Packaging & Supply Chain Geography
+1. DB Schenker (Battery logistics)
+2. DHL (Dangerous Goods, Battery logistics, Customs)
+3. Kuehne + Nagel (Battery logistics, Customs)
+4. UPS (Dangerous Goods)
+5. FedEx (Dangerous Goods, Custom Critical)
+6. CMA CGM Group (incl. CEVA Logistics & formerly Bolloré Logistics)
+7. DSV Panalpina (Customs)
+8. Expeditors International (Customs)
+9. Nippon Express
+10. Sinotrans (China logistics)
+11. Gefco (Stellantis logistics)
+12. Ryder System, Inc. (EV fleet logistics)
+13. XPO Logistics
+14. Agility Logistics
+15. Wallenius Wilhelmsen (RoRo ocean carrier)
+16. COSCO Shipping Lines
+17. SEKO Logistics (EV/Battery hazmat)
+18. Dachser (European auto/battery supply)
+19. Kintetsu World Express (Japanese forwarder)
+20. STG Logistics
+21. Lynden Logistics (Hazardous materials)
+22. Anderson Trucking Service (ATS)
+23. Landstar System (Hazardous materials)
+24. Schneider National (Hazmat trucking)
+25. J.B. Hunt Transport Services
+26. Werner Enterprises (Hazmat)
+27. Knight-Swift Transportation
+28. Old Dominion Freight Line (Expedited)
+29. Nefab Group (Protective packaging)
+30. DS Smith (Sustainable packaging)
+31. Greif Inc. (Industrial packaging)
+32. Sonoco Products Company
+33. Sealed Air Corporation
+34. Signode Industrial Group
+35. ORBIS Corporation (Reusable packaging)
+36. Schoeller Allibert (Reusable containers)
+37. Tekni-Plex (formerly IPL Plastics)
+38. Bulk Pack Inc. (Dangerous goods packaging)
+39. Labelmaster (Dangerous goods compliance)
+40. Air Sea Containers (Dangerous goods packaging)
+41. C.L. Smith (Industrial packaging)
+42. Uline (Packaging supplies)
+43. JIT Packaging (Just-in-time packaging)
+44. CellBlock ECS (Fire-suppressing packaging)
+45. Zarges International (Aluminum cases for UN-certified transport)
+46. Smurfit Kappa (Heavy-duty corrugated EV battery boxes)
+47. Intelsius (DGP) (Dangerous goods packaging)
+48. Veritiv Corporation (Custom EV battery module packaging)
+49. Sea Box, Inc. (Shipping containers)
+50. W&H Systems (Packaging automation)
+51. Pelican Products (Protective cases)
+52. Hardigg Cases (Protective shipping)
+53. Zero Manufacturing (Electronic enclosures)
+54. Bud Industries (Enclosures)
+55. Hammond Manufacturing (Enclosures)
+56. OKW Enclosures
+57. Polycase (Electronic enclosures)
+58. Takachi Electronics Enclosure
+59. Tennessee Valley Authority (TVA - US Southeast Econ Dev)
+60. Michigan Economic Development Corporation (MEDC)
+61. Georgia Department of Economic Development
+62. North Carolina Department of Commerce
+63. South Carolina Department of Commerce
+64. California GO-Biz
+65. Texas Economic Development Corporation
+66. Invest in Bavaria (Germany)
+67. Business France
+68. Invest in Sweden
+69. Flanders Investment & Trade (Belgium)
+70. Netherlands Foreign Investment Agency (NFIA)
+71. Japan External Trade Organization (JETRO)
+72. Invest in Canada
+73. Australian Trade and Investment Commission (Austrade)
+74. Kentucky Cabinet for Economic Development
+75. JobsOhio
+76. Port of Rotterdam
+77. Port of Antwerp-Bruges
+78. Port of Hamburg
+79. Port of Los Angeles
+80. Port of Long Beach
+81. Port of Shanghai
+82. Port of Shenzhen
+83. Port of Singapore
+84. Port of Vancouver
+85. Port of Busan
+86. Port of San Antonio (Chile)
+87. Port of Ulsan (South Korea)
+88. Prologis (Industrial logistics real estate)
+89. Goodman Group (Industrial property)
+90. GLP (Global logistics properties)
+91. ESR Group (Logistics real estate)
+92. Duke Realty Corporation (Industrial REIT)
+93. First Industrial Realty Trust
+94. Rexford Industrial Realty
+95. STAG Industrial
+96. Triton International (Container leasing)
+97. Textainer Group Holdings (Container leasing)
+98. China Fortune Land Development (Industrial parks)
+99. SEG (Suzhou Industrial Park)
+100. Tianjin Economic-Technological Development Area (TEDA)
+101. Zhangjiagang Free Trade Zone
+102. Yantai Economic & Technological Development Zone
+103. Suzhou New District
+104. Wuxi National Hi-tech District
+105. Chengdu Hi-tech Industrial Development Zone
+106. Xi'an High-tech Zone
+107. Hefei High-tech Zone
+108. CapitaLand (Ascendas-Singbridge) (Asian industrial parks)
+
+## 20. Insurance, Risk Management, Legal & Trade Policy
+1. Munich Re (Battery risk)
+2. Swiss Re (Climate risk insurance)
+3. Lloyd's of London (Specialty insurance)
+4. AIG (Energy division)
+5. Chubb Limited (Energy insurance)
+6. AXA XL (Energy & Power)
+7. Allianz Global Corporate & Specialty
+8. Zurich Insurance Group
+9. Berkshire Hathaway Specialty Insurance
+10. Liberty Mutual Insurance
+11. FM Global (Property risk engineering)
+12. Tesla Insurance (OEM captive)
+13. Mapfre (Mobility & EV Division)
+14. Travelers Insurance (Gigafactory property)
+15. Endurance Warranty Services (EV battery extended warranty)
+16. CarChex (EV battery extended warranty)
+17. Assurant (incl. The Warranty Group) (Device/EV warranty)
+18. American Bankers Insurance (Warranty)
+19. Old Republic Warranty
+20. Fortegra Financial (Warranty solutions)
+21. Interstate National Corporation
+22. National Warranty Corporation
+23. Service Contract Industry Council (Trade association)
+24. Automotive Warranty & Service Contract Association
+25. Marsh McLennan (Risk management)
+26. Aon plc (Risk solutions)
+27. Willis Towers Watson (WTW - risk advisory)
+28. Arthur J. Gallagher & Co. (Gallagher)
+29. Lockton Companies (Risk advisory)
+30. Brown & Brown Insurance
+31. HUB International
+32. Acrisure (Insurance brokerage)
+33. USI Insurance Services
+34. ERM (Environmental Resources Management)
+35. AECOM (Environmental consulting)
+36. Jacobs Engineering Group (Environmental & Tech Due Diligence)
+37. Tetra Tech, Inc. (Environmental services)
+38. Stantec (Environmental consulting)
+39. Arcadis NV (Environmental management)
+40. Golder Associates (now WSP)
+41. Ramboll Group (Environmental consulting & Tech DD)
+42. Wood PLC (Environmental services)
+43. SLR Consulting
+44. Deloitte (Sustainability, Market Entry, M&A Integration)
+45. PwC (Sustainability, Market Entry, M&A Integration)
+46. EY (Climate Change, Market Entry, M&A Integration)
+47. KPMG (Sustainability, Market Entry, M&A Integration)
+48. Accenture (Sustainability, Market Entry, M&A Integration)
+49. Bain & Company (Sustainability, Market Entry, M&A)
+50. Boston Consulting Group (Sustainability, Market Entry, M&A)
+51. McKinsey & Company (Sustainability, Market Entry, M&A)
+52. BSR (Business for Social Responsibility)
+53. Kearney (Circular Economy / Market Entry)
+54. Oliver Wyman (Market Entry / Post-merger integration)
+55. L.E.K. Consulting (M&A strategy)
+56. IBM (Joint venture & M&A integration advisory)
+57. Capgemini (JV & integration consulting)
+58. A.T. Kearney (Operations / M&A)
+59. Climate Impact Partners (Carbon offsetting)
+60. South Pole (Carbon project developer)
+61. 3Degrees (Carbon offset services)
+62. NativeEnergy (Carbon offsets)
+63. Carbonfund.org Foundation
+64. Terrapass (Carbon offsets)
+65. Sustainable Travel International (Carbon offsetting)
+66. myclimate (Carbon offset foundation)
+67. Atmosfair (Carbon offsetting)
+68. Cool Effect (Carbon credit platform)
+69. Circular Economy Alliance
+70. Circle Economy (consulting)
+71. Ellen MacArthur Foundation (consulting partners)
+72. Gartner Supply Chain (consulting)
+73. Alvarez & Marsal Performance Improvement
+74. Information Technology & Innovation Foundation (ITIF) (Policy think tank)
+75. Wiley Rein LLP (EV & Battery Practice) (Trade law/Policy)
+76. American Clean Power Association (clean energy lobby)
+77. Advanced Energy Economy (AEE)
+78. European Association for Storage of Energy (EASE)
+79. China Energy Storage Alliance (CNESA)
+80. National Association of Manufacturers (NAM)
+81. U.S. Chamber of Commerce
+82. BusinessEurope
+83. Akin Gump Strauss Hauer & Feld (Government relations)
+84. Covington & Burling (Public policy)
+85. Holland & Knight (Public policy)
+86. Brownstein Hyatt Farber Schreck
+87. Cassidy & Associates
+88. Mehlman Castagnetti Rosen & Thomas
+89. The Franklin Partnership
+90. Van Scoyoc Associates
+91. Capitol Counsel
+92. Crossroads Strategies
+93. Sandler, Travis & Rosenberg (Trade law)
+94. Kelley Drye & Warren (International trade)
+95. Mayer Brown (International trade)
+96. White & Case (International trade)
+97. Sidley Austin (Trade regulation)
+98. King & Spalding (International trade)
+99. Steptoe & Johnson (International trade)
+100. Crowell & Moring (International trade)
+101. ArentFox Schiff (International trade)
+102. Export Compliance Solutions (ECS)
+103. OCR Services (Export compliance)
+104. Trade Compliance Solutions (TCS)
+105. E2open (incl. Amber Road & Integration Point) (Trade compliance)
+106. Descartes Systems Group (Trade compliance)
+107. SAP Global Trade Services
+108. Oracle Global Trade Management
+109. MIC Customs Solutions
+110. Vigilant Global Trade Solutions
+111. Finnegan, Henderson, Farabow, Garrett & Dunner (IP Law)
+112. Fish & Richardson P.C. (IP Law)
+113. Morrison & Foerster LLP (IP Law)
+114. Jones Day (IP Law)
+115. Baker McKenzie (IP Law)
+116. Hogan Lovells (IP Law)
+117. Kilpatrick Townsend & Stockton (IP Law)
+118. Dentons (IP Law)
+119. Bird & Bird (IP Law)
+120. Carpmaels & Ransford (UK IP specialists)
+121. Ankura Consulting Group (Supply chain resilience)
+122. BDO Global (Mid-market clean-tech consulting)
+123. Kroll (IP & Trade Secret Practice)
+
+## 21. Startups, Emerging Tech & Next-Gen Chemistry
+1. Skeleton Technologies (Supercapacitor/Ultracapacitor)
+2. Nanotech Energy (Graphene batteries)
+3. Graphenano (Graphene batteries)
+4. Ionic Materials (Polymer electrolyte)
+5. Pellion Technologies (Magnesium batteries)
+6. PolyPlus Battery Company (Lithium-air, lithium-water)
+7. Ambri (Liquid metal battery)
+8. Form Energy (Iron-air battery)
+9. ESS Inc. (Iron flow battery)
+10. VoltStorage (Iron salt battery)
+11. Zinc8 Energy Solutions (Zinc-air)
+12. EnerVenue (Metal-hydrogen battery)
+13. Cadenza Innovation (Cell design)
+14. Ampcera Inc. (Solid-state electrolyte)
+15. ION Storage Systems (Solid-state)
+16. Blue Solutions (Solid-state polymer - Bolloré)
+17. Factorial Energy (Solid-state)
+18. Cuberg (Lithium metal - acquired by Northvolt)
+19. SES AI (Hybrid Li-metal)
+20. GMG Graphene (Graphene-aluminum battery)
+21. Lyten (3D Graphene)
+22. Natron Energy (Sodium-ion)
+23. Altris AB (Sodium-ion cathode)
+24. Tiamat (Sodium-ion)
+25. Faradion (Sodium-ion - acquired by Reliance Industries)
+26. HiNa Battery Technology (Sodium-ion)
+27. AMTE Power (Sodium-ion, UK)
+28. LiNa Energy (Sodium-metal chloride)
+29. Nyobolt (Ultra-fast charging)
+30. Echion Technologies (Niobium anode)
+31. NEO Battery Materials (Silicon anode)
+32. Enwires (Wire-based battery)
+33. Prieto Battery (3D copper foam structure)
+34. Eos Energy Enterprises (Zinc-hybrid cathode)
+35. Invinity Energy Systems (Vanadium flow battery)
+36. VRB Energy (Vanadium redox battery)
+37. Highview Power (Liquid air energy storage)
+38. Redflow (Zinc-bromine flow battery)
+39. Wildcat Discovery Technologies (Materials discovery)
+40. Addionics (3D porous current collectors)
+41. Zeta Energy (Sulfur/lithium-metal)
+42. Nuvvon (Polymer solid-state)
+43. BrightVolt (Polymer solid-state)
+44. Cymbet Corporation (Solid-state thin-film)
+45. Excellatron Solid State (Thin-film)
+46. Front Edge Technology (Thin-film)
+47. Seeo (Acquired by Bosch)
+48. Sakti3 (Acquired by Dyson)
+49. LionVolt (3D solid-state)
+50. Inlyte Energy (Sodium-based solid-state)
+51. Natrion (Solid-state electrolyte)
+52. Theion (Sulfur-based solid-state)
+
+## 22. Charging Infrastructure, BaaS, Swapping & Cybersecurity
+1. Octopus Energy (Electric Juice - BaaS)
+2. Shell Recharge Solutions (incl. Volta, Greenlots, NewMotion)
+3. BP Pulse
+4. EVgo (Charging network)
+5. ChargePoint (Charging network)
+6. Electrify America
+7. Ionity (European charging network)
+8. Fastned (European charging)
+9. Enel X (JuiceBox)
+10. Blink Charging (incl. SemaConnect)
+11. Schneider Electric (EV Connect)
+12. Star Charge (StarCharge) (Chinese network/hardware)
+13. TELD (Qingdao Teld New Energy) (Chinese network)
+14. XCharge (Global high-power charging)
+15. ev.energy (Smart charging and V2G software)
+16. Driivz (White-label CPMS software)
+17. NIO (Battery swapping stations)
+18. Aulton (Chinese battery swapping)
+19. Ample (Modular battery swapping)
+20. Gogoro (Battery swapping for scooters)
+21. BattSwap (Battery swapping technology)
+22. PowerSwap (Sweden)
+23. SUN Mobility (Indian battery swapping)
+24. BattRE (Indian EV swapping)
+25. Lithion Power (Indian swapping)
+26. Charge+ (Singapore swapping)
+27. Batttery (Swapping infrastructure)
+28. Rydies (Australian swapping)
+29. CATL (EVOGO / Choco-SEB) (Swapping)
+30. Geely Auto Group (Cao Cao Mobility) (Swapping)
+31. Botan Technology (Chinese swapping stations)
+32. Yulu (Indian two-wheeler swapping)
+33. SK E&S (EasiBSS) (Korean swapping)
+34. FreeWire (Mobile charging)
+35. SparkCharge (Portable charging)
+36. WiTricity Corporation (incl. former Qualcomm Halo) (Wireless charging)
+37. InductEV (formerly Momentum Dynamics) (Wireless)
+38. HEVO Inc. (Wireless)
+39. Plugless Power (Evatran) (Wireless)
+40. Bombardier PRIMOVE (Wireless)
+41. ElectReon Wireless (Dynamic wireless)
+42. WAVE (Wireless Advanced Vehicle Electrification)
+43. IPT Technology GmbH (Wireless)
+44. Mojo Mobility (acquired by Apple) (Wireless)
+45. Continental AG (Wireless charging)
+46. Bosch (Wireless charging)
+47. Siemens (Wireless charging)
+48. Hyundai Mobis (Wireless)
+49. Anjie Wireless (Chinese wireless)
+50. Zhejiang VIE Science & Technology (Chinese wireless)
+51. ZTE Corporation (New Energy Vehicles) (Wireless)
+52. Continental (Argus Cyber Security)
+53. Karamba Security
+54. GuardKnox (Now Harman)
+55. Upstream Security
+56. C2A Security
+57. Vector Informatik (Cybersecurity solutions)
+58. ETAS (Bosch - cybersecurity)
+59. Synopsys (Software security)
+60. BlackBerry QNX (Secure operating systems)
+61. Green Hills Software (INTEGRITY OS)
+62. Wind River (VxWorks)
+63. SUSE Linux Enterprise (Automotive)
+64. Microsoft Azure Sphere (IoT security)
+65. AWS IoT Device Defender
+66. VicOne (Automotive cybersecurity)
+67. Cymotive Technologies (VW-backed)
+68. Cybellum (Digital twin cyber risk)
+69. Verimatrix (Cryptographic root-of-trust)
+70. Riscure (Hardware security testing)
+
+## 23. Predictive Maintenance, Digital Twin, Robotics & Additive Mfg
+1. Uptake Technologies
+2. C3.ai (Predictive analytics)
+3. Falkonry (Time series AI)
+4. Petasense (IoT predictive maintenance)
+5. Augury (Machine health intelligence)
+6. Senseye (Predictive maintenance)
+7. SparkCognition (AI for maintenance)
+8. SAS Institute (Predictive analytics)
+9. IBM Maximo (Asset management)
+10. Oracle IoT Asset Monitoring
+11. PTC ThingWorx (Asset monitoring)
+12. GE Vernova (Asset Performance Management)
+13. Siemens (Insights Hub / Predictive maintenance)
+14. ABB Ability (Asset health)
+15. Honeywell Forge (Asset monitoring)
+16. Dukosi (Chip-on-cell monitoring)
+17. Tata Elxsi (BMS algorithms)
+18. Smartenit (Stationary storage monitoring)
+19. Cognite (Industrial data-ops)
+20. Itron (Grid edge intelligence)
+21. ANSYS (Battery simulation suite)
+22. SIMULIA (Dassault Systèmes)
+23. Altair (Multiphysics simulation)
+24. dSPACE (HIL for BMS validation)
+25. OPAL-RT Technologies (Real-time digital simulators)
+26. Speedgoat (Real-time HIL)
+27. JSOL Corporation (Electrochemical modeling)
+28. Visual Components (Gigafactory line simulation)
+29. FANUC America Corporation
+30. Yaskawa America, Inc. (Motoman Robotics)
+31. KUKA Robotics Corporation
+32. ABB Robotics
+33. Universal Robots
+34. Teradyne (MiR - Mobile Industrial Robots)
+35. Stäubli Robotics
+36. Epson Robots
+37. Kawasaki Robotics
+38. Nachi Robotic Systems
+39. HIWIN Technologies
+40. Siasun Robot & Automation
+41. Robotic Automation Systems
+42. OTTO Motors (Clearpath) (Heavy-duty AMRs)
+43. Boston Dynamics (Stretch) (Logistics robots)
+44. Doosan Robotics (Cobots)
+45. Voxeljet (3D printing for battery prototypes)
+46. 3D Systems Corporation
+47. Stratasys Ltd.
+48. HP Inc. (Multi Jet Fusion)
+49. EOS GmbH (Electro Optical Systems)
+50. Renishaw plc (Metal 3D printing)
+51. SLM Solutions Group AG
+52. Markforged
+53. Carbon, Inc.
+54. Formlabs
+55. UltiMaker (merger of Ultimaker & MakerBot)
+56. Nano Dimension (Printed electronics) (Acquiring Desktop Metal)
+57. Optomec (Aerosol Jet printing)
+58. XJet (Carmel 1400 for ceramics)
+59. Sakuu Corporation (3D printed solid-state batteries)
+60. Blackstone Technology (3D screen-printing batteries)
+61. ADDUP (FormUp 350) (Metal 3D printing for cooling plates)
+
+## 24. Human Capital, Education, Events & Media
+1. Battery Jobs (batteryjobs.com)
+2. Clean Energy Jobs (cleanenergyjobline.com)
+3. LinkedIn Jobs
+4. Indeed
+5. Glassdoor
+6. AngelList (startup jobs)
+7. IEEE Job Site
+8. SAE Career Center
+9. Electrochemical Society Career Center
+10. Battery Industry Professionals (LinkedIn Group)
+11. Energy Storage Association Career Center
+12. GreenJobs.com
+13. Renewables.jobs
+14. CleanTech Talent
+15. EngineerJobs.com
+16. Spencer Stuart (Executive search)
+17. Heidrick & Struggles
+18. Korn Ferry
+19. Egon Zehnder
+20. Russell Reynolds Associates
+21. Boyden
+22. DHR Global
+23. Michael Page (PageGroup)
+24. Robert Half Technology
+25. Actalent (formerly Aerotek Engineering)
+26. Kelly Services
+27. ManpowerGroup
+28. Adecco
+29. Randstad
+30. Hays plc
+31. Brunel International
+32. Volt Workforce Solutions
+33. TRC Staffing Services
+34. Nesco Resource
+35. Express Employment Professionals
+36. Orion Talent
+37. Climatebase (Climate tech job board)
+38. Terra.do (Climate talent platform)
+39. Work in Climate (Vetted community)
+40. Selby Jennings (Deep-tech recruitment)
+41. Vaco (Binoculars) (Clean-tech talent)
+42. Coursera (Battery courses)
+43. edX (Energy storage courses)
+44. Udemy (Battery technology courses)
+45. LinkedIn Learning (EV, battery courses)
+46. MIT OpenCourseWare
+47. Stanford Online
+48. The Faraday Institution (Educational resources)
+49. Battery University (by Cadex Electronics)
+50. Electrochemical Society (ECS) Short Courses
+51. IEEE (Educational Activities & Continuing Education)
+52. UL University (Battery safety certification)
+53. TÜV Rheinland Academy (Battery training)
+54. DNV Academy (Energy storage courses)
+55. Sandia National Laboratories Battery Abuse Testing Laboratory training
+56. Argonne National Laboratory battery workshops
+57. SAE International battery training
+58. Skill-Lync (EV battery design/BMS simulation)
+59. Udacity (EV Nanodegrees)
+60. Vector Academy (Vector Informatik) (BMS software/safety training)
+61. Altair University (Battery simulation training)
+62. Rational Motion (UK EV battery integration training)
+63. ASTM International training
+64. UL Education & Training
+65. CSA Group Training Services
+66. BSI Training Academy
+67. TÜV SÜD Academy
+68. DEKRA Academy
+69. SGS Academy
+70. Bureau Veritas Training
+71. The Battery Show (North America, Europe)
+72. Electric & Hybrid Vehicle Technology Expo
+73. InterBattery (South Korea)
+74. CIFF (China International Battery Fair)
+75. ees Europe / Electrical Energy Storage
+76. Smarter E Europe
+77. Asian Battery Conference
+78. International Battery Seminar & Exhibit
+79. Advanced Automotive Battery Conference (AABC)
+80. Battery Congress (Germany/UK)
+81. Battery Japan (Tokyo)
+82. EVS (Electric Vehicle Symposium & Exhibition)
+83. Power2Drive Europe
+84. BloombergNEF Energy Storage Summit
+85. Benchmark Mineral Intelligence World Tour
+86. Power Battery Expo (Japan)
+87. Informa Markets (Battery Show series)
+88. Messe Düsseldorf (Battery+Storage)
+89. Reed Exhibitions (Energy events)
+90. Clarion Events (Energy storage events)
+91. Hannover Fairs (Industrial trade shows)
+92. Deutsche Messe (Energy exhibitions)
+93. Koelnmesse (Trade fairs)
+94. Messe München (Electronics & battery events)
+95. Hong Kong Trade Development Council (HKTDC)
+96. China Council for the Promotion of International Trade (CCPIT)
+97. Endless Sphere (Forum)
+98. DIY Electric Car Forums
+99. EEVblog (Electronics, includes BMS)
+100. Reddit - r/EVs, r/batteries, r/EnergyStorage
+101. ResearchGate (Scientific community)
+102. Speakev.com (EV/battery forum)
+103. EVTV Motor Werks (Webcast/Forum)
+104. The Electric (Steve LeVine podcast)
+105. The Interchange (Wood Mackenzie podcast)
+106. Redefining Energy (Podcast)
+107. Cleaning Up (Michael Liebreich podcast)
+108. The Energy Gang (Wood Mackenzie)
+109. Columbia Energy Exchange (Podcast)
+110. Volts (David Roberts podcast)
+111. Watt It Takes (Powerhouse podcast)
+112. The Big Switch (Dr. Melissa Lott podcast)
+113. Energy Insiders (Australian podcast)
+114. Fully Charged Show (YouTube)
+115. Engineering Explained (YouTube)
+116. Munro Live (YouTube)
+117. Weber Auto (YouTube)
+118. Battery Technology (YouTube)
+119. The Limiting Factor (YouTube)
+120. EV Tech Explained (YouTube)
+121. Charged (YouTube)
+122. E for Electric (YouTube)
+123. Out of Spec Motoring (Kyle Conner) (YouTube)
+124. Autoline Network (Podcast/YouTube)
+125. Dr. Shirley Meng (UCSD/Univ of Chicago/Argonne)
+126. Prof. Jeff Dahn (Dalhousie University)
+127. Prof. Clare Grey (Cambridge University)
+128. Elon Musk (Tesla, SpaceX)
+129. Peter Carlsson (Northvolt)
+130. JB Straubel (Redwood Materials)
+131. Gene Berdichevsky (Sila Nanotechnologies)
+132. Dr. Venkat Viswanathan (Carnegie Mellon)
+133. Dr. Matthew Keyser (NREL)
+134. Dr. K.M. Abraham (Northeastern University)
+135. Steven "Steve" LeVine (Author/Journalist)
+136. Simon Moores (Benchmark Mineral Intelligence)
+137. James Frith (BloombergNEF)
+138. Sam Jaffe (Cairn ERA)
+139. Dr. George Crabtree (1946-2023, Argonne National Lab)
+140. Dr. M. Stanley Whittingham (Nobel Laureate)
+141. Jason Hughes (wk057) (Tesla BMS hacker/reverse-engineer)
+142. BatteryMart.com (Consumer batteries)
+143. PowerStream Technology (Battery components)
+144. Mouser Electronics (Battery management ICs)
+145. Digi-Key Electronics (Battery components)
+146. RS Components (incl. Allied Electronics) (Global distributor)
+147. TTI, Inc. (Specialty electronics distributor)
+148. Future Electronics
+149. Avnet, Inc.
+150. Arrow Electronics (Global distributor)
+151. Rutronik Elektronische Bauelemente (European distributor)
+152. Octopart (Altium) (Component search engine)
+153. Findchips (Component search engine)
+154. Radix (by Cirba Solutions) (Battery scrap trading platform)
+155. Alibaba.com (B2B components)
+156. Made-in-China.com (B2B equipment)
+157. Global Sources (Electronics components)
+158. Thomasnet.com (Industrial suppliers)
+159. Kompass (Industrial B2B directory)
+160. eWorldTrade (Global B2B)
+161. ExportersIndia.com
+162. Taiwantrade.com
+163. IndiaMART
