@@ -1,40 +1,54 @@
-# HQ Location & Production Base — Enrichment Prompt
+# Baseline Metadata — Enrichment Prompt (HQ + core facts)
 
-Paste the block below into any AI tool along with a batch of company names
-(20–40 at a time, one category at a time works well). Run the **same batch
-through 2–3 different AI tools**, compare the answers, and keep only the
-facts that agree (or that you can verify yourself) — that's the
-cross-checking step. Paste the final, reconciled answer into a plain text
-file in the **exact pipe format** shown below, then merge it with
-[`tools/apply_locations.py`](../tools/apply_locations.py).
+The **minimum-requirement** metadata every entry should have, in one
+pipe-delimited pass you can run across the whole list and cross-check across
+multiple AI tools. This is the *shallow-but-universal* companion to
+[`ENRICHMENT_PROMPT.md`](ENRICHMENT_PROMPT.md) (which does *deep* type-specific
+profiles for the spine): run this over **all** entries to give every page a
+real summary, HQ, founding year, ownership and website; run the deep prompt
+only where you want chemistry / form-factor / key-IP detail.
+
+## The minimum set (per entry)
+
+| Field | Why it's minimum | Applies to |
+| --- | --- | --- |
+| **One-liner** | The single highest-value field — becomes the page summary + card subtitle. Without it a page is just a name. | everything |
+| **Type** | Corrects the auto-guessed entity type; frames the whole page (Corporate vs Facility vs People…). | everything |
+| **HQ City + Country** | Locates the entry; powers the country hubs + map. | everything |
+| **Founded** | Universal, low-risk credibility signal. | orgs/companies (blank for people/plants) |
+| **Ownership** | Public / Private / State-owned — key filter dimension. | companies |
+| **Website** | Drives the logo + official-link. Highest hallucination risk — see rules. | orgs/companies |
+| Production base(s) | *Optional bonus* — where it manufactures, if different from HQ. | manufacturers |
 
 ---
 
 ## The prompt
 
 ````text
-For each company below, give its headquarters location and, if different,
-where it actually manufactures/produces. Output ONE LINE PER COMPANY in
-EXACTLY this pipe-delimited format, nothing else (no numbering, no
-markdown, no extra commentary):
+For each company/organization below, return ONE LINE in EXACTLY this
+pipe-delimited format, nothing else (no numbering, no markdown, no commentary):
 
-Company Name | HQ City | HQ Country | Production base(s)
+Name | Type | HQ City | HQ Country | Founded | Ownership | Website | Production base(s) | One-liner
 
-Rules:
-- HQ City / HQ Country = where the company is legally headquartered.
-- Production base(s) = the actual manufacturing/production site(s), ONLY
-  if they differ meaningfully from HQ or there are multiple important ones.
-  Format multiple sites as "City1 (Country1); City2 (Country2)". If
-  production happens at/near HQ, or you don't know, leave this column BLANK
-  — do not guess or repeat the HQ as filler.
-- If you don't know the HQ city or country confidently, leave that column
-  BLANK rather than guessing. Do not fabricate a location.
-- Use the company's real, current, publicly known headquarters — not a
-  historical one, unless the company has since relocated (then use current).
-- Keep city/country names in plain English (e.g. "South Korea" not "Korea,
-  Republic of").
-- Output nothing but the pipe-delimited lines (one per company). No header
-  row, no blank lines between entries, no explanation before or after.
+Column rules (leave ANY column BLANK rather than guessing — an empty column is
+always better than a wrong value):
+- Type: one of Corporate | Facility | People | Research | Institution | Media
+- HQ City / HQ Country: current legal headquarters, plain English
+  ("South Korea", not "Korea, Republic of").
+- Founded: 4-digit year only. Blank for people, plants, and anything you're
+  unsure of.
+- Ownership: one of Public | Private | Private (VC) | State-owned | Subsidiary
+  | Nonprofit | Government. Blank if unknown.
+- Website: the REAL official homepage only (https, no path, no tracking). If
+  you are not certain of the exact domain, LEAVE IT BLANK — do not construct a
+  plausible-looking URL. This is the #1 thing to get wrong.
+- Production base(s): main manufacturing site(s) ONLY if they differ from HQ,
+  as "City1 (Country1); City2 (Country2)". Blank if same as HQ or unknown.
+- One-liner: <= 90 characters, factual, specific, NO marketing words
+  (no "leading", "innovative", "world-class"). E.g. "Korean pouch-cell maker;
+  Ford BlueOval SK JV" — not "a leading provider of advanced solutions".
+
+Output nothing but the pipe lines, one per company, no header row.
 
 Companies:
 <PASTE 20–40 NAMES HERE, ONE PER LINE>
@@ -42,58 +56,48 @@ Companies:
 
 ## Worked example
 
-Input companies:
+Input:
 ```
-CATL
-Albemarle
-Redwood Materials
+Rivian
+Sunwoda Electronic
+Prof. Jeff Dahn
 ```
 
-Expected output:
+Output:
 ```
-CATL | Ningde | China | Ningde, Yibin & Liyang (China); Debrecen (Hungary); Arnstadt (Germany)
-Albemarle | Charlotte | United States | Kings Mountain, NC & Silver Peak, NV (USA); Salar de Atacama (Chile); Greenbushes JV (Australia)
-Redwood Materials | Carson City | United States |
+Rivian | Corporate | Irvine | United States | 2009 | Public | https://rivian.com |  | US maker of electric pickups, SUVs and delivery vans
+Sunwoda Electronic | Corporate | Shenzhen | China | 1997 | Public | https://www.sunwoda.com | Shenzhen & Zhejiang (China) | Chinese maker of consumer-electronics and EV battery cells
+Prof. Jeff Dahn | People | Halifax | Canada |  |  |  |  | Li-ion lifetime researcher; Tesla's academic partner at Dalhousie University
 ```
-(Redwood's production base is left blank since its main campus *is* near
-its Carson City / Storey County, Nevada HQ — no separate distant site to
-call out.)
+(Founded/Ownership/Website blank for the person; Production base blank for
+Rivian since it's near HQ.)
 
-## Cross-checking workflow
+## Cross-checking + merge workflow
 
-1. Pick a batch of 20–40 company names from one sector/category.
-2. Run the prompt above through 2–3 AI tools (e.g. Claude, ChatGPT, Gemini).
-3. Compare the outputs line by line. Where they agree, keep it. Where they
-   disagree or one is blank, spot-check with a web search rather than
-   guessing which AI to trust.
-4. Save the final, reconciled lines into a text file, e.g.
-   `data/locations-batch1.txt` (a header row `Company Name | HQ City | HQ
-   Country | Production base(s)` is fine — the merge script skips it).
-5. Merge it in:
+1. Take 20–40 names from one sector/category.
+2. Run the prompt through **2–3 AI tools** (e.g. Claude, ChatGPT, Gemini).
+3. Compare line by line. Keep what agrees; where they differ or one is blank,
+   spot-check with a quick web search instead of trusting one tool. **Websites
+   especially** — verify the domain resolves to the real company.
+4. Save the reconciled lines to a text file, e.g. `data/baseline-batch1.txt`
+   (a header row is fine — the script reads column names from it).
+5. Merge:
    ```bash
    python3 build.py                                  # refresh dist/directory.json
-   python3 tools/apply_locations.py data/locations-batch1.txt
+   python3 tools/apply_locations.py data/baseline-batch1.txt
    python3 build.py                                  # apply + check for [warn] lines
    ```
-   The script reports how many rows resolved and writes any unmatched
-   company names to `data/locations-batch1.misses.txt` for you to review
-   (usually a naming mismatch — try the fuller/shorter form of the name).
-6. Spot-check a few `dist/e/<slug>.html` pages to confirm the HQ line and
-   "Production base(s)" row look right, then commit `data/companies.txt`,
-   the touched `data/metadata/*.json` shards, and (if created)
-   `data/metadata/15-locations.json`.
-7. Delete the scratch `data/locations-batch*.txt` files once merged — they
-   aren't read by the build, only `apply_locations.py` consumes them.
+6. Review `data/baseline-batch1.misses.txt` (unmatched names — usually a
+   fuller/shorter name form), spot-check a few `dist/e/` pages, then commit
+   `data/companies.txt` + the touched `data/metadata/*.json` shards. Delete the
+   scratch `baseline-batch*.txt` once merged.
 
-## Notes
+## Safety (how the merge protects your curated data)
 
-- Country already exists on most entries; this pass mainly **adds city**
-  and **production base**, and fills in country where it was missing.
-- Don't duplicate the ~102 already-detailed gigafactory/plant entries
-  (`data/metadata/14-gigafactories.json`) — those already have precise
-  per-plant city/status/chemistry. This workflow is for giving the
-  *corporate* entities (and everyone else) their own HQ + production info.
-- `apply_locations.py` never overwrites an existing metadata profile — it
-  merges `production_base` into whatever record already exists for that
-  entity (in whichever shard it lives), or creates a minimal new one only
-  if the entity has no profile yet.
+`tools/apply_locations.py` is **fill-gap by default**: it only sets a field
+that's currently *empty*, so a bulk baseline pass will **never overwrite** the
+327 hand-curated profiles (or an existing country/URL). Pass `--overwrite` only
+when you deliberately want the new values to win. `production_base` and any
+metadata field are merged into an entity's *existing* record (in whatever shard
+it lives), never a duplicate key. Header names are matched flexibly, so you can
+run a subset of columns (e.g. just `Name | Website`) in a later pass.

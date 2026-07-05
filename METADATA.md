@@ -34,6 +34,13 @@ doubt, use the full cleaned name as the key for an exact match.
 `country=`/`city=` live directly on the `data/companies.txt` line (not in
 metadata) — see below.
 
+**Minimum requirement (every entry):** `one_liner` + `type` + HQ
+`country`/`city` + `founded` + `ownership` + website. This baseline set is
+what makes a page read like a real profile rather than a bare name; enrich it
+across the whole list in one pipe-delimited pass with
+[`data/LOCATION_PROMPT.md`](data/LOCATION_PROMPT.md). Deep type-specific fields
+(below) are for the spine, via `ENRICHMENT_PROMPT.md`.
+
 ## Type-specific fields
 - **Corporate:** `ticker · product · chemistry · form_factor · deployment · target · key_ip · extraction · esg · production_base`
 - **Facility:** `facility_type · capacity · hazmat · city · strategic_role`
