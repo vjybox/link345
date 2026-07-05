@@ -102,12 +102,21 @@ python3 build.py                                       # merge into pages
 QA ~5 pages in `dist/e/` per batch (watch for invented numbers), commit
 `data/about.json`, redeploy.
 
+**HQ location + production base** (any AI tool, cross-checked): see
+[`data/LOCATION_PROMPT.md`](data/LOCATION_PROMPT.md) for the prompt and
+[`tools/apply_locations.py`](tools/apply_locations.py) for merging the
+cross-checked result. Every entry gains a "City, Country" HQ line; Corporate
+entries can also get a `production_base` (where they actually manufacture,
+when that's not already one of the 102 gigafactory plant entries).
+
 **Priorities, in order:**
-1. The ~150 most-connected "spine" companies (they appear on many pages).
-2. All 102 gigafactory entries (capacity / chemistry / customer) — the plant
-   atlas is a genuine differentiator.
-3. **Relationship edges** — highest leverage per line: every edge enriches
-   two entity pages plus the "two steps away" blocks. Target: 61 → 500+.
+1. ~~The ~150 most-connected "spine" companies~~ — done.
+2. ~~All 102 gigafactory entries~~ — done (Facility profiles in
+   `data/metadata/14-gigafactories.json`).
+3. **HQ + production base for every entry** — in progress; start with the
+   already-profiled 327 entities (`data/LOCATION_PROMPT.md`), then the rest.
+4. **Relationship edges** — highest leverage per line: every edge enriches
+   two entity pages plus the "two steps away" blocks. Target: 92 → 500+.
 
 ---
 

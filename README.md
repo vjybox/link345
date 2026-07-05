@@ -50,6 +50,7 @@ drawer + dark mode + hash deep-links all working.
 | `data/metadata/*.json` | Curated entity profiles, sharded one file per sector (glob-merged at build). |
 | `data/relationships.json` | Directed graph edges between entities (the Connections drawer). |
 | `data/ENRICHMENT_PROMPT.md` | Copy-paste AI prompt to populate/enrich the three data files at scale. |
+| `data/LOCATION_PROMPT.md` | Copy-paste AI prompt for HQ city/country + production base, cross-checked across multiple AI tools, merged via `tools/apply_locations.py`. |
 | `dist/directory.json` | Generated structured data (also embedded in the HTML) — git-ignored build artifact. |
 | `dist/e/<slug>.html` | One generated **content page per entry** (profile, supply-chain network, discovery lists) — git-ignored. |
 | `dist/{s,c,country,t,stage}/` | ~90 generated **hub/list pages** (sectors, categories, countries, technologies, loop stages). |

@@ -394,8 +394,8 @@ def parse():
         if m and current is not None:
             text = m.group(2)
             # optional pipe-separated fields:
-            #   "Name | https://url | country=Germany | logo=https://logo.svg"
-            url, country, logo = "", "", ""
+            #   "Name | https://url | country=Germany | city=Munich | logo=https://logo.svg"
+            url, country, city, logo = "", "", "", ""
             if "|" in text:
                 parts = [p.strip() for p in text.split("|")]
                 text = parts[0]
@@ -407,6 +407,8 @@ def parse():
                         k = k.strip().lower()
                         if k == "country":
                             country = v.strip()
+                        elif k == "city":
+                            city = v.strip()
                         elif k == "logo":
                             logo = v.strip()
             if not url:
@@ -424,6 +426,7 @@ def parse():
                 "type": SECTOR_TYPE.get(current["sector"], "Other"),
                 "tech": derive_tech(text, current["name"]),
                 "country": country,
+                "city": city,
                 "region": REGION_OF.get(country, ""),
             })
     return categories, entries
@@ -458,7 +461,8 @@ PAGE_FACTS = [
     ("target", "Target market"), ("key_ip", "Key IP"), ("extraction", "Extraction"),
     ("facility_type", "Facility type"), ("capacity", "Capacity"),
     ("hazmat", "Hazmat handling"), ("strategic_role", "Strategic role"),
-    ("city", "Location"), ("institution_type", "Institution type"),
+    ("city", "Location"), ("production_base", "Production base(s)"),
+    ("institution_type", "Institution type"),
     ("funding_source", "Funding source"), ("notable_facility", "Facility"),
     ("title", "Role"), ("expertise", "Expertise"), ("esg", "ESG"),
     ("media_type", "Format"),
@@ -692,8 +696,10 @@ def _entry_content_html(e, payload, rels, by_eid, by_cat, ctx, about_text=""):
         rows.append(("Status", escape(status)))
     if e.get("co"):
         n = counts["country"].get(e["co"], 0)
-        rows.append(("Country", _a(ctx, hubs["country"],
-                                   f'{escape(e["co"])}') + f' <span class="ct">({n} in the index)</span>'))
+        loc = f'{escape(e["ci"])}, ' if e.get("ci") else ""
+        rows.append(("HQ" if e.get("ci") else "Country",
+                     loc + _a(ctx, hubs["country"], f'{escape(e["co"])}')
+                     + f' <span class="ct">({n} in the index)</span>'))
     n_cat = counts["cat"].get(e["c"], 0)
     rows.append(("Category", _a(ctx, hubs["cat"], escape(e.get("cn", "")))
                  + f' <span class="ct">({n_cat} entries)</span>'))
@@ -1308,6 +1314,7 @@ def main():
              "s": e["sector"], "u": e["url"], "t": e["type"], "tech": e["tech"],
              "co": e["country"], "rg": e["region"], "eid": e["eid"], "et": e["et"],
              "stt": e["status"], "one": e["one"],
+             **({"ci": e["city"]} if e.get("city") else {}),
              **({"lg": e["logo"]} if e.get("logo") else {}),
              **({"ov": 1} if e.get("one_verified") else {}),
              **({"m": e["meta"]} if e.get("meta") else {})}
@@ -2844,7 +2851,7 @@ function openDetail(e){
     <div class="d-top">
       ${logoHtml(e)}
       <div class="d-title"><h3>${esc(e.n)}</h3>
-        <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.et||"")} · ${esc(e.s)}${e.co?' · '+esc(e.co):''} · Loop: ${esc(stageOf(e.s))}</div>
+        <div class="d-sec"><span class="dot" style="--sc:${DB.colors[e.s]||'#0a0a0a'}"></span>${esc(e.et||"")} · ${esc(e.s)}${e.co?' · '+(e.ci?esc(e.ci)+", ":"")+esc(e.co):''} · Loop: ${esc(stageOf(e.s))}</div>
       </div>
       <button class="d-x" data-close aria-label="Close">${I.x}</button>
     </div>
@@ -2869,6 +2876,7 @@ const PROFILE_ROWS = [
   ["product","Core product / material"],["chemistry","Chemistry"],["form_factor","Form factor"],
   ["deployment","Deployment"],["target","Target market"],["key_ip","Key IP"],["extraction","Extraction"],
   ["facility_type","Facility type"],["capacity","Capacity"],["hazmat","Hazmat handling"],["strategic_role","Strategic role"],
+  ["city","Location"],["production_base","Production base(s)"],
   ["institution_type","Institution type"],["funding_source","Funding source"],["notable_facility","Facility"],
   ["title","Role"],["expertise","Expertise"],["esg","ESG"],["media_type","Format"]];
 function entityProfile(e){
