@@ -121,7 +121,10 @@ when that's not already one of the 102 gigafactory plant entries).
 3. **HQ + production base for every entry** — in progress; start with the
    already-profiled 327 entities (`data/LOCATION_PROMPT.md`), then the rest.
 4. **Relationship edges** — highest leverage per line: every edge enriches
-   two entity pages plus the "two steps away" blocks. Target: 92 → 500+.
+   two entity pages plus the "two steps away" blocks. Target: 149 → 500+
+   (92 → 149 done in Batch C; next: more OEM↔cell-maker pairs, additional
+   recycling/materials supply chains, and the "second steps" that are still
+   thin — e.g. equipment makers beyond the handful currently linked).
 
 ---
 
