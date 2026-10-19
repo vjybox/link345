@@ -83,6 +83,11 @@ placeholders):
 
 ## Phase 1 — The content flywheel (~2–4 h/week — this is the moat)
 
+> Using more than one AI tool (e.g. ChatGPT alongside Claude) to generate or
+> cross-check this content? Read [`MULTI-AI-WORKFLOW.md`](MULTI-AI-WORKFLOW.md)
+> first — it's short and prevents the two ways this has gone wrong before
+> (format drift, and one AI silently "revising" another's work).
+
 Work **one sector per week**, two batches each:
 
 **Facts batch** (any free AI chat):
