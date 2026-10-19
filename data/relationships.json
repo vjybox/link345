@@ -460,6 +460,291 @@
       "ionity",
       "PARTNER_OF",
       "mercedes-benz group"
+    ],
+    [
+      "igo",
+      "JV_WITH",
+      "tianqi lithium"
+    ],
+    [
+      "mineral resources",
+      "JV_WITH",
+      "albemarle"
+    ],
+    [
+      "talon metals",
+      "SUPPLIES_TO",
+      "tesla"
+    ],
+    [
+      "liontown resources",
+      "SUPPLIES_TO",
+      "lg energy solution"
+    ],
+    [
+      "vale",
+      "SUPPLIES_TO",
+      "tesla"
+    ],
+    [
+      "glencore",
+      "INVESTED_IN",
+      "li-cycle"
+    ],
+    [
+      "pilbara minerals",
+      "JV_WITH",
+      "posco future m"
+    ],
+    [
+      "sigma lithium",
+      "SUPPLIES_TO",
+      "lg energy solution"
+    ],
+    [
+      "ecopro",
+      "SUPPLIES_TO",
+      "sk on"
+    ],
+    [
+      "shanshan technology",
+      "SUPPLIES_TO",
+      "catl"
+    ],
+    [
+      "resonac",
+      "SUPPLIES_TO",
+      "panasonic"
+    ],
+    [
+      "asahi kasei",
+      "SUPPLIES_TO",
+      "panasonic"
+    ],
+    [
+      "toray industries",
+      "SUPPLIES_TO",
+      "lg energy solution"
+    ],
+    [
+      "mitsubishi chemical",
+      "SUPPLIES_TO",
+      "panasonic"
+    ],
+    [
+      "sila",
+      "SUPPLIES_TO",
+      "mercedes-benz group"
+    ],
+    [
+      "zhejiang huayou",
+      "JV_WITH",
+      "lg energy solution"
+    ],
+    [
+      "wuxi lead",
+      "SUPPLIES_EQUIPMENT_TO",
+      "byd"
+    ],
+    [
+      "kuka",
+      "SUPPLIES_EQUIPMENT_TO",
+      "volkswagen"
+    ],
+    [
+      "fanuc",
+      "SUPPLIES_EQUIPMENT_TO",
+      "tesla"
+    ],
+    [
+      "wolfspeed",
+      "SUPPLIES_TO",
+      "general motors"
+    ],
+    [
+      "wolfspeed",
+      "SUPPLIES_TO",
+      "mercedes-benz group"
+    ],
+    [
+      "stmicroelectronics",
+      "SUPPLIES_TO",
+      "tesla"
+    ],
+    [
+      "vitesco technologies",
+      "SUPPLIES_TO",
+      "volkswagen"
+    ],
+    [
+      "nxp semiconductors",
+      "SUPPLIES_TO",
+      "bmw group"
+    ],
+    [
+      "renesas electronics",
+      "SUPPLIES_TO",
+      "nissan motor"
+    ],
+    [
+      "redwood materials",
+      "PARTNER_OF",
+      "toyota motor"
+    ],
+    [
+      "li-cycle",
+      "PARTNER_OF",
+      "lg energy solution"
+    ],
+    [
+      "ascend elements",
+      "PARTNER_OF",
+      "honda motor"
+    ],
+    [
+      "ascend elements",
+      "PARTNER_OF",
+      "sk on"
+    ],
+    [
+      "siemens",
+      "JV_WITH",
+      "fluence"
+    ],
+    [
+      "ionity",
+      "PARTNER_OF",
+      "ford"
+    ],
+    [
+      "ionity",
+      "PARTNER_OF",
+      "hyundai motor"
+    ],
+    [
+      "ionity",
+      "PARTNER_OF",
+      "volkswagen"
+    ],
+    [
+      "ionity",
+      "PARTNER_OF",
+      "stellantis"
+    ],
+    [
+      "evgo",
+      "PARTNER_OF",
+      "general motors"
+    ],
+    [
+      "argonne national laboratory",
+      "PARTNER_OF",
+      "lg energy solution"
+    ],
+    [
+      "argonne national laboratory",
+      "PARTNER_OF",
+      "samsung sdi"
+    ],
+    [
+      "argonne national laboratory",
+      "PARTNER_OF",
+      "sk on"
+    ],
+    [
+      "national renewable energy laboratory",
+      "MEMBER_OF",
+      "u.s. department of energy"
+    ],
+    [
+      "oak ridge",
+      "MEMBER_OF",
+      "u.s. department of energy"
+    ],
+    [
+      "general motors",
+      "MEMBER_OF",
+      "society of automotive"
+    ],
+    [
+      "ford",
+      "MEMBER_OF",
+      "society of automotive"
+    ],
+    [
+      "bmw group",
+      "MEMBER_OF",
+      "european battery alliance"
+    ],
+    [
+      "volkswagen",
+      "MEMBER_OF",
+      "european battery alliance"
+    ],
+    [
+      "northvolt",
+      "MEMBER_OF",
+      "european battery alliance"
+    ],
+    [
+      "acc",
+      "MEMBER_OF",
+      "european battery alliance"
+    ],
+    [
+      "reuters",
+      "COVERS",
+      "catl"
+    ],
+    [
+      "insideevs",
+      "COVERS",
+      "tesla"
+    ],
+    [
+      "electrek",
+      "COVERS",
+      "rivian"
+    ],
+    [
+      "bloombergnef",
+      "COVERS",
+      "albemarle"
+    ],
+    [
+      "benchmark mineral intelligence",
+      "COVERS",
+      "catl"
+    ],
+    [
+      "catl",
+      "COMPETES_WITH",
+      "byd"
+    ],
+    [
+      "lg energy solution",
+      "COMPETES_WITH",
+      "samsung sdi"
+    ],
+    [
+      "lg energy solution",
+      "COMPETES_WITH",
+      "sk on"
+    ],
+    [
+      "samsung sdi",
+      "COMPETES_WITH",
+      "sk on"
+    ],
+    [
+      "quantumscape",
+      "COMPETES_WITH",
+      "solid power"
+    ],
+    [
+      "quantumscape",
+      "COMPETES_WITH",
+      "prologium technology"
     ]
   ]
 }
