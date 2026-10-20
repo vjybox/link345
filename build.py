@@ -3060,6 +3060,28 @@ function splitOutsideParens(s){
   return parts;
 }
 
+// ---- shared dialog focus management (drawer + path-finder modal) ----
+// Neither traps Tab or restores focus on close -- a keyboard user can Tab
+// out into the page behind an open dialog, and loses their place entirely
+// after closing it. Both issues, same fix, used by both dialogs.
+function focusablesIn(container){
+  return Array.from(container.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  )).filter(el => el.offsetParent !== null);
+}
+function trapTabKey(container, ev){
+  if(ev.key !== "Tab") return;
+  const f = focusablesIn(container);
+  if(!f.length) return;
+  const first = f[0], last = f[f.length-1];
+  const inside = container.contains(document.activeElement);
+  if(ev.shiftKey){
+    if(!inside || document.activeElement === first){ ev.preventDefault(); last.focus(); }
+  } else {
+    if(!inside || document.activeElement === last){ ev.preventDefault(); first.focus(); }
+  }
+}
+
 // ---- filtering ----
 function filtered(){
   const q = state.q.trim().toLowerCase();
@@ -3320,7 +3342,9 @@ function renderMap(rows){
   </svg>`;
 }
 
+let drawerReturnFocus = null, pathReturnFocus = null;
 function openDetail(e){
+  if(drawer.hidden) drawerReturnFocus = document.activeElement;  // only on first open, not a re-center
   const cn = cleanName(e.n) || e.n;
   const site = e.u ? ["Official site", e.u, true] : null;
   const links = [
@@ -3354,7 +3378,11 @@ function openDetail(e){
     </div>
     <a class="d-suggest" href="${SUBMIT_URL}" target="_blank" rel="noopener">✎ Suggest an edit or add a link</a>`;
   drawer.hidden = false;
-  requestAnimationFrame(()=>drawer.classList.add("open"));
+  requestAnimationFrame(()=>{
+    drawer.classList.add("open");
+    const f = focusablesIn(drawerPanel);
+    if(f.length) f[0].focus();
+  });
 }
 const REL_LABELS = /*__RELS__*/;
 const PROFILE_ROWS = [
@@ -3473,7 +3501,12 @@ function connectionsHtml(e){
   return `<div class="d-h">Connections <span class="d-n">${list.length}</span></div><div class="d-conns">${items}</div>`;
 }
 function openByEid(eid){ const e = DB.entries.find(x=>x.eid===eid); if(e) openDetail(e); }
-function closeDrawer(){ drawer.classList.remove("open"); setTimeout(()=>{drawer.hidden=true;}, 200); }
+function closeDrawer(){
+  drawer.classList.remove("open");
+  setTimeout(()=>{drawer.hidden=true;}, 200);
+  if(drawerReturnFocus){ drawerReturnFocus.focus(); drawerReturnFocus=null; }
+}
+drawer.addEventListener("keydown", ev=>trapTabKey(drawerPanel, ev));
 
 // ---- supply-chain path finder: BFS over DB.rels, "how is Pilbara linked to Tesla?" ----
 function findPath(fromEid, toEid){
@@ -3562,6 +3595,7 @@ function wireEntityAutocomplete(inputEl, sugEl2){
 const pFromAC = wireEntityAutocomplete($("#pFrom"), $("#pFromSug"));
 const pToAC = wireEntityAutocomplete($("#pTo"), $("#pToSug"));
 function openPathModal(presetFrom){
+  if(pathModal.hidden) pathReturnFocus = document.activeElement;
   pathModal.hidden = false;
   requestAnimationFrame(()=>pathModal.classList.add("open"));
   $("#pResult").innerHTML = "";
@@ -3575,7 +3609,12 @@ function openPathModal(presetFrom){
     setTimeout(()=>$("#pFrom").focus(), 50);
   }
 }
-function closePathModal(){ pathModal.classList.remove("open"); setTimeout(()=>{pathModal.hidden=true;}, 150); }
+function closePathModal(){
+  pathModal.classList.remove("open");
+  setTimeout(()=>{pathModal.hidden=true;}, 150);
+  if(pathReturnFocus){ pathReturnFocus.focus(); pathReturnFocus=null; }
+}
+pathModal.addEventListener("keydown", ev=>trapTabKey(pathModal.querySelector(".ppanel"), ev));
 $("#pathBtn").addEventListener("click", ()=>openPathModal());
 pathModal.addEventListener("click", ev=>{
   if(ev.target.closest("[data-pclose]")){ closePathModal(); return; }
