@@ -925,6 +925,86 @@
       "northvolt",
       "COMPETES_WITH",
       "catl"
+    ],
+    [
+      "hyundai motor",
+      "JV_WITH",
+      "sk on"
+    ],
+    [
+      "catl",
+      "SUPPLIES_TO",
+      "mercedes-benz group"
+    ],
+    [
+      "catl",
+      "PARTNER_OF",
+      "stellantis"
+    ],
+    [
+      "catl",
+      "SUPPLIES_TO",
+      "toyota motor"
+    ],
+    [
+      "catl",
+      "SUPPLIES_TO",
+      "nio"
+    ],
+    [
+      "catl",
+      "INVESTED_IN",
+      "nio"
+    ],
+    [
+      "albemarle",
+      "SUPPLIES_TO",
+      "ford"
+    ],
+    [
+      "sqm",
+      "SUPPLIES_TO",
+      "bmw group"
+    ],
+    [
+      "arcadium lithium",
+      "SUPPLIES_TO",
+      "bmw group"
+    ],
+    [
+      "l&f",
+      "SUPPLIES_TO",
+      "sk on"
+    ],
+    [
+      "hitachi high-tech",
+      "SUPPLIES_EQUIPMENT_TO",
+      "panasonic"
+    ],
+    [
+      "goldman sachs",
+      "INVESTED_IN",
+      "northvolt"
+    ],
+    [
+      "bmw group",
+      "USES_SOFTWARE",
+      "twaice"
+    ],
+    [
+      "fortum",
+      "RECYCLES_FOR",
+      "volkswagen"
+    ],
+    [
+      "karlsruhe institute",
+      "PARTNER_OF",
+      "bmw group"
+    ],
+    [
+      "fraunhofer",
+      "PARTNER_OF",
+      "bmw group"
     ]
   ]
 }

@@ -24,7 +24,23 @@ metadata key must be a genuine prefix of the intended entry's *cleaned* name,
 and `resolve()` picks the **shortest** matching entry for a given key. A short
 key like `"acme"` can silently attach to a shorter same-company plant entry
 ("Acme — Ohio") instead of the corporate line ("Acme Corporation"). When in
-doubt, use the full cleaned name as the key for an exact match.
+doubt, use the full cleaned name as the key for an exact match. This bit
+`sunwoda`/`prologium`/`svolt` in Batch A and the bare `byd` key in Batches
+A-C (all four of its edges were silently attaching to "BYD (ESS)" instead of
+the main automotive/battery company, since "BYD (ESS)" strips down to the
+*exact* string "byd" — fixed in Batch D by renaming to the exact-match key
+`byd company limited`).
+
+A second, subtler variant: **two entries whose cleaned names are *exactly*
+identical** (not prefix/suffix — identical), e.g. `"NIO"` and `"NIO (Battery
+swapping stations)"` both clean down to `"nio"`. Here `resolve()`'s exact-match
+dict can only ever hold one of them — whichever was inserted first (entry ID
+order) silently wins every lookup of that key; the other becomes permanently
+unreachable via any key derived from its name, since its cleaned name doesn't
+differ from the sibling's at all. When you suspect this (a parenthetical
+qualifier on an otherwise-identical name), grep `dist/directory.json`'s
+entries for the exact name before trusting the short key, and verify which
+entity the key actually lands on in the rebuilt page — don't assume.
 
 ## Base fields (any entity)
 `type` (Corporate·Facility·People·Research·Institution·Media) · `status`
