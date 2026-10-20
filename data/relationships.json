@@ -1005,6 +1005,121 @@
       "fraunhofer",
       "PARTNER_OF",
       "bmw group"
+    ],
+    [
+      "ganfeng lithium",
+      "INVESTED_IN",
+      "pilbara minerals"
+    ],
+    [
+      "china molybdenum",
+      "SUPPLIES_TO",
+      "gem"
+    ],
+    [
+      "texas instruments",
+      "SUPPLIES_TO",
+      "ford"
+    ],
+    [
+      "nxp semiconductors",
+      "SUPPLIES_TO",
+      "volkswagen"
+    ],
+    [
+      "stmicroelectronics",
+      "SUPPLIES_TO",
+      "byd company limited"
+    ],
+    [
+      "chargepoint",
+      "PARTNER_OF",
+      "general motors"
+    ],
+    [
+      "national renewable energy laboratory",
+      "PARTNER_OF",
+      "general motors"
+    ],
+    [
+      "oak ridge",
+      "PARTNER_OF",
+      "general motors"
+    ],
+    [
+      "tsinghua university",
+      "PARTNER_OF",
+      "catl"
+    ],
+    [
+      "electrek",
+      "COVERS",
+      "byd company limited"
+    ],
+    [
+      "insideevs",
+      "COVERS",
+      "byd company limited"
+    ],
+    [
+      "reuters",
+      "COVERS",
+      "lg energy solution"
+    ],
+    [
+      "wood mackenzie",
+      "COVERS",
+      "tesla"
+    ],
+    [
+      "bloombergnef",
+      "COVERS",
+      "tesla"
+    ],
+    [
+      "toyota motor",
+      "MEMBER_OF",
+      "society of automotive"
+    ],
+    [
+      "honda motor",
+      "MEMBER_OF",
+      "society of automotive"
+    ],
+    [
+      "hyundai motor",
+      "MEMBER_OF",
+      "society of automotive"
+    ],
+    [
+      "ford",
+      "COMPETES_WITH",
+      "general motors"
+    ],
+    [
+      "rivian",
+      "COMPETES_WITH",
+      "tesla"
+    ],
+    [
+      "lucid motors",
+      "COMPETES_WITH",
+      "tesla"
+    ],
+    [
+      "nio",
+      "COMPETES_WITH",
+      "xpeng"
+    ],
+    [
+      "panasonic",
+      "COMPETES_WITH",
+      "lg energy solution"
+    ],
+    [
+      "catl",
+      "COMPETES_WITH",
+      "lg energy solution"
     ]
   ]
 }
