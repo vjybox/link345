@@ -782,6 +782,16 @@ def _entry_content_html(e, payload, rels, by_eid, by_cat, ctx, about_text=""):
             f'<h2>Research</h2>{rlinks_html}')
 
 
+# Self-hosted analytics beacon (replaces GoatCounter/Cloudflare) -- one
+# fire-and-forget POST to the Flask service in docker-compose.yml. No
+# cookies, no third-party request; fails silently if the API isn't running
+# (e.g. the page is viewed standalone, outside the docker-compose stack).
+ANALYTICS_BEACON = (
+    '<script>try{fetch("/api/pageview",{method:"POST",'
+    'headers:{"Content-Type":"application/json"},'
+    'body:JSON.stringify({path:location.pathname,referrer:document.referrer})})'
+    '.catch(function(){});}catch(e){}</script>')
+
 PAGE_CSS = """*{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;color:#111;background:#fafafa;line-height:1.55}
 a{color:#1452ff;text-decoration:none}a:hover{text-decoration:underline}
@@ -818,6 +828,23 @@ a.badge{text-decoration:none}a.badge:hover{border-color:#1452ff;color:#1452ff}
 .links{display:flex;flex-wrap:wrap;gap:8px}
 .links a{border:1px solid #ddd;padding:6px 11px;border-radius:2px;font-size:13px}
 footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e5e5;font-size:12px;color:#888}
+form.submit-form{display:flex;flex-direction:column;gap:14px;margin-top:20px;max-width:560px}
+form.submit-form label{font-size:12px;font-weight:600;color:#666;display:flex;flex-direction:column;gap:5px}
+form.submit-form label .req{color:#d92d0a;font-weight:400}
+form.submit-form input,form.submit-form select,form.submit-form textarea{
+  font-family:Inter,system-ui,sans-serif;font-size:14px;padding:9px 11px;
+  border:1px solid #ddd;border-radius:3px;background:#fff;color:#111}
+form.submit-form input:focus,form.submit-form select:focus,form.submit-form textarea:focus{
+  outline:2px solid #1452ff;outline-offset:1px;border-color:#1452ff}
+form.submit-form textarea{resize:vertical;min-height:70px;font-family:inherit}
+form.submit-form button{align-self:flex-start;font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:13px;background:#1452ff;color:#fff;border:none;padding:11px 20px;border-radius:3px;
+  cursor:pointer;min-height:44px}
+form.submit-form button:hover{background:#0f3fd1}
+form.submit-form button:disabled{background:#999;cursor:wait}
+#submit-msg{font-size:13px;padding:10px 12px;border-radius:3px;display:none}
+#submit-msg.ok{display:block;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+#submit-msg.err{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
 @media(prefers-color-scheme:dark){
  body{background:#0c0d10;color:#e7e7ea}a{color:#6f9bff}
  header.site{background:#0a0a0b;border-color:#222}
@@ -826,8 +853,85 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e5e5;font-size:1
  table.facts th,table.facts td{border-color:#222}table.facts th{color:#9a9aa2}
  ul.related li,.links a,.chip{border-color:#2a2a30}
  .chip{color:#e7e7ea}h3{color:#c5c5cc}
- footer{border-color:#222;color:#777}.lead{color:#cfcfd6}}
+ footer{border-color:#222;color:#777}.lead{color:#cfcfd6}
+ form.submit-form input,form.submit-form select,form.submit-form textarea{
+   background:#15161a;color:#e7e7ea;border-color:#2a2a30}
+ #submit-msg.ok{background:#082b17;color:#4ade80;border-color:#14532d}
+ #submit-msg.err{background:#2a1212;color:#fca5a5;border-color:#5a1e1e}}
 """
+
+
+def _submit_page_html(category_names):
+    """Native, self-hosted Submit-a-company form. POSTs to /api/submit (the
+    Flask service in docker-compose.yml) -- no Google Forms, no third party.
+    Degrades to a clear error message if that API isn't reachable (e.g. the
+    page was opened standalone, or the API container is down)."""
+    opts = "".join(f'<option value="{escape(c)}">{escape(c)}</option>'
+                   for c in sorted(category_names))
+    inner = f"""<p class="lead">Know a company that belongs in the index? Tell us about it —
+every submission is reviewed before it's added.</p>
+<form class="submit-form" id="submitForm" autocomplete="off">
+  <label>Company name <span class="req">*</span>
+    <input type="text" name="company_name" id="f-name" required maxlength="200"></label>
+  <label>Official website
+    <input type="url" name="official_url" id="f-url" placeholder="https://" maxlength="500"></label>
+  <label>Country
+    <input type="text" name="country" id="f-country" maxlength="100"></label>
+  <label>Category
+    <select name="category" id="f-category"><option value="">— choose if it's clear —</option>{opts}</select></label>
+  <label>What do they do? (1-2 sentences)
+    <textarea name="description" id="f-desc" maxlength="2000"></textarea></label>
+  <label>Related companies &amp; the relationship (optional)
+    <textarea name="related_companies" id="f-rel" placeholder="e.g. Supplies cathode material to CATL" maxlength="1000"></textarea></label>
+  <label>Your email (optional, in case we have a question)
+    <input type="email" name="submitter_email" id="f-email" maxlength="200"></label>
+  <button type="submit" id="f-submit">Submit</button>
+  <div id="submit-msg" role="status"></div>
+</form>
+<script>
+(function(){{
+  var form = document.getElementById("submitForm");
+  var msg = document.getElementById("submit-msg");
+  var btn = document.getElementById("f-submit");
+  form.addEventListener("submit", function(ev){{
+    ev.preventDefault();
+    msg.className = ""; msg.textContent = "";
+    var payload = {{
+      company_name: document.getElementById("f-name").value.trim(),
+      official_url: document.getElementById("f-url").value.trim(),
+      country: document.getElementById("f-country").value.trim(),
+      category: document.getElementById("f-category").value,
+      description: document.getElementById("f-desc").value.trim(),
+      related_companies: document.getElementById("f-rel").value.trim(),
+      submitter_email: document.getElementById("f-email").value.trim()
+    }};
+    if(!payload.company_name){{
+      msg.className = "err"; msg.textContent = "Company name is required."; return;
+    }}
+    btn.disabled = true; btn.textContent = "Submitting…";
+    fetch("/api/submit", {{method:"POST", headers:{{"Content-Type":"application/json"}}, body:JSON.stringify(payload)}})
+      .then(function(r){{ return r.json().then(function(j){{ return {{status:r.status, body:j}}; }}); }})
+      .then(function(res){{
+        btn.disabled = false; btn.textContent = "Submit";
+        if(res.status === 201){{
+          msg.className = "ok"; msg.textContent = "Thanks! Your submission is in — we review new entries regularly.";
+          form.reset();
+        }} else {{
+          msg.className = "err"; msg.textContent = (res.body && res.body.error) || "Something went wrong — try again.";
+        }}
+      }})
+      .catch(function(){{
+        btn.disabled = false; btn.textContent = "Submit";
+        msg.className = "err";
+        msg.textContent = "Couldn't reach the submission service. If you're self-hosting, check that the api container is running.";
+      }});
+  }});
+}})();
+</script>"""
+    return _page_shell("Submit a company — The Lithium Index",
+                       "Suggest a company, facility, or organization for The Lithium Index.",
+                       '<a href="index.html">Home</a> / Submit', "Submit a company",
+                       inner, "assets/lx-page.css", [], prefix="")
 
 
 def _page_shell(title, desc, crumb_html, h1, inner, css_href, ld_blocks, prefix="../"):
@@ -852,7 +956,9 @@ def _page_shell(title, desc, crumb_html, h1, inner, css_href, ld_blocks, prefix=
         f'{inner}'
         f'<footer>linkplus.in — every company is a link. '
         f'<a href="{prefix}index.html">Browse the full directory &#8599;</a>'
-        f' · <a href="{prefix}lists.html">Explore all lists</a></footer>'
+        f' · <a href="{prefix}lists.html">Explore all lists</a>'
+        f' · <a href="{prefix}submit.html">Suggest an edit or add a company</a></footer>'
+        f'{ANALYTICS_BEACON}'
         f'</div></body></html>')
 
 
@@ -1157,6 +1263,10 @@ def write_entry_pages(payload, rels, about_map=None):
                              "<b>All lists</b>", "Explore the index", lists_inner,
                              "assets/lx-page.css", [], prefix="")
     (dist / "lists.html").write_text(lists_html, encoding="utf-8")
+
+    # --- self-hosted Submit-a-company page (see server/app.py) ---
+    submit_html = _submit_page_html(cat_name.values())
+    (dist / "submit.html").write_text(submit_html, encoding="utf-8")
 
     # --- copy the app in as the site root, so dist/ deploys standalone ---
     app = ROOT / "index.html"
@@ -2518,7 +2628,7 @@ mark{color:#111}
 const DB = /*__DATA__*/;
 const PER_PAGE = 60;
 // Replace with your Google Form / Tally link to collect submissions.
-const SUBMIT_URL = "https://docs.google.com/forms/";
+const SUBMIT_URL = "submit.html";
 const QUICK = ["Cell Manufacturing & OEMs","Materials & Chemicals","Mining & Raw Materials",
   "Recycling & Circular Economy","Manufacturing Equipment","Software, Data & Simulation"];
 const I = {
@@ -3207,6 +3317,9 @@ document.addEventListener("click",e=>{
 buildTree(); buildPills(); buildSelects();
 hashLock=true; applyHash(); hashLock=false;
 render();
+try{fetch("/api/pageview",{method:"POST",headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({path:location.pathname+location.hash,referrer:document.referrer})})
+  .catch(function(){});}catch(e){}
 </script>
 </body>
 </html>

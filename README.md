@@ -52,6 +52,9 @@ drawer + dark mode + hash deep-links all working.
 | `data/ENRICHMENT_PROMPT.md` | Copy-paste AI prompt to populate/enrich the three data files at scale. |
 | `data/LOCATION_PROMPT.md` | Copy-paste AI prompt for HQ city/country + production base, cross-checked across multiple AI tools, merged via `tools/apply_locations.py`. |
 | `MULTI-AI-WORKFLOW.md` | Rules for using ChatGPT (or any second AI) alongside Claude on this content without corrupting data — read before cross-tool enrichment. |
+| `DEPLOY-SYNOLOGY.md` | Self-hosting the full stack (site + own Submit form + own analytics) via Docker, e.g. on a Synology NAS. |
+| `docker-compose.yml` + `docker/` + `server/` | The self-hosted stack: nginx serving `dist/`, a Flask+SQLite API for submissions and analytics. |
+| `tools/import_submissions.py` | Turns reviewed Submit-form CSV rows (from `/admin`) into ready-to-merge `companies.txt`/metadata entries, with dedup. |
 | `dist/directory.json` | Generated structured data (also embedded in the HTML) — git-ignored build artifact. |
 | `dist/e/<slug>.html` | One generated **content page per entry** (profile, supply-chain network, discovery lists) — git-ignored. |
 | `dist/{s,c,country,t,stage}/` | ~90 generated **hub/list pages** (sectors, categories, countries, technologies, loop stages). |

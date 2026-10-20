@@ -27,59 +27,52 @@ launching it, growing the content, and what to build next.
 > (like `git commit && git push`), run each command on its own line and
 > check the output before continuing.
 
-**Two constants to set in `build.py` before launch** (both currently
-placeholders):
+**Two constants to set in `build.py` before launch:**
 
 | Constant | Where | Set it to |
 | --- | --- | --- |
-| `SITE_BASE` | `build.py` (search `SITE_BASE = ""`) | Your deployed URL, e.g. `https://<user>.github.io/link345` — unlocks a valid sitemap, BreadcrumbList JSON-LD, and absolute cross-links in the Blogger XML. The build prints a `[warn]` until you do. |
-| `SUBMIT_URL` | `build.py` (search `const SUBMIT_URL`) | Your Google Form / Tally URL for "Submit a company". |
+| `SITE_BASE` | `build.py` (search `SITE_BASE = ""`) | Your deployed URL, e.g. `https://yourdomain.com` — unlocks a valid sitemap, BreadcrumbList JSON-LD, and absolute cross-links in the Blogger XML. The build prints a `[warn]` until you do. |
+| `SUBMIT_URL` | `build.py` (search `const SUBMIT_URL`) | **Already set** to `submit.html` — the self-hosted form below. No action needed unless you want something else. |
 
 ---
 
-## Phase 0 — Ship it (one sitting, ~1–2 hours)
+## Phase 0 — Ship it (self-hosted on Synology/Docker)
 
-1. **Merge the branch.** Merge `claude/lithium-index-directory-n9a7c0` into
-   `main` so main is the source of truth.
+Hosting choice: **self-hosted via Docker on your own Synology NAS**, with
+your own SQLite database for submissions and analytics — no GitHub Pages,
+no Google Forms, no third-party analytics. Full walkthrough:
+[`DEPLOY-SYNOLOGY.md`](DEPLOY-SYNOLOGY.md). Short version:
 
-2. **Host the full site — GitHub Pages (free, recommended).**
-   `dist/` is a complete standalone site (app at `index.html`, entry pages,
-   hubs, sitemap). Simplest manual flow:
+1. **Merge the branch** — done; `main` is now the source of truth.
 
-   ```bash
-   # after setting SITE_BASE:
-   python3 build.py
-   # publish dist/ to a gh-pages branch (one-liner with git worktree):
-   git worktree add ../gh-pages gh-pages 2>/dev/null || git worktree add -b gh-pages ../gh-pages
-   rm -rf ../gh-pages/* && cp -r dist/* ../gh-pages/
-   cd ../gh-pages && git add -A && git commit -m "deploy" && git push -u origin gh-pages
-   ```
+2. **Get the repo + `dist/` onto the NAS**, `cp .env.example .env` and set
+   a real `ADMIN_PASSWORD`, then `python3 build.py && docker compose up -d --build`.
+   This brings up two containers: `web` (nginx serving `dist/`, reverse-
+   proxying `/api/*`) and `api` (Flask + SQLite — `server/app.py`).
 
-   Then repo → Settings → Pages → deploy from `gh-pages` branch. (Later this
-   can become a GitHub Action that rebuilds on every push.)
-   Optional: point a subdomain like `index.linkplus.in` at Pages (CNAME) and
-   use that as `SITE_BASE`.
+3. **Submit a company** is now a native page (`submit.html`), posting to
+   your own `/api/submit` — no Google Form to create. Review submissions
+   and export them as CSV at `/admin` (Basic Auth: `ADMIN_USER`/
+   `ADMIN_PASSWORD`), then turn reviewed rows into real entries with
+   `python3 tools/import_submissions.py <csv>` (dedups against existing
+   entries, flags anything ambiguous for manual review instead of guessing).
 
-3. **Wire Blogger (linkplus.in)** — see [`BLOGGER-SETUP.md`](BLOGGER-SETUP.md):
-   - a Page with an `<iframe>` of the hosted `index.html` (full app), and/or
-     paste `blogger-page.html` into a Page (no-JS catalog);
+4. **Analytics** is already wired — every page beacons a pageview to your
+   own `/api/pageview` (no cookies, no third party). View counts at `/admin`.
+
+5. **Wire Blogger (linkplus.in)** — see [`BLOGGER-SETUP.md`](BLOGGER-SETUP.md):
+   - a Page with an `<iframe>` of your hosted `index.html` (full app),
+     and/or paste `blogger-page.html` into a Page (no-JS catalog);
    - optionally import `dist/blogger-import.xml` once (Settings → Manage blog
      → Import content) → 1,632 posts labeled by sector + category.
 
-4. **Create the Submit form** (Google Forms or Tally, free). Suggested
-   fields: company name · official URL · country · category (dropdown of the
-   30) · what they do (1–2 sentences) · related companies + relationship ·
-   submitter email. Paste its URL into `SUBMIT_URL`, rebuild, redeploy.
-
-5. **Google Search Console**: verify the domain, submit
-   `<SITE_BASE>/sitemap.xml` (1,722 URLs). Hub pages ("battery recycling
+6. **Google Search Console**: verify the domain, submit
+   `<SITE_BASE>/sitemap.xml` (1,728 URLs). Hub pages ("battery recycling
    companies", "gigafactories in Germany") are the expected organic winners;
    indexing ramps over weeks.
 
-6. **Analytics (free)**: GoatCounter or Cloudflare Web Analytics — a single
-   script tag to add to the page shell when you've picked one.
-
 ---
+
 
 ## Phase 1 — The content flywheel (~2–4 h/week — this is the moat)
 
@@ -137,11 +130,14 @@ Ranked by value; each can be requested as its own task:
    Makes every Phase-1 batch immediately visible and useful.
 2. **Ego-graph** — a small interactive network (1–2 hops) in the drawer and
    on entry pages; same inline-SVG approach as the Loop and the map.
-3. **Submissions intake tool** — `tools/import_submissions.py` to parse the
-   Submit form's response CSV into ready-to-review entries/metadata with
-   dedup, closing the crowdsourcing loop.
+3. ~~**Submissions intake tool**~~ — done:
+   [`tools/import_submissions.py`](tools/import_submissions.py) parses the
+   self-hosted Submit form's CSV export into ready-to-merge entries/metadata
+   with dedup, closing the crowdsourcing loop end-to-end (self-hosted form →
+   admin review → import → build).
 4. **Analytics content** — "Most connected" leaderboards per sector; a
-   supply-chain path finder ("how is Pilbara linked to Tesla?").
+   supply-chain path finder ("how is Pilbara linked to Tesla?"). The raw
+   pageview data is already there in SQLite (`/admin`) once self-hosted.
 5. **Monetization scaffolding** (once traffic justifies): sponsored pin per
    category, Claimed/Verified badge tier, newsletter signup embed.
 

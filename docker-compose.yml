@@ -1,0 +1,31 @@
+services:
+  web:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.web
+    ports:
+      - "${HOST_PORT:-8080}:80"
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./server
+    environment:
+      - DB_PATH=/data/app.db
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env before starting -- see .env.example}
+    volumes:
+      - lithium-data:/data
+    restart: unless-stopped
+
+volumes:
+  lithium-data:
+    # Named volume holding the one SQLite file (submissions + pageviews).
+    # On Synology this lives under /volume1/docker/volumes/... -- back it
+    # up like any database (copy the file, or `docker compose exec api
+    # sqlite3 /data/app.db .dump > backup.sql`).
