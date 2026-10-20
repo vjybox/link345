@@ -20,15 +20,6 @@
     "product": "Lithium carbonate & hydroxide",
     "extraction": "Brine (Salar de Atacama)"
   },
-  "ganfeng lithium": {
-    "type": "Corporate",
-    "status": "Active",
-    "ownership": "Public",
-    "ticker": "SZSE: 002460",
-    "one_liner": "Vertically integrated Chinese lithium giant, mine-to-battery.",
-    "product": "Lithium compounds & metal, cells",
-    "extraction": "Brine + hard rock + recycling"
-  },
   "arcadium lithium": {
     "type": "Corporate",
     "status": "Active",
@@ -173,5 +164,14 @@
     "ownership": "Public",
     "ticker": "EPA: ERA",
     "one_liner": "French mining group; manganese and nickel (New Caledonia, Indonesia) plus a lithium project in Argentina."
+  },
+  "ganfeng lithium co ltd": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "SZSE: 002460",
+    "one_liner": "Vertically integrated Chinese lithium giant, mine-to-battery.",
+    "product": "Lithium compounds & metal, cells",
+    "extraction": "Brine + hard rock + recycling"
   }
 }

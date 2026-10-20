@@ -327,7 +327,7 @@
       "acc"
     ],
     [
-      "mercedes-benz group",
+      "mercedes-benz group ag",
       "JV_WITH",
       "acc"
     ],
@@ -337,7 +337,7 @@
       "acc"
     ],
     [
-      "mercedes-benz group",
+      "mercedes-benz group ag",
       "PARTNER_OF",
       "factorial energy"
     ],
@@ -377,7 +377,7 @@
       "verkor"
     ],
     [
-      "svolt",
+      "svolt energy technology",
       "PARTNER_OF",
       "great wall motor"
     ],
@@ -453,13 +453,13 @@
     ],
     [
       "ionity",
-      "PARTNER_OF",
+      "JV_WITH",
       "bmw group"
     ],
     [
       "ionity",
-      "PARTNER_OF",
-      "mercedes-benz group"
+      "JV_WITH",
+      "mercedes-benz group ag"
     ],
     [
       "igo",
@@ -534,7 +534,7 @@
     [
       "sila",
       "SUPPLIES_TO",
-      "mercedes-benz group"
+      "mercedes-benz group ag"
     ],
     [
       "zhejiang huayou",
@@ -564,7 +564,7 @@
     [
       "wolfspeed",
       "SUPPLIES_TO",
-      "mercedes-benz group"
+      "mercedes-benz group ag"
     ],
     [
       "stmicroelectronics",
@@ -613,22 +613,22 @@
     ],
     [
       "ionity",
-      "PARTNER_OF",
+      "JV_WITH",
       "ford"
     ],
     [
       "ionity",
-      "PARTNER_OF",
+      "JV_WITH",
       "hyundai motor"
     ],
     [
       "ionity",
-      "PARTNER_OF",
+      "JV_WITH",
       "volkswagen"
     ],
     [
       "ionity",
-      "PARTNER_OF",
+      "JV_WITH",
       "stellantis"
     ],
     [
@@ -653,12 +653,12 @@
     ],
     [
       "national renewable energy laboratory",
-      "MEMBER_OF",
+      "SUBSIDIARY_OF",
       "u.s. department of energy"
     ],
     [
       "oak ridge",
-      "MEMBER_OF",
+      "SUBSIDIARY_OF",
       "u.s. department of energy"
     ],
     [
@@ -934,7 +934,7 @@
     [
       "catl",
       "SUPPLIES_TO",
-      "mercedes-benz group"
+      "mercedes-benz group ag"
     ],
     [
       "catl",

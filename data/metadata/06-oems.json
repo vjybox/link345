@@ -99,13 +99,6 @@
     "ticker": "NYSE: HMC",
     "one_liner": "Japanese automaker; battery joint venture with LG Energy Solution in Ohio, USA."
   },
-  "mercedes-benz group": {
-    "type": "Corporate",
-    "status": "Active",
-    "ownership": "Public",
-    "ticker": "ETR: MBG",
-    "one_liner": "German automaker; co-owner of the ACC cell joint venture and a Factorial Energy solid-state partner."
-  },
   "saic motor": {
     "type": "Corporate",
     "status": "Active",
@@ -190,5 +183,12 @@
     "status": "Defunct",
     "ownership": "Public",
     "one_liner": "US EV truck startup (Endurance pickup) that filed for Chapter 11 bankruptcy in 2023."
+  },
+  "mercedes-benz group ag": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "ticker": "ETR: MBG",
+    "one_liner": "German automaker; co-owner of the ACC cell joint venture and a Factorial Energy solid-state partner."
   }
 }

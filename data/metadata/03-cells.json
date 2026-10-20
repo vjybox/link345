@@ -13,17 +13,6 @@
     "key_ip": "Cell-to-Pack (CTP), Shenxing fast-charge",
     "deployment": "Mass production (gigafactory)"
   },
-  "byd": {
-    "type": "Corporate",
-    "status": "Active",
-    "ownership": "Public",
-    "founded": 1995,
-    "one_liner": "Chinese EV + battery maker; the LFP Blade Battery.",
-    "product": "LFP Blade cells, EVs",
-    "chemistry": "LFP",
-    "form_factor": "Prismatic (Blade)",
-    "key_ip": "Blade Battery (cell-to-body)"
-  },
   "lg energy solution": {
     "type": "Corporate",
     "status": "Active",
@@ -64,7 +53,7 @@
     "status": "Active",
     "ownership": "Private",
     "founded": 2016,
-    "one_liner": "European cell maker founded by ex-Tesla exec Peter Carlsson; Revolt recycling.",
+    "one_liner": "European cell maker founded by ex-Tesla exec Peter Carlsson; Revolt recycling; faced serious financial restructuring since 2024.",
     "chemistry": "NMC",
     "form_factor": "Prismatic, Cylindrical"
   },
@@ -271,5 +260,16 @@
     "ownership": "Public",
     "one_liner": "Chinese cell manufacturer spun out of Great Wall Motor.",
     "parent": "great wall motor"
+  },
+  "byd company limited": {
+    "type": "Corporate",
+    "status": "Active",
+    "ownership": "Public",
+    "founded": 1995,
+    "one_liner": "Chinese EV + battery maker; the LFP Blade Battery.",
+    "product": "LFP Blade cells, EVs",
+    "chemistry": "LFP",
+    "form_factor": "Prismatic (Blade)",
+    "key_ip": "Blade Battery (cell-to-body)"
   }
 }
