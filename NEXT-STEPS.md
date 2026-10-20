@@ -115,12 +115,14 @@ when that's not already one of the 102 gigafactory plant entries).
    already-profiled 327 entities (`data/LOCATION_PROMPT.md`), then the rest.
 4. **Relationship edges** — highest leverage per line: every edge enriches
    two entity pages plus the "two steps away" blocks, the ego-graph, and
-   the path finder/leaderboards. Target: 201 → 500+ (92 → 149 → 185 → 201
-   done in Batches C/D/E; 133 entities now have at least one connection).
-   Next: this is now past the point where general knowledge alone finds
-   new high-confidence edges quickly — a good place to switch to the
-   `ENRICHMENT_PROMPT.md` relationship block + real web search/sourcing
-   for the next batch, rather than more recall-only passes.
+   the path finder/leaderboards. Target: 224 → 500+ (92 → 149 → 185 → 201 →
+   224 done in Batches C-F; 140 entities now have at least one connection).
+   Batch F already leaned on broader, more structural facts (supplier
+   relationships, association membership, competitive rivalries) rather
+   than specific recent deals — a sign recall-only passes are reaching
+   diminishing returns. Next batch should switch to `ENRICHMENT_PROMPT.md`'s
+   relationship block + real web search/sourcing (or your ChatGPT
+   cross-check workflow) rather than another recall-only pass.
 
 ---
 
