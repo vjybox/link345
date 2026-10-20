@@ -104,8 +104,19 @@ batches.
 
 - `/api/submit` has a basic per-IP rate limit (5/hour) to deter spam — it's
   friction, not a CAPTCHA; if spam becomes a real problem, add one.
-- `/admin` has no rate limiting on login attempts — keep `ADMIN_PASSWORD`
-  long, and put it behind HTTPS before exposing it publicly (see step 5).
+- **Never expose `/admin` over plain HTTP beyond your LAN.** HTTP Basic Auth
+  sends the username/password on every request as trivially-reversible
+  Base64, not encryption — over plain HTTP that's readable by anything
+  between the visitor and your NAS. Nothing in the stack blocks this by
+  itself; it's only safe because step 5's recommended paths (DSM's reverse
+  proxy with Let's Encrypt, or a Cloudflare Tunnel) put real TLS in front
+  of it. If you ever reach `/admin` and the address bar says `http://`
+  from outside your LAN, stop and fix the reverse proxy first. There's
+  also no lockout on failed login attempts, so keep `ADMIN_PASSWORD` long.
 - The API container never talks to the internet — the only network calls
   are inbound (from nginx) and to the local SQLite file. No data leaves
   your NAS unless you choose to export it.
+- The CSV export (`/admin/submissions.csv`) neutralizes formula-injection
+  payloads (a submission starting with `=`, `+`, `-`, or `@`, which Excel/
+  Sheets would otherwise interpret as a formula when you open the file) —
+  no action needed on your part, just worth knowing it's handled.

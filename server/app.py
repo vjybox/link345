@@ -35,6 +35,10 @@ ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
 ALLOWED_PATH_PREFIX = "/"
 
 app = Flask(__name__)
+# Defense in depth: nginx already caps request bodies (client_max_body_size,
+# default 1m), but this protects the API directly too if it's ever reached
+# without nginx in front (e.g. during local testing or a misconfiguration).
+app.config["MAX_CONTENT_LENGTH"] = 256 * 1024  # 256 KB -- generous for the submit form
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS submissions (
@@ -224,6 +228,15 @@ a.btn{{display:inline-block;margin:.5rem 0;padding:6px 12px;background:#111;colo
 </body></html>"""
 
 
+def _csv_safe(v):
+    """Neutralize CSV/formula injection: a submitted value starting with
+    =, +, -, or @ is interpreted as a formula by Excel/Sheets when the
+    admin opens this export (e.g. "=HYPERLINK(...)"). Prefixing with a
+    single quote forces it to be read as plain text."""
+    s = "" if v is None else str(v)
+    return "'" + s if s[:1] in ("=", "+", "-", "@") else s
+
+
 @app.get("/admin/submissions.csv")
 @requires_admin
 def admin_submissions_csv():
@@ -235,7 +248,7 @@ def admin_submissions_csv():
             "category", "description", "related_companies", "submitter_email", "status"]
     w.writerow(cols)
     for r in rows:
-        w.writerow([r[c] for c in cols])
+        w.writerow([_csv_safe(r[c]) for c in cols])
     return Response(buf.getvalue(), mimetype="text/csv",
                      headers={"Content-Disposition": "attachment; filename=submissions.csv"})
 
