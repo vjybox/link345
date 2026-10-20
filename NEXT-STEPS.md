@@ -125,9 +125,10 @@ when that's not already one of the 102 gigafactory plant entries).
 
 Ranked by value; each can be requested as its own task:
 
-1. **Metadata facet filters + completeness meter** — filter by ownership /
-   chemistry / form-factor / status; per-sector "profiled N of M" progress.
-   Makes every Phase-1 batch immediately visible and useful.
+1. ~~**Metadata facet filters + completeness meter**~~ — done: "More
+   filters" (Ownership/Chemistry/Form factor/Status) in the toolbar, a
+   "Profiled" KPI tile, and a per-sector completeness bar on every
+   landscape tile.
 2. **Ego-graph** — a small interactive network (1–2 hops) in the drawer and
    on entry pages; same inline-SVG approach as the Loop and the map.
 3. ~~**Submissions intake tool**~~ — done:

@@ -373,6 +373,20 @@ footer a{color:var(--blue)}
   letter-spacing:.04em;text-transform:uppercase;padding-top:1px}
 .d-fact .fv{flex:1;color:var(--ink);overflow-wrap:anywhere}
 .d-n{font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);padding:0 5px}
+.d-egofig{margin:4px 0 12px;text-align:center}
+.egograph{width:100%;max-width:400px;height:auto}
+.ego-edge{stroke:var(--line);stroke-width:1}
+.ego-edge-2{stroke-dasharray:3,3}
+.ego-ego{fill:var(--blue)}
+.ego-ego-label{font-family:var(--mono);font-size:10px;fill:#fff;pointer-events:none}
+.ego-node{fill:var(--panel);stroke:var(--line);stroke-width:1.5}
+.ego-node-2{stroke-dasharray:1.5,1.5;fill:var(--panel)}
+.ego-label{font-size:9.5px;fill:var(--ink)}
+.ego-label-2{font-size:8.5px;fill:var(--muted)}
+a.ego-link{cursor:pointer}
+a.ego-link:hover .ego-node,a.ego-link:focus .ego-node{stroke:var(--blue)}
+a.ego-link:hover .ego-label,a.ego-link:focus .ego-label{fill:var(--blue)}
+.d-egofig figcaption{font-size:11px;color:var(--muted);margin-top:4px}
 .d-conns{display:flex;flex-direction:column;gap:4px}
 .d-conn{display:flex;flex-direction:column;gap:1px;text-align:left;font-family:var(--sans);
   background:none;border:1px solid var(--line);border-left:3px solid var(--blue);
@@ -863,6 +877,7 @@ function openDetail(e){
       <button class="d-x" data-close aria-label="Close">${I.x}</button>
     </div>
     ${entityProfile(e)}
+    ${egoGraphHtml(e)}
     ${connectionsHtml(e)}
     ${tags?`<div class="d-h">Technology</div><div class="tags d-tags">${tags}</div>`:""}
     <div class="d-h">Actions</div>
@@ -900,6 +915,87 @@ function entityProfile(e){
   if(!rows.length) return oneline;
   return oneline + `<div class="d-h">Profile${seeded?"":' <span class="d-inf">inferred</span>'}</div>
     <div class="d-facts">${rows.map(([k,v])=>`<div class="d-fact"><span class="fk">${esc(k)}</span><span class="fv">${v}</span></div>`).join("")}</div>`;
+}
+function shortLabel(name, n){
+  n = n||15;
+  name = String(name).replace(/\s*\([^)]*\)\s*$/,"").trim();
+  return name.length<=n ? name : name.slice(0,n-1).trimEnd()+"…";
+}
+function twoHopJS(e){
+  const list = (DB.rels||{})[e.eid] || [];
+  const direct = new Set(list.map(r=>r.e));
+  const sugg = {};
+  for(const r of list){
+    for(const r2 of ((DB.rels||{})[r.e]||[])){
+      const k = r2.e;
+      if(k===e.eid || direct.has(k)) continue;
+      const tgt = DB.entries.find(x=>x.eid===k);
+      if(!tgt) continue;
+      if(!sugg[k]) sugg[k] = {tgt, via:new Set()};
+      sugg[k].via.add(r.n);
+    }
+  }
+  return Object.values(sugg)
+    .sort((a,b)=> b.via.size-a.via.size || a.tgt.n.localeCompare(b.tgt.n))
+    .slice(0,6);
+}
+// Interactive twin of _ego_graph_svg() in build.py -- same radial layout,
+// but nodes are click-to-recenter (openByEid) instead of <a href>.
+function egoGraphHtml(e){
+  const list = (DB.rels||{})[e.eid] || [];
+  if(!list.length) return "";
+  // the drawer panel is capped around 380-400px wide, so show fewer nodes
+  // here than the full-width static page version to keep labels legible.
+  const hops = twoHopJS(e).slice(0,4);
+  const shown = list.slice(0,10);
+  const overflow = list.length - shown.length;
+  const W=440, H=440, cx=W/2, cy=H/2, r1=128, r2=196, pad=90;
+  const pos = {};
+  shown.forEach((r,i)=>{
+    const ang = 2*Math.PI*i/shown.length - Math.PI/2;
+    pos[r.e] = [cx+r1*Math.cos(ang), cy+r1*Math.sin(ang), ang];
+  });
+  hops.forEach((h,i)=>{
+    const ang = 2*Math.PI*(i+0.5)/Math.max(hops.length,1) - Math.PI/2;
+    pos[h.tgt.eid] = [cx+r2*Math.cos(ang), cy+r2*Math.sin(ang), ang];
+  });
+  const anchor = ang => { const c=Math.cos(ang); return c>0.3?"start":c<-0.3?"end":"middle"; };
+  let lines = "";
+  shown.forEach(r=>{
+    const [x,y] = pos[r.e];
+    lines += `<line class="ego-edge" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`;
+  });
+  hops.forEach(h=>{
+    const [x,y] = pos[h.tgt.eid];
+    const bridge = shown.find(r=>h.via.has(r.n));
+    if(bridge){
+      const [bx,by] = pos[bridge.e];
+      lines += `<line class="ego-edge ego-edge-2" x1="${bx.toFixed(1)}" y1="${by.toFixed(1)}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`;
+    }
+  });
+  let nodes = `<circle class="ego-ego" cx="${cx}" cy="${cy}" r="30"/>` +
+    `<text class="ego-ego-label" x="${cx}" y="${cy+4}" text-anchor="middle">${esc(shortLabel(e.n,9))}</text>`;
+  shown.forEach(r=>{
+    const [x,y,ang] = pos[r.e];
+    const lx=x+20*Math.cos(ang), ly=y+20*Math.sin(ang)+3;
+    nodes += `<a class="ego-link" data-eid="${esc(r.e)}" tabindex="0" role="button" aria-label="Open ${esc(r.n)}">`+
+      `<circle class="ego-node" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14"/>`+
+      `<text class="ego-label" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor(ang)}">${esc(shortLabel(r.n))}</text></a>`;
+  });
+  hops.forEach(h=>{
+    const [x,y,ang] = pos[h.tgt.eid];
+    const lx=x+16*Math.cos(ang), ly=y+16*Math.sin(ang)+3;
+    nodes += `<a class="ego-link" data-eid="${esc(h.tgt.eid)}" tabindex="0" role="button" aria-label="Open ${esc(h.tgt.n)}">`+
+      `<circle class="ego-node ego-node-2" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8"/>`+
+      `<text class="ego-label ego-label-2" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor(ang)}">${esc(shortLabel(h.tgt.n,13))}</text></a>`;
+  });
+  let note = `${shown.length} direct connection${shown.length!==1?"s":""}`;
+  if(hops.length) note += ` · ${hops.length} two steps away`;
+  if(overflow>0) note += ` · +${overflow} more below`;
+  note += " · click a node to jump there";
+  return `<div class="d-h">Network map</div><figure class="egofig d-egofig">`+
+    `<svg class="egograph" viewBox="${-pad} ${-pad} ${W+2*pad} ${H+2*pad}" role="img" aria-label="Network map centered on ${esc(e.n)}">${lines}${nodes}</svg>`+
+    `<figcaption>${esc(note)}</figcaption></figure>`;
 }
 function connectionsHtml(e){
   const list = (DB.rels||{})[e.eid] || [];
@@ -1074,6 +1170,8 @@ drawer.addEventListener("click", ev=>{
   if(ev.target.closest("[data-close]")){ closeDrawer(); return; }
   const conn = ev.target.closest(".d-conn[data-eid]");
   if(conn){ drawerPanel.scrollTop=0; openByEid(conn.dataset.eid); return; }
+  const egoNode = ev.target.closest(".ego-link[data-eid]");
+  if(egoNode){ ev.preventDefault(); drawerPanel.scrollTop=0; openByEid(egoNode.dataset.eid); return; }
   const rel = ev.target.closest(".d-rel");
   if(rel){ const e=DB.entries.find(x=>x.i===Number(rel.dataset.id)); if(e){ drawerPanel.scrollTop=0; openDetail(e); } return; }
   const cat = ev.target.closest(".d-cat[data-cat]");

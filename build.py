@@ -10,6 +10,7 @@ Usage:  python3 build.py
 """
 
 import json
+import math
 import re
 from html import escape
 from pathlib import Path
@@ -679,6 +680,89 @@ def _hub_paths(e, ctx):
             "country": f'country/{sl["country"][e["co"]]}.html' if e.get("co") else ""}
 
 
+def _short_label(name, n=15):
+    name = re.sub(r"\s*\([^)]*\)\s*$", "", name).strip()  # drop a trailing parenthetical first
+    return name if len(name) <= n else name[:n - 1].rstrip() + "…"
+
+
+def _ego_graph_svg(e, rels, by_eid, ctx):
+    """1-2 hop network diagram centered on `e`, pure inline SVG (no JS) --
+    ego at center, direct connections on an inner ring, two-hop neighbors
+    (reusing _two_hop's already-ranked, already-capped list) on an outer
+    ring, each node a clickable link to that entity's page. Caps the
+    VISIBLE 1-hop nodes at 14 for legibility; the full list is still the
+    "Supply chain & network" text block below -- nothing is hidden, just
+    not all drawn."""
+    if ctx.get("mode") == "xml":
+        return ""
+    conns = rels.get(e["eid"]) or []
+    if not conns:
+        return ""
+    hops = _two_hop(e, rels, by_eid)
+    shown = conns[:14]
+    overflow = len(conns) - len(shown)
+
+    W = H = 440
+    cx, cy = W / 2, H / 2
+    r1, r2 = 128, 196
+    pos = {}
+    for i, r in enumerate(shown):
+        ang = 2 * math.pi * i / len(shown) - math.pi / 2
+        pos[r["e"]] = (cx + r1 * math.cos(ang), cy + r1 * math.sin(ang), ang)
+    for i, (xe, via) in enumerate(hops):
+        ang = 2 * math.pi * (i + 0.5) / max(len(hops), 1) - math.pi / 2
+        pos[xe["eid"]] = (cx + r2 * math.cos(ang), cy + r2 * math.sin(ang), ang)
+
+    def anchor(ang):
+        c = math.cos(ang)
+        return "start" if c > 0.3 else "end" if c < -0.3 else "middle"
+
+    lines = []
+    for r in shown:
+        x, y, _ = pos[r["e"]]
+        lines.append(f'<line class="ego-edge" x1="{cx:.0f}" y1="{cy:.0f}" x2="{x:.1f}" y2="{y:.1f}"/>')
+    for xe, via in hops:
+        x, y, _ = pos[xe["eid"]]
+        bridge = next((r for r in shown if r["n"] in via), None)
+        if bridge:
+            bx, by_ = pos[bridge["e"]][0], pos[bridge["e"]][1]
+            lines.append(f'<line class="ego-edge ego-edge-2" x1="{bx:.1f}" y1="{by_:.1f}" '
+                         f'x2="{x:.1f}" y2="{y:.1f}"/>')
+
+    nodes = [f'<circle class="ego-ego" cx="{cx}" cy="{cy}" r="30"/>',
+             f'<text class="ego-ego-label" x="{cx}" y="{cy+4}" text-anchor="middle">'
+             f'{escape(_short_label(e["n"], 9))}</text>']
+    for r in shown:
+        x, y, ang = pos[r["e"]]
+        tgt = by_eid.get(r["e"])
+        if not tgt:
+            continue
+        lx, ly = x + 20 * math.cos(ang), y + 20 * math.sin(ang) + 3
+        link_inner = (f'<circle class="ego-node" cx="{x:.1f}" cy="{y:.1f}" r="14"/>'
+                      f'<text class="ego-label" x="{lx:.1f}" y="{ly:.1f}" '
+                      f'text-anchor="{anchor(ang)}">{escape(_short_label(r["n"]))}</text>')
+        nodes.append(_a(ctx, f'e/{_entry_slug(tgt)}.html', link_inner, ' class="ego-link"'))
+    for xe, via in hops:
+        x, y, ang = pos[xe["eid"]]
+        lx, ly = x + 16 * math.cos(ang), y + 16 * math.sin(ang) + 3
+        link_inner = (f'<circle class="ego-node ego-node-2" cx="{x:.1f}" cy="{y:.1f}" r="8"/>'
+                      f'<text class="ego-label ego-label-2" x="{lx:.1f}" y="{ly:.1f}" '
+                      f'text-anchor="{anchor(ang)}">{escape(_short_label(xe["n"], 13))}</text>')
+        nodes.append(_a(ctx, f'e/{_entry_slug(xe)}.html', link_inner, ' class="ego-link"'))
+
+    note = f'{len(shown)} direct connection{"s" if len(shown)!=1 else ""}'
+    if hops:
+        note += f' · {len(hops)} two steps away'
+    if overflow > 0:
+        note += f' · +{overflow} more in the list below'
+    pad = 90  # room for labels that extend past the outer ring (text-anchor doesn't auto-fit the viewBox)
+    return (f'<h2>Network map</h2><figure class="egofig">'
+            f'<svg class="egograph" viewBox="{-pad} {-pad} {W+2*pad} {H+2*pad}" role="img" '
+            f'aria-label="Network map centered on {escape(e["n"])}">'
+            + "".join(lines) + "".join(nodes) + "</svg>"
+            f'<figcaption>{note}</figcaption></figure>')
+
+
 def _two_hop(e, rels, by_eid):
     """Entities two steps away in the graph (not self, not direct), with the
     bridging entity — cheap 'you may also want to see' discovery."""
@@ -742,6 +826,8 @@ def _entry_content_html(e, payload, rels, by_eid, by_cat, ctx, about_text=""):
                   + "".join(f'<tr><th>{escape(k)}</th><td>{v}</td></tr>'
                             for k, v in rows) + "</table>")
 
+    ego_html = _ego_graph_svg(e, rels, by_eid, ctx)
+
     # --- supply chain: connections grouped by direction/role ---
     conn_html = ""
     if conns:
@@ -799,7 +885,7 @@ def _entry_content_html(e, payload, rels, by_eid, by_cat, ctx, about_text=""):
 
     return (f'<div class="badges">{badges}</div>'
             f'<p class="lead">{escape(prose)}</p>'
-            f'{facts_html}{conn_html}{disc_html}{rel_html}'
+            f'{facts_html}{ego_html}{conn_html}{disc_html}{rel_html}'
             f'<h2>Research</h2>{rlinks_html}')
 
 
@@ -866,6 +952,20 @@ form.submit-form button:disabled{background:#999;cursor:wait}
 #submit-msg{font-size:13px;padding:10px 12px;border-radius:3px;display:none}
 #submit-msg.ok{display:block;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
 #submit-msg.err{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.egofig{margin:0 0 24px;text-align:center}
+.egograph{width:100%;max-width:620px;height:auto}
+.ego-edge{stroke:#e5e5e5;stroke-width:1}
+.ego-edge-2{stroke-dasharray:3,3}
+.ego-ego{fill:#1452ff}
+.ego-ego-label{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10px;fill:#fff;pointer-events:none}
+.ego-node{fill:#fafafa;stroke:#ddd;stroke-width:1.5}
+.ego-node-2{stroke-dasharray:1.5,1.5;fill:#fafafa}
+.ego-label{font-size:9.5px;fill:#333}
+.ego-label-2{font-size:8.5px;fill:#999}
+a.ego-link{text-decoration:none}
+a.ego-link:hover .ego-node{stroke:#1452ff}
+a.ego-link:hover .ego-label{fill:#1452ff}
+.egofig figcaption{font-size:11px;color:#999;margin-top:6px}
 @media(prefers-color-scheme:dark){
  body{background:#0c0d10;color:#e7e7ea}a{color:#6f9bff}
  header.site{background:#0a0a0b;border-color:#222}
@@ -878,7 +978,11 @@ form.submit-form button:disabled{background:#999;cursor:wait}
  form.submit-form input,form.submit-form select,form.submit-form textarea{
    background:#15161a;color:#e7e7ea;border-color:#2a2a30}
  #submit-msg.ok{background:#082b17;color:#4ade80;border-color:#14532d}
- #submit-msg.err{background:#2a1212;color:#fca5a5;border-color:#5a1e1e}}
+ #submit-msg.err{background:#2a1212;color:#fca5a5;border-color:#5a1e1e}
+ .ego-edge{stroke:#2a2a30}.ego-ego{fill:#6f9bff}.ego-ego-label{fill:#0c0d10}
+ .ego-node,.ego-node-2{fill:#15161a;stroke:#2a2a30}.ego-label{fill:#cfcfd6}.ego-label-2{fill:#777}
+ a.ego-link:hover .ego-node{stroke:#6f9bff}a.ego-link:hover .ego-label{fill:#6f9bff}
+ .egofig figcaption{color:#777}}
 """
 
 
@@ -2190,6 +2294,20 @@ STYLE_EMBED = r"""<style>
   letter-spacing:.04em;text-transform:uppercase;padding-top:1px}
 #li-root .d-fact .fv{flex:1;color:var(--ink);overflow-wrap:anywhere}
 #li-root .d-n{font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);padding:0 5px}
+#li-root .d-egofig{margin:4px 0 12px;text-align:center}
+#li-root .egograph{width:100%;max-width:400px;height:auto}
+#li-root .ego-edge{stroke:var(--line);stroke-width:1}
+#li-root .ego-edge-2{stroke-dasharray:3,3}
+#li-root .ego-ego{fill:var(--blue)}
+#li-root .ego-ego-label{font-family:var(--mono);font-size:10px;fill:#fff;pointer-events:none}
+#li-root .ego-node{fill:var(--panel);stroke:var(--line);stroke-width:1.5}
+#li-root .ego-node-2{stroke-dasharray:1.5,1.5;fill:var(--panel)}
+#li-root .ego-label{font-size:9.5px;fill:var(--ink)}
+#li-root .ego-label-2{font-size:8.5px;fill:var(--muted)}
+#li-root a.ego-link{cursor:pointer}
+#li-root a.ego-link:hover .ego-node,#li-root a.ego-link:focus .ego-node{stroke:var(--blue)}
+#li-root a.ego-link:hover .ego-label,#li-root a.ego-link:focus .ego-label{fill:var(--blue)}
+#li-root .d-egofig figcaption{font-size:11px;color:var(--muted);margin-top:4px}
 #li-root .d-conns{display:flex;flex-direction:column;gap:4px}
 #li-root .d-conn{display:flex;flex-direction:column;gap:1px;text-align:left;font-family:var(--sans);
   background:none;border:1px solid var(--line);border-left:3px solid var(--blue);
@@ -2592,6 +2710,20 @@ footer a{color:var(--blue)}
   letter-spacing:.04em;text-transform:uppercase;padding-top:1px}
 .d-fact .fv{flex:1;color:var(--ink);overflow-wrap:anywhere}
 .d-n{font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);padding:0 5px}
+.d-egofig{margin:4px 0 12px;text-align:center}
+.egograph{width:100%;max-width:400px;height:auto}
+.ego-edge{stroke:var(--line);stroke-width:1}
+.ego-edge-2{stroke-dasharray:3,3}
+.ego-ego{fill:var(--blue)}
+.ego-ego-label{font-family:var(--mono);font-size:10px;fill:#fff;pointer-events:none}
+.ego-node{fill:var(--panel);stroke:var(--line);stroke-width:1.5}
+.ego-node-2{stroke-dasharray:1.5,1.5;fill:var(--panel)}
+.ego-label{font-size:9.5px;fill:var(--ink)}
+.ego-label-2{font-size:8.5px;fill:var(--muted)}
+a.ego-link{cursor:pointer}
+a.ego-link:hover .ego-node,a.ego-link:focus .ego-node{stroke:var(--blue)}
+a.ego-link:hover .ego-label,a.ego-link:focus .ego-label{fill:var(--blue)}
+.d-egofig figcaption{font-size:11px;color:var(--muted);margin-top:4px}
 .d-conns{display:flex;flex-direction:column;gap:4px}
 .d-conn{display:flex;flex-direction:column;gap:1px;text-align:left;font-family:var(--sans);
   background:none;border:1px solid var(--line);border-left:3px solid var(--blue);
@@ -3082,6 +3214,7 @@ function openDetail(e){
       <button class="d-x" data-close aria-label="Close">${I.x}</button>
     </div>
     ${entityProfile(e)}
+    ${egoGraphHtml(e)}
     ${connectionsHtml(e)}
     ${tags?`<div class="d-h">Technology</div><div class="tags d-tags">${tags}</div>`:""}
     <div class="d-h">Actions</div>
@@ -3119,6 +3252,87 @@ function entityProfile(e){
   if(!rows.length) return oneline;
   return oneline + `<div class="d-h">Profile${seeded?"":' <span class="d-inf">inferred</span>'}</div>
     <div class="d-facts">${rows.map(([k,v])=>`<div class="d-fact"><span class="fk">${esc(k)}</span><span class="fv">${v}</span></div>`).join("")}</div>`;
+}
+function shortLabel(name, n){
+  n = n||15;
+  name = String(name).replace(/\s*\([^)]*\)\s*$/,"").trim();
+  return name.length<=n ? name : name.slice(0,n-1).trimEnd()+"…";
+}
+function twoHopJS(e){
+  const list = (DB.rels||{})[e.eid] || [];
+  const direct = new Set(list.map(r=>r.e));
+  const sugg = {};
+  for(const r of list){
+    for(const r2 of ((DB.rels||{})[r.e]||[])){
+      const k = r2.e;
+      if(k===e.eid || direct.has(k)) continue;
+      const tgt = DB.entries.find(x=>x.eid===k);
+      if(!tgt) continue;
+      if(!sugg[k]) sugg[k] = {tgt, via:new Set()};
+      sugg[k].via.add(r.n);
+    }
+  }
+  return Object.values(sugg)
+    .sort((a,b)=> b.via.size-a.via.size || a.tgt.n.localeCompare(b.tgt.n))
+    .slice(0,6);
+}
+// Interactive twin of _ego_graph_svg() in build.py -- same radial layout,
+// but nodes are click-to-recenter (openByEid) instead of <a href>.
+function egoGraphHtml(e){
+  const list = (DB.rels||{})[e.eid] || [];
+  if(!list.length) return "";
+  // the drawer panel is capped around 380-400px wide, so show fewer nodes
+  // here than the full-width static page version to keep labels legible.
+  const hops = twoHopJS(e).slice(0,4);
+  const shown = list.slice(0,10);
+  const overflow = list.length - shown.length;
+  const W=440, H=440, cx=W/2, cy=H/2, r1=128, r2=196, pad=90;
+  const pos = {};
+  shown.forEach((r,i)=>{
+    const ang = 2*Math.PI*i/shown.length - Math.PI/2;
+    pos[r.e] = [cx+r1*Math.cos(ang), cy+r1*Math.sin(ang), ang];
+  });
+  hops.forEach((h,i)=>{
+    const ang = 2*Math.PI*(i+0.5)/Math.max(hops.length,1) - Math.PI/2;
+    pos[h.tgt.eid] = [cx+r2*Math.cos(ang), cy+r2*Math.sin(ang), ang];
+  });
+  const anchor = ang => { const c=Math.cos(ang); return c>0.3?"start":c<-0.3?"end":"middle"; };
+  let lines = "";
+  shown.forEach(r=>{
+    const [x,y] = pos[r.e];
+    lines += `<line class="ego-edge" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`;
+  });
+  hops.forEach(h=>{
+    const [x,y] = pos[h.tgt.eid];
+    const bridge = shown.find(r=>h.via.has(r.n));
+    if(bridge){
+      const [bx,by] = pos[bridge.e];
+      lines += `<line class="ego-edge ego-edge-2" x1="${bx.toFixed(1)}" y1="${by.toFixed(1)}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`;
+    }
+  });
+  let nodes = `<circle class="ego-ego" cx="${cx}" cy="${cy}" r="30"/>` +
+    `<text class="ego-ego-label" x="${cx}" y="${cy+4}" text-anchor="middle">${esc(shortLabel(e.n,9))}</text>`;
+  shown.forEach(r=>{
+    const [x,y,ang] = pos[r.e];
+    const lx=x+20*Math.cos(ang), ly=y+20*Math.sin(ang)+3;
+    nodes += `<a class="ego-link" data-eid="${esc(r.e)}" tabindex="0" role="button" aria-label="Open ${esc(r.n)}">`+
+      `<circle class="ego-node" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="14"/>`+
+      `<text class="ego-label" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor(ang)}">${esc(shortLabel(r.n))}</text></a>`;
+  });
+  hops.forEach(h=>{
+    const [x,y,ang] = pos[h.tgt.eid];
+    const lx=x+16*Math.cos(ang), ly=y+16*Math.sin(ang)+3;
+    nodes += `<a class="ego-link" data-eid="${esc(h.tgt.eid)}" tabindex="0" role="button" aria-label="Open ${esc(h.tgt.n)}">`+
+      `<circle class="ego-node ego-node-2" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8"/>`+
+      `<text class="ego-label ego-label-2" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor(ang)}">${esc(shortLabel(h.tgt.n,13))}</text></a>`;
+  });
+  let note = `${shown.length} direct connection${shown.length!==1?"s":""}`;
+  if(hops.length) note += ` · ${hops.length} two steps away`;
+  if(overflow>0) note += ` · +${overflow} more below`;
+  note += " · click a node to jump there";
+  return `<div class="d-h">Network map</div><figure class="egofig d-egofig">`+
+    `<svg class="egograph" viewBox="${-pad} ${-pad} ${W+2*pad} ${H+2*pad}" role="img" aria-label="Network map centered on ${esc(e.n)}">${lines}${nodes}</svg>`+
+    `<figcaption>${esc(note)}</figcaption></figure>`;
 }
 function connectionsHtml(e){
   const list = (DB.rels||{})[e.eid] || [];
@@ -3293,6 +3507,8 @@ drawer.addEventListener("click", ev=>{
   if(ev.target.closest("[data-close]")){ closeDrawer(); return; }
   const conn = ev.target.closest(".d-conn[data-eid]");
   if(conn){ drawerPanel.scrollTop=0; openByEid(conn.dataset.eid); return; }
+  const egoNode = ev.target.closest(".ego-link[data-eid]");
+  if(egoNode){ ev.preventDefault(); drawerPanel.scrollTop=0; openByEid(egoNode.dataset.eid); return; }
   const rel = ev.target.closest(".d-rel");
   if(rel){ const e=DB.entries.find(x=>x.i===Number(rel.dataset.id)); if(e){ drawerPanel.scrollTop=0; openDetail(e); } return; }
   const cat = ev.target.closest(".d-cat[data-cat]");
