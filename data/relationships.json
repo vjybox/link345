@@ -182,7 +182,7 @@
       "volkswagen"
     ],
     [
-      "byd",
+      "byd company limited",
       "EXPORTS_THROUGH",
       "port of rotterdam"
     ],
@@ -414,7 +414,7 @@
     [
       "shenzhen capchem",
       "SUPPLIES_TO",
-      "byd"
+      "byd company limited"
     ],
     [
       "sumitomo metal mining",
@@ -544,7 +544,7 @@
     [
       "wuxi lead",
       "SUPPLIES_EQUIPMENT_TO",
-      "byd"
+      "byd company limited"
     ],
     [
       "kuka",
@@ -719,7 +719,7 @@
     [
       "catl",
       "COMPETES_WITH",
-      "byd"
+      "byd company limited"
     ],
     [
       "lg energy solution",
@@ -745,6 +745,186 @@
       "quantumscape",
       "COMPETES_WITH",
       "prologium technology"
+    ],
+    [
+      "norilsk nickel",
+      "SUPPLIES_TO",
+      "basf"
+    ],
+    [
+      "eramet",
+      "JV_WITH",
+      "basf"
+    ],
+    [
+      "tianqi lithium",
+      "SUPPLIES_TO",
+      "sk on"
+    ],
+    [
+      "ganfeng lithium",
+      "SUPPLIES_TO",
+      "byd company limited"
+    ],
+    [
+      "albemarle",
+      "SUPPLIES_TO",
+      "panasonic"
+    ],
+    [
+      "sqm",
+      "SUPPLIES_TO",
+      "tesla"
+    ],
+    [
+      "btr new material",
+      "SUPPLIES_TO",
+      "byd company limited"
+    ],
+    [
+      "novonix",
+      "SUPPLIES_TO",
+      "panasonic"
+    ],
+    [
+      "umicore",
+      "SUPPLIES_TO",
+      "general motors"
+    ],
+    [
+      "posco future m",
+      "SUPPLIES_TO",
+      "samsung sdi"
+    ],
+    [
+      "sumitomo chemical",
+      "SUPPLIES_TO",
+      "panasonic"
+    ],
+    [
+      "toda kogyo",
+      "SUPPLIES_TO",
+      "panasonic"
+    ],
+    [
+      "manz",
+      "SUPPLIES_EQUIPMENT_TO",
+      "catl"
+    ],
+    [
+      "schuler group",
+      "SUPPLIES_EQUIPMENT_TO",
+      "volkswagen"
+    ],
+    [
+      "durr group",
+      "SUPPLIES_EQUIPMENT_TO",
+      "tesla"
+    ],
+    [
+      "rockwell automation",
+      "SUPPLIES_EQUIPMENT_TO",
+      "general motors"
+    ],
+    [
+      "ats automation",
+      "SUPPLIES_EQUIPMENT_TO",
+      "general motors"
+    ],
+    [
+      "infineon",
+      "SUPPLIES_TO",
+      "general motors"
+    ],
+    [
+      "infineon",
+      "SUPPLIES_TO",
+      "volkswagen"
+    ],
+    [
+      "stmicroelectronics",
+      "SUPPLIES_TO",
+      "stellantis"
+    ],
+    [
+      "renesas electronics",
+      "SUPPLIES_TO",
+      "honda motor"
+    ],
+    [
+      "duesenfeld",
+      "PARTNER_OF",
+      "volkswagen"
+    ],
+    [
+      "posco hy clean",
+      "SUPPLIES_TO",
+      "posco future m"
+    ],
+    [
+      "redwood materials",
+      "PARTNER_OF",
+      "volvo cars"
+    ],
+    [
+      "softbank vision fund",
+      "INVESTED_IN",
+      "arrival"
+    ],
+    [
+      "catl",
+      "PARTNER_OF",
+      "ford"
+    ],
+    [
+      "byd company limited",
+      "SUPPLIES_TO",
+      "tesla"
+    ],
+    [
+      "prof. jeff dahn",
+      "PARTNER_OF",
+      "tesla"
+    ],
+    [
+      "stellantis",
+      "MEMBER_OF",
+      "european battery alliance"
+    ],
+    [
+      "renault group",
+      "MEMBER_OF",
+      "european battery alliance"
+    ],
+    [
+      "idtechex",
+      "COVERS",
+      "catl"
+    ],
+    [
+      "fastmarkets",
+      "COVERS",
+      "sqm"
+    ],
+    [
+      "benchmark mineral intelligence",
+      "COVERS",
+      "tesla"
+    ],
+    [
+      "byd company limited",
+      "COMPETES_WITH",
+      "tesla"
+    ],
+    [
+      "redwood materials",
+      "COMPETES_WITH",
+      "li-cycle"
+    ],
+    [
+      "northvolt",
+      "COMPETES_WITH",
+      "catl"
     ]
   ]
 }
