@@ -924,6 +924,12 @@ ul.conns,ul.related{list-style:none;padding:0;margin:0 0 8px;display:flex;flex-d
 ul.conns .rel{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;color:#888;margin-right:6px}
 ul.related{flex-direction:row;flex-wrap:wrap;gap:8px}
 ul.related li{border:1px solid #e5e5e5;padding:5px 10px;border-radius:2px;font-size:13px}
+ol.leaderboard{list-style:none;counter-reset:lb;padding:0;margin:0 0 8px;display:flex;flex-direction:column;gap:2px}
+ol.leaderboard li{counter-increment:lb;display:flex;align-items:baseline;gap:10px;
+  padding:7px 0;border-bottom:1px solid #eee;font-size:14px}
+ol.leaderboard li::before{content:counter(lb);font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:11px;color:#999;width:1.4em;text-align:right;flex-shrink:0}
+ol.leaderboard li .ct{margin-left:auto;flex-shrink:0}
 h3{font-size:13px;margin:16px 0 8px;color:#444;font-weight:600}
 h3 .n{color:#999;font-weight:400}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -974,6 +980,7 @@ a.ego-link:hover .ego-label{fill:#1452ff}
  table.facts th,table.facts td{border-color:#222}table.facts th{color:#9a9aa2}
  ul.related li,.links a,.chip{border-color:#2a2a30}
  .chip{color:#e7e7ea}h3{color:#c5c5cc}
+ ol.leaderboard li{border-color:#222}ol.leaderboard li::before{color:#777}
  footer{border-color:#222;color:#777}.lead{color:#cfcfd6}
  form.submit-form input,form.submit-form select,form.submit-form textarea{
    background:#15161a;color:#e7e7ea;border-color:#2a2a30}
@@ -1203,17 +1210,35 @@ def _build_page_ctx(payload, rels, mode):
     # connection rank within each sector (among connected entities only)
     conn_rank = {}
     by_sector = {}
+    by_eid_local = {e["eid"]: e for e in entries}
     for e in entries:
         n = len(rels.get(e["eid"]) or [])
         if n:
             by_sector.setdefault(e["s"], []).append((n, e["eid"]))
+    leaderboard = {}  # sector -> [(entry, count), ...] top 10, most-connected first
     for s, lst in by_sector.items():
         lst.sort(key=lambda t: (-t[0], t[1]))
         for i, (n, eid) in enumerate(lst, 1):
             conn_rank[eid] = (i, len(lst))
+        leaderboard[s] = [(by_eid_local[eid], n) for n, eid in lst[:10]]
 
     return {"mode": mode, "prefix": "../", "payload": payload,
-            "slugs": slugs, "counts": counts, "conn_rank": conn_rank}
+            "slugs": slugs, "counts": counts, "conn_rank": conn_rank, "leaderboard": leaderboard}
+
+
+def _leaderboard_html(ctx, sector):
+    """'Most connected' top-10 for a sector hub page -- surfaces the
+    relationship graph's highest-leverage entities (Phase 2 analytics item
+    in NEXT-STEPS.md). Omitted entirely if nothing in the sector has any
+    recorded connections yet."""
+    rows = ctx["leaderboard"].get(sector) or []
+    if not rows:
+        return ""
+    items = "".join(
+        f'<li>{_a(ctx, "e/" + _entry_slug(e) + ".html", escape(e["n"]))}'
+        f' <span class="ct">{n} connection{"s" if n != 1 else ""}</span></li>'
+        for e, n in rows)
+    return f'<h2>Most connected</h2><ol class="leaderboard">{items}</ol>'
 
 
 def _hub_body(items, ctx, group_by=None, anchor_slugs=None):
@@ -1295,7 +1320,8 @@ def write_entry_pages(payload, rels, about_map=None):
                  + f'</div><p class="lead">{len(items)} entries across {len(cats_in)} '
                  f'categories in the {escape(s)} mega-sector of the battery industry.</p>'
                  f'<h2>Categories</h2><div class="chips">{catlinks}</div>'
-                 f'<h2>All entries</h2>'
+                 + _leaderboard_html(ctx, s)
+                 + f'<h2>All entries</h2>'
                  + _hub_body(items, ctx, group_by=lambda x: x.get("cn", ""),
                              anchor_slugs=None))
         _write_hub(dist / "s" / f"{slug}.html", s,
@@ -2261,6 +2287,44 @@ STYLE_EMBED = r"""<style>
   padding:18px;overflow:auto;transform:translateX(100%);transition:transform .2s;
   display:flex;flex-direction:column;gap:12px}
 #li-root .drawer.open .panel{transform:none}
+#li-root .pathmodal{position:fixed;inset:0;z-index:2100;display:flex;align-items:center;justify-content:center}
+#li-root .pathmodal[hidden]{display:none}
+#li-root .pathmodal .scrim{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;transition:opacity .2s}
+#li-root .pathmodal.open .scrim{opacity:1}
+#li-root .ppanel{position:relative;width:min(480px,92vw);max-height:85vh;overflow:auto;background:var(--panel);
+  border:1px solid var(--line-strong);border-radius:6px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);
+  transform:scale(.96);opacity:0;transition:transform .15s,opacity .15s}
+#li-root .pathmodal.open .ppanel{transform:none;opacity:1}
+#li-root .p-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+#li-root .p-top h3{margin:0;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;font-size:22px}
+#li-root .p-sub{font-size:13px;color:var(--muted);margin:6px 0 16px}
+#li-root .p-row{display:flex;align-items:flex-end;gap:8px}
+#li-root .p-field{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;gap:4px}
+#li-root .p-field label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+#li-root .p-field input{font-family:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line-strong);
+  border-radius:3px;background:var(--panel);color:var(--ink);width:100%}
+#li-root .p-field input:focus{outline:2px solid var(--blue);outline-offset:1px}
+#li-root .p-swap{cursor:pointer;font-size:16px;color:var(--muted);padding:0 2px 9px;user-select:none}
+#li-root .p-swap:hover{color:var(--blue)}
+#li-root .psug{position:absolute;top:100%;left:0;right:0;z-index:10;background:var(--panel);
+  border:1px solid var(--line-strong);max-height:220px;overflow:auto;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+#li-root .psug button{display:block;width:100%;text-align:left;background:none;border:none;
+  font-family:inherit;font-size:13px;padding:7px 10px;cursor:pointer;color:var(--ink)}
+#li-root .psug button:hover,#li-root .psug button.on{background:rgba(20,82,255,.08)}
+#li-root .p-find{margin-top:14px;width:100%;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13px;
+  background:var(--blue);color:#fff;border:none;padding:11px;border-radius:3px;cursor:pointer;min-height:44px}
+#li-root .p-find:hover{opacity:.9}
+#li-root .p-find:disabled{opacity:.5;cursor:default}
+#li-root .p-result{margin-top:16px;font-size:13px}
+#li-root .p-chain{display:flex;flex-direction:column;gap:0}
+#li-root .p-hop{display:flex;align-items:center;gap:8px;padding:8px 0}
+#li-root .p-hop .p-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0}
+#li-root .p-hop .p-ent{font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;font-size:13px;color:var(--ink);padding:0;text-align:left}
+#li-root .p-hop .p-ent:hover{color:var(--blue)}
+#li-root .p-hop .p-rel{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.04em}
+#li-root .p-connector{width:1px;height:14px;background:var(--line-strong);margin-left:3.5px}
+#li-root .p-empty{color:var(--muted);padding:8px 0}
 #li-root .d-top{display:flex;align-items:flex-start;gap:10px}
 #li-root .d-top .logo{width:38px;height:38px}
 #li-root .d-title{flex:1;min-width:0}
@@ -2677,6 +2741,44 @@ footer a{color:var(--blue)}
   padding:18px;overflow:auto;transform:translateX(100%);transition:transform .2s;
   display:flex;flex-direction:column;gap:12px}
 .drawer.open .panel{transform:none}
+.pathmodal{position:fixed;inset:0;z-index:2100;display:flex;align-items:center;justify-content:center}
+.pathmodal[hidden]{display:none}
+.pathmodal .scrim{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;transition:opacity .2s}
+.pathmodal.open .scrim{opacity:1}
+.ppanel{position:relative;width:min(480px,92vw);max-height:85vh;overflow:auto;background:var(--panel);
+  border:1px solid var(--line-strong);border-radius:6px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);
+  transform:scale(.96);opacity:0;transition:transform .15s,opacity .15s}
+.pathmodal.open .ppanel{transform:none;opacity:1}
+.p-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.p-top h3{margin:0;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;font-size:22px}
+.p-sub{font-size:13px;color:var(--muted);margin:6px 0 16px}
+.p-row{display:flex;align-items:flex-end;gap:8px}
+.p-field{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;gap:4px}
+.p-field label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.p-field input{font-family:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line-strong);
+  border-radius:3px;background:var(--panel);color:var(--ink);width:100%}
+.p-field input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.p-swap{cursor:pointer;font-size:16px;color:var(--muted);padding:0 2px 9px;user-select:none}
+.p-swap:hover{color:var(--blue)}
+.psug{position:absolute;top:100%;left:0;right:0;z-index:10;background:var(--panel);
+  border:1px solid var(--line-strong);max-height:220px;overflow:auto;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.psug button{display:block;width:100%;text-align:left;background:none;border:none;
+  font-family:inherit;font-size:13px;padding:7px 10px;cursor:pointer;color:var(--ink)}
+.psug button:hover,.psug button.on{background:rgba(20,82,255,.08)}
+.p-find{margin-top:14px;width:100%;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13px;
+  background:var(--blue);color:#fff;border:none;padding:11px;border-radius:3px;cursor:pointer;min-height:44px}
+.p-find:hover{opacity:.9}
+.p-find:disabled{opacity:.5;cursor:default}
+.p-result{margin-top:16px;font-size:13px}
+.p-chain{display:flex;flex-direction:column;gap:0}
+.p-hop{display:flex;align-items:center;gap:8px;padding:8px 0}
+.p-hop .p-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0}
+.p-hop .p-ent{font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;font-size:13px;color:var(--ink);padding:0;text-align:left}
+.p-hop .p-ent:hover{color:var(--blue)}
+.p-hop .p-rel{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.04em}
+.p-connector{width:1px;height:14px;background:var(--line-strong);margin-left:3.5px}
+.p-empty{color:var(--muted);padding:8px 0}
 .d-top{display:flex;align-items:flex-start;gap:10px}
 .d-top .logo{width:38px;height:38px}
 .d-title{flex:1;min-width:0}
@@ -2774,6 +2876,7 @@ mark{color:#111}
       <div><b id="statSecs">__N_SECTORS__</b><span>Sectors</span></div>
     </div>
     <div class="hactions">
+      <button class="hbtn" id="pathBtn" title="Find a path between two entries"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.5 12h9"/></svg>Path finder</button>
       <button class="hbtn" id="submitBtn" title="Submit a company"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="stroke:var(--brand)"><path d="M12 5v14M5 12h14"/></svg>Submit</button>
       <button class="hbtn icon" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode"></button>
     </div>
@@ -2828,6 +2931,30 @@ mark{color:#111}
   <div class="panel" id="drawerPanel" role="dialog" aria-modal="true"></div>
 </div>
 
+<div class="pathmodal" id="pathModal" hidden>
+  <div class="scrim" data-pclose></div>
+  <div class="ppanel" role="dialog" aria-modal="true" aria-label="Supply-chain path finder">
+    <div class="p-top"><h3>How are they connected?</h3>
+      <button class="d-x" data-pclose aria-label="Close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <p class="p-sub">Find the shortest chain of relationships between any two entries in the index.</p>
+    <div class="p-row">
+      <div class="p-field">
+        <label for="pFrom">From</label>
+        <input id="pFrom" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. Pilbara Minerals">
+        <div class="psug" id="pFromSug" hidden></div>
+      </div>
+      <div class="p-swap" id="pSwap" title="Swap">⇄</div>
+      <div class="p-field">
+        <label for="pTo">To</label>
+        <input id="pTo" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. Tesla">
+        <div class="psug" id="pToSug" hidden></div>
+      </div>
+    </div>
+    <button class="p-find" id="pFind">Find path</button>
+    <div class="p-result" id="pResult"></div>
+  </div>
+</div>
+
 <footer>
   <span>The Lithium Index · __N_ENTRIES__ entries · __N_CATS__ categories · __N_SECTORS__ mega-sectors</span>
   <span>linkplus.in — every company is a link · ✓ marks a verified official link; others open a web search</span>
@@ -2863,7 +2990,7 @@ const grid = $("#grid"), pager = $("#pager"), chips = $("#chips"),
       resultLine = $("#resultLine"), treeEl = $("#tree"), pillsEl = $("#pills"),
       crumbEl = $("#crumb"), sugEl = $("#sug"),
       landscapeEl = $("#landscape"), mapEl = $("#map"),
-      drawer = $("#drawer"), drawerPanel = $("#drawerPanel");
+      drawer = $("#drawer"), drawerPanel = $("#drawerPanel"), pathModal = $("#pathModal");
 // Theme applies to #li-root inside a Blogger embed, else the document root.
 const ROOT = document.getElementById("li-root") || document.documentElement;
 
@@ -3347,6 +3474,130 @@ function connectionsHtml(e){
 }
 function openByEid(eid){ const e = DB.entries.find(x=>x.eid===eid); if(e) openDetail(e); }
 function closeDrawer(){ drawer.classList.remove("open"); setTimeout(()=>{drawer.hidden=true;}, 200); }
+
+// ---- supply-chain path finder: BFS over DB.rels, "how is Pilbara linked to Tesla?" ----
+function findPath(fromEid, toEid){
+  if(fromEid===toEid) return [];
+  const MAX_DEPTH = 5;
+  const visited = new Set([fromEid]);
+  const queue = [[fromEid, []]];
+  while(queue.length){
+    const [cur, path] = queue.shift();
+    if(path.length>=MAX_DEPTH) continue;
+    for(const r of ((DB.rels||{})[cur] || [])){
+      if(visited.has(r.e)) continue;
+      const hop = {to:r.e, rel:r.r, dir:r.d, label:r.n};
+      if(r.e===toEid) return [...path, hop];
+      visited.add(r.e);
+      queue.push([r.e, [...path, hop]]);
+    }
+  }
+  return null;
+}
+function renderPathResult(fromE, toE, path){
+  if(path===null){
+    const fromHas = ((DB.rels||{})[fromE.eid]||[]).length>0;
+    const toHas = ((DB.rels||{})[toE.eid]||[]).length>0;
+    let note = "The relationship graph is still being built -- see NEXT-STEPS.md.";
+    if(!fromHas) note = `"${esc(fromE.n)}" has no recorded connections yet. ` + note;
+    else if(!toHas) note = `"${esc(toE.n)}" has no recorded connections yet. ` + note;
+    return `<div class="p-empty">No connection found within 5 steps. ${note}</div>`;
+  }
+  if(!path.length) return `<div class="p-empty">That's the same entry.</div>`;
+  let html = `<div class="p-chain"><div class="p-hop"><span class="p-dot"></span>`+
+    `<button class="p-ent" data-eid="${esc(fromE.eid)}">${esc(fromE.n)}</button></div>`;
+  for(const hop of path){
+    const lbl = REL_LABELS[hop.rel] || hop.rel.toLowerCase().replace(/_/g," ");
+    const arrow = hop.dir==="out" ? "↓" : "↑";
+    const tgt = DB.entries.find(x=>x.eid===hop.to);
+    html += `<div class="p-connector"></div>`+
+      `<div class="p-hop"><span class="p-dot" style="background:none;border:1px solid var(--line-strong)"></span>`+
+      `<span class="p-rel">${arrow} ${esc(lbl)}</span></div>`+
+      `<div class="p-connector"></div>`+
+      `<div class="p-hop"><span class="p-dot"></span>`+
+      `<button class="p-ent" data-eid="${esc(hop.to)}">${esc(tgt?tgt.n:hop.label)}</button></div>`;
+  }
+  html += `</div><div class="p-sub" style="margin:10px 0 0">${path.length} step${path.length!==1?"s":""} apart</div>`;
+  return html;
+}
+function wireEntityAutocomplete(inputEl, sugEl2){
+  let items = [], idx = -1;
+  function hide(){ sugEl2.hidden = true; idx = -1; }
+  function show(q){
+    q = q.trim().toLowerCase();
+    delete inputEl.dataset.eid;
+    if(!q){ hide(); return; }
+    items = DB.entries.filter(e=>e.n.toLowerCase().includes(q)).slice(0,8);
+    if(!items.length){ hide(); return; }
+    sugEl2.innerHTML = items.map((e,i)=>`<button data-i="${i}">${esc(e.n)}</button>`).join("");
+    sugEl2.hidden = false; idx = -1;
+  }
+  function pick(i){
+    const e = items[i]; if(!e) return;
+    inputEl.value = e.n; inputEl.dataset.eid = e.eid; hide();
+  }
+  inputEl.addEventListener("input", ()=>show(inputEl.value));
+  inputEl.addEventListener("focus", ()=>{ if(inputEl.value.trim()) show(inputEl.value); });
+  inputEl.addEventListener("blur", ()=>setTimeout(hide,150));
+  inputEl.addEventListener("keydown", ev=>{
+    if(sugEl2.hidden) return;
+    if(ev.key==="ArrowDown"||ev.key==="ArrowUp"){
+      ev.preventDefault();
+      idx=(idx+(ev.key==="ArrowDown"?1:-1)+items.length)%items.length;
+      sugEl2.querySelectorAll("button").forEach((b,i)=>b.classList.toggle("on",i===idx));
+    } else if(ev.key==="Enter" && idx>=0){ ev.preventDefault(); pick(idx); }
+    else if(ev.key==="Escape"){ hide(); }
+  });
+  sugEl2.addEventListener("mousedown", ev=>{
+    const b = ev.target.closest("button[data-i]"); if(!b) return;
+    ev.preventDefault(); pick(Number(b.dataset.i));
+  });
+  return { getEntity: () => {
+    const byEid = DB.entries.find(x=>x.eid===inputEl.dataset.eid);
+    if(byEid) return byEid;
+    const v = inputEl.value.trim();
+    return v ? DB.entries.find(x=>x.n===v) : null;
+  }};
+}
+const pFromAC = wireEntityAutocomplete($("#pFrom"), $("#pFromSug"));
+const pToAC = wireEntityAutocomplete($("#pTo"), $("#pToSug"));
+function openPathModal(presetFrom){
+  pathModal.hidden = false;
+  requestAnimationFrame(()=>pathModal.classList.add("open"));
+  $("#pResult").innerHTML = "";
+  // focus whichever field still needs typing -- never steal focus from a
+  // field the caller already filled in (was clobbering autocomplete state
+  // if the user/test started typing in #pFrom before this timer fired)
+  if(presetFrom){
+    $("#pFrom").value = presetFrom.n; $("#pFrom").dataset.eid = presetFrom.eid;
+    setTimeout(()=>$("#pTo").focus(), 50);
+  } else {
+    setTimeout(()=>$("#pFrom").focus(), 50);
+  }
+}
+function closePathModal(){ pathModal.classList.remove("open"); setTimeout(()=>{pathModal.hidden=true;}, 150); }
+$("#pathBtn").addEventListener("click", ()=>openPathModal());
+pathModal.addEventListener("click", ev=>{
+  if(ev.target.closest("[data-pclose]")){ closePathModal(); return; }
+  const ent = ev.target.closest(".p-ent[data-eid]");
+  if(ent){ const e=DB.entries.find(x=>x.eid===ent.dataset.eid); if(e){ closePathModal(); openDetail(e); } }
+});
+document.addEventListener("keydown", ev=>{ if(ev.key==="Escape" && !pathModal.hidden) closePathModal(); });
+$("#pSwap").addEventListener("click", ()=>{
+  const a=$("#pFrom"), b=$("#pTo");
+  const av=a.value, aEid=a.dataset.eid, bv=b.value, bEid=b.dataset.eid;
+  a.value=bv; if(bEid) a.dataset.eid=bEid; else delete a.dataset.eid;
+  b.value=av; if(aEid) b.dataset.eid=aEid; else delete b.dataset.eid;
+});
+$("#pFind").addEventListener("click", ()=>{
+  const fromE = pFromAC.getEntity(), toE = pToAC.getEntity();
+  const result = $("#pResult");
+  if(!fromE || !toE){
+    result.innerHTML = `<div class="p-empty">Pick two entries from the suggestions (start typing a company name).</div>`;
+    return;
+  }
+  result.innerHTML = renderPathResult(fromE, toE, findPath(fromE.eid, toE.eid));
+});
 
 function renderCrumb(){
   if(state.view!=="grid" || (!state.sector && !state.cat)){ crumbEl.hidden=true; return; }

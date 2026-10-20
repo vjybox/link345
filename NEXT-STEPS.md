@@ -136,9 +136,12 @@ Ranked by value; each can be requested as its own task:
    self-hosted Submit form's CSV export into ready-to-merge entries/metadata
    with dedup, closing the crowdsourcing loop end-to-end (self-hosted form →
    admin review → import → build).
-4. **Analytics content** — "Most connected" leaderboards per sector; a
-   supply-chain path finder ("how is Pilbara linked to Tesla?"). The raw
-   pageview data is already there in SQLite (`/admin`) once self-hosted.
+4. ~~**Analytics content**~~ — done: every sector hub page (`dist/s/*.html`)
+   has a "Most connected" top-10; the header's **Path finder** button
+   answers "how is Pilbara linked to Tesla?" with the actual shortest chain
+   (BFS over the relationship graph, capped at 5 hops, click any entity in
+   the chain to open it). Pageview leaderboards from the self-hosted
+   SQLite data (`/admin`) are still open if useful later.
 5. **Monetization scaffolding** (once traffic justifies): sponsored pin per
    category, Claimed/Verified badge tier, newsletter signup embed.
 
