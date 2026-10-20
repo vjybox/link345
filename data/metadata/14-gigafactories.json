@@ -71,9 +71,9 @@
     "type": "Facility",
     "status": "Under-Construction",
     "facility_type": "Cell gigafactory",
-    "chemistry": "Cylindrical",
     "city": "Queen Creek, Arizona",
-    "strategic_role": "New LGES plant for cylindrical cells serving multiple customers."
+    "strategic_role": "New LGES plant for cylindrical cells serving multiple customers.",
+    "form_factor": "Cylindrical"
   },
   "starplus energy kokomo indiana": {
     "type": "Facility",

@@ -351,6 +351,27 @@ LIFECYCLE_STAGES = [
 LINKS_SECTORS = ["Logistics & Supply Chain"]
 
 
+def split_outside_parens(s):
+    """Split a comma-separated metadata value (chemistry/form_factor) on
+    commas, but not ones inside parentheses -- "Cylindrical (2170, 4680)"
+    is one value, not two. Mirrored in JS as splitOutsideParens()."""
+    parts, depth, cur = [], 0, []
+    for ch in s:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth = max(0, depth - 1)
+        if ch == "," and depth == 0:
+            parts.append("".join(cur).strip())
+            cur = []
+        else:
+            cur.append(ch)
+    tail = "".join(cur).strip()
+    if tail:
+        parts.append(tail)
+    return [p for p in parts if p]
+
+
 def derive_tech(name, category):
     hay = (name + " " + category).lower()
     tags = []
@@ -1448,12 +1469,20 @@ def main():
         "countries": sorted({e["country"] for e in entries if e["country"]}),
         "regions": sorted({e["region"] for e in entries if e["region"]}),
         "centroids": {c: COUNTRY_CENTROIDS[c] for c in present_countries},
+        "ownerships": sorted({e["meta"]["ownership"] for e in entries
+                              if e.get("meta", {}).get("ownership")}),
+        "chemistries": sorted({v for e in entries
+                               for v in split_outside_parens(e.get("meta", {}).get("chemistry") or "")}),
+        "formFactors": sorted({v for e in entries
+                               for v in split_outside_parens(e.get("meta", {}).get("form_factor") or "")}),
+        "metaStatuses": sorted({e["status"] for e in entries if e.get("status")}),
         "stats": {
             "entries": len(entries),
             "categories": len(categories),
             "sectors": len(tree),
             "withUrl": sum(1 for e in entries if e["url"]),
             "withCountry": sum(1 for e in entries if e["country"]),
+            "profiled": sum(1 for e in entries if e.get("meta")),
         },
     }
 
@@ -1918,6 +1947,21 @@ STYLE_EMBED = r"""<style>
                    linear-gradient(135deg,var(--ink) 50%,transparent 50%);
   background-position:calc(100% - 12px) 11px,calc(100% - 8px) 11px;
   background-size:4px 4px,4px 4px;background-repeat:no-repeat}
+#li-root .morefilters{position:relative}
+#li-root .morefilters summary{list-style:none;display:inline-block}
+#li-root .morefilters summary::-webkit-details-marker{display:none}
+#li-root .morefilters summary::after{content:" ▾"}
+#li-root .morefilters[open] summary::after{content:" ▴"}
+#li-root .mf-badge{display:inline-block;background:var(--blue);color:#fff;font-size:9px;
+  border-radius:50%;width:16px;height:16px;line-height:16px;text-align:center;margin-left:5px}
+#li-root .mf-panel{position:absolute;top:calc(100% + 6px);right:0;z-index:20;
+  background:var(--panel);border:1px solid var(--line-strong);padding:14px;
+  display:flex;flex-direction:column;gap:10px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+#li-root .mf-panel label{display:flex;flex-direction:column;gap:4px;font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+#li-root .mf-panel select{font-family:inherit;font-size:13px;padding:6px 8px;
+  border:1px solid var(--line-strong);background:var(--panel);color:var(--ink);text-transform:none;letter-spacing:0}
+#li-root .mf-note{font-size:11px;color:var(--muted);border-top:1px solid var(--line-strong);padding-top:8px;margin-top:2px}
 #li-root .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 #li-root .chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;
   background:#fff;border:1px solid var(--line-strong);padding:5px 8px}
@@ -2090,6 +2134,10 @@ STYLE_EMBED = r"""<style>
 #li-root .tile-c{font-size:16px;font-weight:700;color:var(--sc,var(--ink))}
 #li-root .tile-sub{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 #li-root .tile-top{font-size:10.5px;color:var(--muted);line-height:1.5}
+#li-root .tile-prof{display:flex;align-items:center;gap:6px;margin-top:8px}
+#li-root .tile-proftrack{flex:1;height:3px;background:var(--line-strong);border-radius:2px;overflow:hidden}
+#li-root .tile-proffill{display:block;height:100%;background:var(--sc,var(--blue))}
+#li-root .tile-profn{font-size:9.5px;color:var(--muted);white-space:nowrap}
 #li-root .mapwrap{border:1px solid var(--line-strong);background:var(--panel);padding:8px}
 #li-root .worldmap{width:100%;height:auto;display:block}
 #li-root .worldmap .ocean{fill:transparent}
@@ -2157,7 +2205,7 @@ STYLE_EMBED = r"""<style>
 @container (max-width:679px){
   #li-root .sector>.row{min-height:44px}
   #li-root .cat{min-height:40px;align-items:center}
-  #li-root .pill,#li-root .sort,#li-root .hbtn,#li-root .viewtabs button{min-height:40px}
+  #li-root .pill,#li-root .sort,#li-root .hbtn,#li-root .viewtabs button,#li-root .morefilters summary{min-height:40px}
   #li-root .pager button{min-height:42px;min-width:44px}
 }
 #li-root[data-theme=dark]{--bg:#0c0d10;--panel:#15171c;--ink:#e8e8ea;--muted:#9aa1ab;
@@ -2288,6 +2336,21 @@ select.sort{appearance:none;-webkit-appearance:none;padding-right:22px;
                    linear-gradient(135deg,var(--ink) 50%,transparent 50%);
   background-position:calc(100% - 12px) 11px,calc(100% - 8px) 11px;
   background-size:4px 4px,4px 4px;background-repeat:no-repeat}
+.morefilters{position:relative}
+.morefilters summary{list-style:none;display:inline-block}
+.morefilters summary::-webkit-details-marker{display:none}
+.morefilters summary::after{content:" ▾"}
+.morefilters[open] summary::after{content:" ▴"}
+.mf-badge{display:inline-block;background:var(--blue);color:#fff;font-size:9px;
+  border-radius:50%;width:16px;height:16px;line-height:16px;text-align:center;margin-left:5px}
+.mf-panel{position:absolute;top:calc(100% + 6px);right:0;z-index:20;
+  background:var(--panel);border:1px solid var(--line-strong);padding:14px;
+  display:flex;flex-direction:column;gap:10px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.mf-panel label{display:flex;flex-direction:column;gap:4px;font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mf-panel select{font-family:inherit;font-size:13px;padding:6px 8px;
+  border:1px solid var(--line-strong);background:var(--panel);color:var(--ink);text-transform:none;letter-spacing:0}
+.mf-note{font-size:11px;color:var(--muted);border-top:1px solid var(--line-strong);padding-top:8px;margin-top:2px}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;min-height:0}
 .chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;
   background:#fff;border:1px solid var(--line-strong);padding:5px 8px}
@@ -2471,6 +2534,10 @@ footer a{color:var(--blue)}
 .tile-c{font-size:16px;font-weight:700;color:var(--sc,var(--ink))}
 .tile-sub{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .tile-top{font-size:10.5px;color:var(--muted);line-height:1.5}
+.tile-prof{display:flex;align-items:center;gap:6px;margin-top:8px}
+.tile-proftrack{flex:1;height:3px;background:var(--line-strong);border-radius:2px;overflow:hidden}
+.tile-proffill{display:block;height:100%;background:var(--sc,var(--blue))}
+.tile-profn{font-size:9.5px;color:var(--muted);white-space:nowrap}
 /* world map */
 .mapwrap{border:1px solid var(--line-strong);background:var(--panel);padding:8px}
 .worldmap{width:100%;height:auto;display:block}
@@ -2541,7 +2608,7 @@ mark{color:#111}
 @media(max-width:900px){
   .sector>.row{min-height:44px}
   .cat{min-height:40px;align-items:center}
-  .pill,.sort,.hbtn,.viewtabs button{min-height:40px}
+  .pill,.sort,.hbtn,.viewtabs button,.morefilters summary{min-height:40px}
   .pager button{min-height:42px;min-width:44px}
 }
 /* dark theme */
@@ -2602,6 +2669,16 @@ mark{color:#111}
       <select class="sort" id="regionSel" title="Filter by region / country"></select>
       <select class="sort" id="typeSel" title="Filter by type"></select>
       <select class="sort" id="techSel" title="Filter by technology / chemistry"></select>
+      <details class="morefilters" id="moreFilters">
+        <summary class="sort">More filters<span class="mf-badge" id="mfBadge" hidden></span></summary>
+        <div class="mf-panel">
+          <label>Ownership<select id="ownershipSel"><option value="">Any</option></select></label>
+          <label>Chemistry<select id="chemSel"><option value="">Any</option></select></label>
+          <label>Form factor<select id="formfSel"><option value="">Any</option></select></label>
+          <label>Status<select id="mstatusSel"><option value="">Any</option></select></label>
+          <div class="mf-note" id="mfNote"></div>
+        </div>
+      </details>
       <button class="sort" id="sortBtn">Sort: Relevance</button>
     </div>
     <div class="chips" id="chips"></div>
@@ -2640,7 +2717,8 @@ const I = {
   batt:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10.5v3"/></svg>'
 };
 
-const state = {q:"", sector:null, cat:null, stage:null, type:"", tech:"", region:"", country:"", sort:"rel", view:"landscape", page:1};
+const state = {q:"", sector:null, cat:null, stage:null, type:"", tech:"", region:"", country:"",
+  ownership:"", chem:"", formf:"", mstatus:"", sort:"rel", view:"landscape", page:1};
 const STAGE_SECTORS = {}; (DB.stages||[]).forEach(st=>STAGE_SECTORS[st.n]=new Set(st.sectors));
 function stageOf(sector){
   for(const st of DB.stages){ if(st.sectors.indexOf(sector)>=0) return st.n; }
@@ -2693,6 +2771,15 @@ function buildSelects(){
       cs.map(c=>`<option value="co:${esc(c)}">${esc(c)}</option>`).join("")+`</optgroup>`;
   }).join("");
   regionSel.innerHTML = `<option value="">All regions</option>`+optGroups;
+
+  const fill = (sel, values) => { sel.innerHTML = `<option value="">Any</option>` +
+    values.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join(""); };
+  fill($("#ownershipSel"), DB.ownerships||[]);
+  fill($("#chemSel"), DB.chemistries||[]);
+  fill($("#formfSel"), DB.formFactors||[]);
+  fill($("#mstatusSel"), DB.metaStatuses||[]);
+  const pct = DB.stats.entries ? Math.round(100*DB.stats.profiled/DB.stats.entries) : 0;
+  $("#mfNote").textContent = `${DB.stats.profiled.toLocaleString()} of ${DB.stats.entries.toLocaleString()} entries have a curated profile (${pct}%) — these filters only match among those.`;
 }
 function entriesRegion(country){
   const e = DB.entries.find(x=>x.co===country);
@@ -2700,6 +2787,19 @@ function entriesRegion(country){
 }
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
+// Mirrors split_outside_parens() in build.py: "Cylindrical (2170, 4680)" is
+// one value, not two -- a plain .split(",") breaks on the internal comma.
+function splitOutsideParens(s){
+  const parts=[]; let depth=0, cur="";
+  for(const ch of String(s)){
+    if(ch==="(") depth++;
+    else if(ch===")") depth=Math.max(0,depth-1);
+    if(ch===","&&depth===0){ if(cur.trim()) parts.push(cur.trim()); cur=""; }
+    else cur+=ch;
+  }
+  if(cur.trim()) parts.push(cur.trim());
+  return parts;
+}
 
 // ---- filtering ----
 function filtered(){
@@ -2712,6 +2812,12 @@ function filtered(){
   if(state.tech){ rows = rows.filter(e=>e.tech.indexOf(state.tech)>=0); }
   if(state.region){ rows = rows.filter(e=>e.rg===state.region); }
   if(state.country){ rows = rows.filter(e=>e.co===state.country); }
+  if(state.ownership){ rows = rows.filter(e=>e.m && e.m.ownership===state.ownership); }
+  if(state.chem){ rows = rows.filter(e=>e.m && e.m.chemistry &&
+    splitOutsideParens(e.m.chemistry).includes(state.chem)); }
+  if(state.formf){ rows = rows.filter(e=>e.m && e.m.form_factor &&
+    splitOutsideParens(e.m.form_factor).includes(state.formf)); }
+  if(state.mstatus){ rows = rows.filter(e=>e.stt===state.mstatus); }
   if(q){
     rows = rows.filter(e=>
       e.n.toLowerCase().includes(q) ||
@@ -2889,11 +2995,13 @@ function renderLoop(){
 
 function renderLandscape(){
   const st = DB.stats;
+  const pct = st.entries ? Math.round(100*st.profiled/st.entries) : 0;
   const kpis = `<div class="kpis">
     <div class="kpi"><b>${st.entries.toLocaleString()}</b><span>Entries</span></div>
     <div class="kpi"><b>${st.categories}</b><span>Categories</span></div>
     <div class="kpi"><b>${(DB.countries||[]).length}</b><span>Countries</span></div>
     <div class="kpi"><b>${st.withUrl}</b><span>Verified links</span></div>
+    <div class="kpi"><b>${pct}%</b><span>Profiled (${st.profiled.toLocaleString()})</span></div>
   </div>`;
   const rows = Object.entries(DB.tree)
     .map(([sec,cats])=>({sec, n:cats.reduce((a,c)=>a+c.count,0)}))
@@ -2904,13 +3012,21 @@ function renderLandscape(){
       <span class="sbn">${esc(r.sec)}</span>
       <span class="sbtrack"><span class="sbfill" style="width:${(100*r.n/max).toFixed(1)}%;background:${DB.colors[r.sec]||'var(--c1)'}"></span></span>
       <span class="sbv">${r.n}</span></button>`).join("") + `</div>`;
+  const profiledBySector = {};
+  DB.entries.forEach(e=>{ if(e.m) profiledBySector[e.s] = (profiledBySector[e.s]||0)+1; });
   const tiles = Object.entries(DB.tree).map(([sec,cats])=>{
     const total = cats.reduce((a,c)=>a+c.count,0);
     const top = cats.slice().sort((a,b)=>b.count-a.count).slice(0,4).map(c=>esc(c.name)).join(" · ");
+    const prof = profiledBySector[sec]||0;
+    const ppct = total ? Math.round(100*prof/total) : 0;
     return `<button class="tile" data-sector="${esc(sec)}" style="--sc:${DB.colors[sec]||'#0a0a0a'}">
       <div class="tile-h"><span class="tile-n">${esc(sec)}</span><span class="tile-c">${total}</span></div>
       <div class="tile-sub">${cats.length} categories</div>
       <div class="tile-top">${top}</div>
+      <div class="tile-prof" title="${prof} of ${total} entries have a curated profile">
+        <span class="tile-proftrack"><span class="tile-proffill" style="width:${ppct}%"></span></span>
+        <span class="tile-profn">${ppct}% profiled</span>
+      </div>
     </button>`;
   }).join("");
   landscapeEl.innerHTML = renderLoop() + kpis + chart + `<div class="tiles">` + tiles + `</div>`;
@@ -3043,8 +3159,15 @@ function renderChips(){
   if(state.tech) c.push(`<span class="chip"><b>Tech:</b> ${esc(state.tech)} <span class="x" data-clear="tech">${I.x}</span></span>`);
   if(state.region) c.push(`<span class="chip"><b>Region:</b> ${esc(state.region)} <span class="x" data-clear="region">${I.x}</span></span>`);
   if(state.country) c.push(`<span class="chip"><b>Country:</b> ${esc(state.country)} <span class="x" data-clear="country">${I.x}</span></span>`);
+  if(state.ownership) c.push(`<span class="chip"><b>Ownership:</b> ${esc(state.ownership)} <span class="x" data-clear="ownership">${I.x}</span></span>`);
+  if(state.chem) c.push(`<span class="chip"><b>Chemistry:</b> ${esc(state.chem)} <span class="x" data-clear="chem">${I.x}</span></span>`);
+  if(state.formf) c.push(`<span class="chip"><b>Form factor:</b> ${esc(state.formf)} <span class="x" data-clear="formf">${I.x}</span></span>`);
+  if(state.mstatus) c.push(`<span class="chip"><b>Status:</b> ${esc(state.mstatus)} <span class="x" data-clear="mstatus">${I.x}</span></span>`);
   if(state.q.trim()) c.push(`<span class="chip"><b>Search:</b> "${esc(state.q.trim())}" <span class="x" data-clear="q">${I.x}</span></span>`);
   chips.innerHTML = c.join("");
+  const mfCount = [state.ownership,state.chem,state.formf,state.mstatus].filter(Boolean).length;
+  const badge = $("#mfBadge");
+  if(mfCount){ badge.hidden=false; badge.textContent=mfCount; } else { badge.hidden=true; }
 }
 
 function renderPager(pages){
@@ -3136,6 +3259,10 @@ chips.addEventListener("click", ev=>{
   if(k==="tech"){ state.tech=""; $("#techSel").value=""; }
   if(k==="region"){ state.region=""; $("#regionSel").value=""; }
   if(k==="country"){ state.country=""; $("#regionSel").value=""; }
+  if(k==="ownership"){ state.ownership=""; $("#ownershipSel").value=""; }
+  if(k==="chem"){ state.chem=""; $("#chemSel").value=""; }
+  if(k==="formf"){ state.formf=""; $("#formfSel").value=""; }
+  if(k==="mstatus"){ state.mstatus=""; $("#mstatusSel").value=""; }
   if(k==="q"){ state.q=""; $("#q").value=""; }
   state.page=1; render();
 });
@@ -3242,6 +3369,10 @@ $("#regionSel").addEventListener("change", e=>{
   state.country = v.startsWith("co:") ? v.slice(3) : "";
   state.page=1; state.view="grid"; render();
 });
+$("#ownershipSel").addEventListener("change", e=>{ state.ownership=e.target.value; state.page=1; state.view="grid"; render(); });
+$("#chemSel").addEventListener("change", e=>{ state.chem=e.target.value; state.page=1; state.view="grid"; render(); });
+$("#formfSel").addEventListener("change", e=>{ state.formf=e.target.value; state.page=1; state.view="grid"; render(); });
+$("#mstatusSel").addEventListener("change", e=>{ state.mstatus=e.target.value; state.page=1; state.view="grid"; render(); });
 
 const SORTS=[["rel","Relevance"],["az","A → Z"],["za","Z → A"]];
 $("#sortBtn").addEventListener("click", ()=>{
@@ -3252,8 +3383,10 @@ $("#sortBtn").addEventListener("click", ()=>{
 
 $("#clearNav").addEventListener("click", resetAll);
 $("#brandReset").addEventListener("click", e=>{e.preventDefault();resetAll();});
-function resetAll(){ Object.assign(state,{q:"",sector:null,cat:null,stage:null,type:"",tech:"",region:"",country:"",page:1,view:"landscape"});
+function resetAll(){ Object.assign(state,{q:"",sector:null,cat:null,stage:null,type:"",tech:"",region:"",country:"",
+  ownership:"",chem:"",formf:"",mstatus:"",page:1,view:"landscape"});
   $("#q").value=""; $("#typeSel").value=""; $("#techSel").value=""; $("#regionSel").value="";
+  $("#ownershipSel").value=""; $("#chemSel").value=""; $("#formfSel").value=""; $("#mstatusSel").value="";
   document.querySelectorAll(".sector.open").forEach(s=>s.classList.remove("open")); render(); }
 
 // ---- dark mode ----
@@ -3281,6 +3414,10 @@ function updateHash(){
   if(state.tech) p.set("tech",state.tech);
   if(state.region) p.set("rg",state.region);
   if(state.country) p.set("co",state.country);
+  if(state.ownership) p.set("own",state.ownership);
+  if(state.chem) p.set("chem",state.chem);
+  if(state.formf) p.set("ff",state.formf);
+  if(state.mstatus) p.set("mst",state.mstatus);
   if(state.q.trim()) p.set("q",state.q.trim());
   if(state.page>1) p.set("pg",state.page);
   const h=p.toString();
@@ -3297,10 +3434,16 @@ function applyHash(){
   state.tech = p.get("tech")||"";
   state.region = p.get("rg")||"";
   state.country = p.get("co")||"";
+  state.ownership = p.get("own")||"";
+  state.chem = p.get("chem")||"";
+  state.formf = p.get("ff")||"";
+  state.mstatus = p.get("mst")||"";
   state.q = p.get("q")||"";
   state.page = p.get("pg")?Number(p.get("pg")):1;
   $("#q").value=state.q; $("#typeSel").value=state.type; $("#techSel").value=state.tech;
   $("#regionSel").value = state.country?("co:"+state.country):(state.region?("reg:"+state.region):"");
+  $("#ownershipSel").value=state.ownership; $("#chemSel").value=state.chem;
+  $("#formfSel").value=state.formf; $("#mstatusSel").value=state.mstatus;
   const si=SORTS.findIndex(s=>s[0]===state.sort); if(si>=0)$("#sortBtn").textContent="Sort: "+SORTS[si][1];
 }
 window.addEventListener("hashchange", ()=>{ hashLock=true; applyHash(); render(); hashLock=false; });
