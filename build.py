@@ -3025,6 +3025,12 @@ mark{color:#111}
 
 <script>
 const DB = /*__DATA__*/;
+// O(1) eid lookup -- was a DB.entries.find() linear scan at every call site
+// (drawer connections, ego-graph, path-finder autocomplete); one of them
+// (twoHopJS) called it inside a nested loop over degree x degree neighbor
+// pairs, which won't scale gracefully as both entry count and edge density
+// grow together.
+const ENTRY_BY_EID = new Map(DB.entries.map(e => [e.eid, e]));
 const PER_PAGE = 60;
 // Replace with your Google Form / Tally link to collect submissions.
 const SUBMIT_URL = "submit.html";
@@ -3484,7 +3490,7 @@ function twoHopJS(e){
     for(const r2 of ((DB.rels||{})[r.e]||[])){
       const k = r2.e;
       if(k===e.eid || direct.has(k)) continue;
-      const tgt = DB.entries.find(x=>x.eid===k);
+      const tgt = ENTRY_BY_EID.get(k);
       if(!tgt) continue;
       if(!sugg[k]) sugg[k] = {tgt, via:new Set()};
       sugg[k].via.add(r.n);
@@ -3563,7 +3569,7 @@ function connectionsHtml(e){
   }).join("");
   return `<div class="d-h">Connections <span class="d-n">${list.length}</span></div><div class="d-conns">${items}</div>`;
 }
-function openByEid(eid){ const e = DB.entries.find(x=>x.eid===eid); if(e) openDetail(e); }
+function openByEid(eid){ const e = ENTRY_BY_EID.get(eid); if(e) openDetail(e); }
 function closeDrawer(){
   drawer.classList.remove("open");
   setTimeout(()=>{drawer.hidden=true;}, 200);
@@ -3605,7 +3611,7 @@ function renderPathResult(fromE, toE, path){
   for(const hop of path){
     const lbl = REL_LABELS[hop.rel] || hop.rel.toLowerCase().replace(/_/g," ");
     const arrow = hop.dir==="out" ? "↓" : "↑";
-    const tgt = DB.entries.find(x=>x.eid===hop.to);
+    const tgt = ENTRY_BY_EID.get(hop.to);
     html += `<div class="p-connector"></div>`+
       `<div class="p-hop"><span class="p-dot" style="background:none;border:1px solid var(--line-strong)"></span>`+
       `<span class="p-rel">${arrow} ${esc(lbl)}</span></div>`+
@@ -3649,7 +3655,7 @@ function wireEntityAutocomplete(inputEl, sugEl2){
     ev.preventDefault(); pick(Number(b.dataset.i));
   });
   return { getEntity: () => {
-    const byEid = DB.entries.find(x=>x.eid===inputEl.dataset.eid);
+    const byEid = ENTRY_BY_EID.get(inputEl.dataset.eid);
     if(byEid) return byEid;
     const v = inputEl.value.trim();
     return v ? DB.entries.find(x=>x.n===v) : null;
@@ -3682,7 +3688,7 @@ $("#pathBtn").addEventListener("click", ()=>openPathModal());
 pathModal.addEventListener("click", ev=>{
   if(ev.target.closest("[data-pclose]")){ closePathModal(); return; }
   const ent = ev.target.closest(".p-ent[data-eid]");
-  if(ent){ const e=DB.entries.find(x=>x.eid===ent.dataset.eid); if(e){ closePathModal(); openDetail(e); } }
+  if(ent){ const e=ENTRY_BY_EID.get(ent.dataset.eid); if(e){ closePathModal(); openDetail(e); } }
 });
 document.addEventListener("keydown", ev=>{ if(ev.key==="Escape" && !pathModal.hidden) closePathModal(); });
 $("#pSwap").addEventListener("click", ()=>{
