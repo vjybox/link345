@@ -12,6 +12,7 @@ Usage:  python3 build.py
 import json
 import math
 import re
+from datetime import date
 from html import escape
 from pathlib import Path
 
@@ -512,6 +513,22 @@ def _page_prose(e, payload, rels, about_text=""):
     m = e.get("m") or {}
     if m.get("about"):
         return m["about"]
+    return _composed_prose(e, payload, rels)
+
+
+def _a_an(word):
+    return "an" if word[:1].lower() in "aeiou" else "a"
+
+
+def _composed_prose(e, payload, rels):
+    """The deterministic part of _page_prose() -- type/country/loop-stage
+    composition only, never the free-text about_text/curated `about`
+    override. Used directly (not via _page_prose) for the meta description
+    specifically: about_text quality varies a lot for the ~1,200 entries
+    not yet hand-enriched (some are generic, pre-dating this project's
+    stricter no-marketing-language rules), which is fine for the page's
+    visible prose but shouldn't leak into search-result snippets."""
+    m = e.get("m") or {}
     name = e["n"]
     et = e.get("et", "Corporate")
     country = e.get("co", "")
@@ -532,7 +549,7 @@ def _page_prose(e, payload, rels, about_text=""):
             sents.append(f"Expertise: {m['expertise']}.")
     elif et in ("Facility",):
         noun = m.get("facility_type", "facility")
-        s = f"{name} is a {noun.lower()}"
+        s = f"{name} is {_a_an(noun)} {noun.lower()}"
         if m.get("city"):
             s += f" in {m['city']}"
         elif country:
@@ -542,7 +559,7 @@ def _page_prose(e, payload, rels, about_text=""):
             sents.append(m["strategic_role"].rstrip(".") + ".")
     elif et in ("Research", "Institution"):
         noun = m.get("institution_type", "research organisation")
-        s = f"{name} is a {noun.lower()}"
+        s = f"{name} is {_a_an(noun)} {noun.lower()}"
         if country:
             s += f" based in {country}"
         sents.append(s + ".")
@@ -550,11 +567,11 @@ def _page_prose(e, payload, rels, about_text=""):
             sents.append(f"Funded by {m['funding_source']}.")
     elif et == "Media":
         noun = m.get("media_type", "industry media outlet")
-        sents.append(f"{name} is a {noun.lower()} covering the battery industry.")
+        sents.append(f"{name} is {_a_an(noun)} {noun.lower()} covering the battery industry.")
     else:  # Corporate and everything else
         noun = SECTOR_NOUN.get(e["s"], "battery-industry company")
         own = (m.get("ownership", "") or "").lower()
-        lead = f"{name} is a"
+        lead = f"{name} is {_a_an(own if own in ('public', 'private', 'state-owned') else noun)}"
         if own in ("public", "private", "state-owned"):
             lead += f" {own}"
         s = f"{lead} {noun}"
@@ -1094,18 +1111,46 @@ def _page_shell(title, desc, crumb_html, h1, inner, css_href, ld_blocks, prefix=
         f'</div></body></html>')
 
 
+def _meta_description(e, payload, rels):
+    """Entries with a one-liner (curated or inferred from a parenthetical
+    in their name) use it directly -- short and specific. The ~400 entries
+    with neither used to fall back to a single templated sentence
+    ("{Name} in the {Sector} sector.") repeated almost verbatim across
+    hundreds of pages -- a textbook thin/duplicate-content pattern. Uses
+    _composed_prose() instead (never about_text/the curated `about`
+    override -- see its docstring): varies by entity type, country, and
+    loop stage (Extract/Refine/Manufacture/Deploy/Recover), giving real
+    differentiation using data already computed elsewhere, not new content."""
+    if e.get("one"):
+        return e["one"][:180]
+    prose = _composed_prose(e, payload, rels)
+    if len(prose) <= 180:
+        return prose
+    cut = prose[:180]
+    last_sentence = cut.rfind(". ")
+    return cut[:last_sentence + 1] if last_sentence > 60 else cut.rstrip() + "…"
+
+
 def _entry_page_html(e, payload, rels, by_eid, by_cat, ctx, css_href, about_text=""):
     title = f'{e["n"]} — The Lithium Index'
-    desc = (e.get("one") or f'{e["n"]} in the {e["s"]} sector.')[:180]
+    desc = _meta_description(e, payload, rels)
     inner = _entry_content_html(e, payload, rels, by_eid, by_cat, ctx, about_text)
     hubs = _hub_paths(e, ctx)
     # JSON-LD: Organization/Person enriched from the graph, plus BreadcrumbList.
-    ld_type = "Person" if e.get("et") == "People" else "Organization"
+    m = e.get("m") or {}
+    # Corporation is the schema.org subtype that carries tickerSymbol; use it
+    # for public companies (ticker present), Organization otherwise -- both
+    # validate fine, this is just the more semantically correct choice.
+    ld_type = "Person" if e.get("et") == "People" else ("Corporation" if m.get("ticker") else "Organization")
     ld = {"@context": "https://schema.org", "@type": ld_type, "name": e["n"]}
     if e.get("u"):
         ld["url"] = e["u"]
     if e.get("one"):
         ld["description"] = e["one"]
+    if m.get("founded"):
+        ld["foundingDate"] = str(m["founded"])
+    if m.get("ticker"):
+        ld["tickerSymbol"] = m["ticker"]
     for r in (rels.get(e["eid"]) or []):
         if r["d"] != "out":
             continue
@@ -1433,12 +1478,30 @@ def write_entry_pages(payload, rels, about_map=None):
              + [f't/{p}.html' for p in sl["tech"].values()]
              + [f'stage/{p}.html' for p in sl["stage"].values()])
     base = SITE_BASE.rstrip("/") + "/" if SITE_BASE else "/"
+    build_date = date.today().isoformat()
+    # <lastmod> uses the build date uniformly for every URL -- this repo
+    # doesn't track per-entry edit history, so "when was THIS page's content
+    # last changed" isn't available at build time. Still strictly better
+    # than omitting lastmod entirely: it's accurate (the file genuinely was
+    # (re)generated today) and gives crawlers a real recency signal instead
+    # of none. Per-page differentiation would need historical tracking
+    # (e.g. git-log per entry) -- worth doing later, not in this pass.
     sm = ('<?xml version="1.0" encoding="UTF-8"?>\n'
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-          + "".join(f'  <url><loc>{escape(base + p)}</loc></url>\n' for p in paths)
+          + "".join(f'  <url><loc>{escape(base + p)}</loc><lastmod>{build_date}</lastmod></url>\n'
+                    for p in paths)
           + '</urlset>\n')
     (dist / "sitemap.xml").write_text(sm, encoding="utf-8")
-    print(f"[ok] wrote lists.html + sitemap.xml ({len(paths)} URLs) + index.html copy")
+
+    # --- robots.txt: allow-all + sitemap pointer (only valid once SITE_BASE
+    # is set -- the spec requires an absolute URL there; omit the directive
+    # rather than ship an invalid relative one) ---
+    robots = "User-agent: *\nAllow: /\n"
+    if SITE_BASE:
+        robots += f"\nSitemap: {SITE_BASE.rstrip('/')}/sitemap.xml\n"
+    (dist / "robots.txt").write_text(robots, encoding="utf-8")
+
+    print(f"[ok] wrote lists.html + sitemap.xml ({len(paths)} URLs) + robots.txt + index.html copy")
     if not SITE_BASE:
         print("[warn] SITE_BASE is not set: sitemap URLs are root-relative "
               "(the sitemaps spec requires absolute), BreadcrumbList JSON-LD is "
